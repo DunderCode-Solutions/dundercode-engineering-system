@@ -18,6 +18,11 @@
 │   ├── documentation
 │   │   ├── DCSG-0001-canon-style-guide.md
 │   │   └── README.md
+│   ├── glossary
+│   │   ├── acronyms.md
+│   │   ├── definitions.md
+│   │   ├── engineering-terms.md
+│   │   └── README.md
 │   ├── method
 │   │   └── README.md
 │   ├── README.md
@@ -26,19 +31,18 @@
 ├── knowledge
 │   ├── architecture
 │   │   ├── dekg
-│   │   │   ├── README.md
-│   │   │   └── specification
-│   │   │       ├── DEKG-0001-overview.md
-│   │   │       ├── DEKG-0010-canonical-identifiers.md
-│   │   │       ├── DEKG-0020-node-types.md
-│   │   │       ├── DEKG-0030-relationships.md
-│   │   │       ├── DEKG-0040-metadata-schema.md
-│   │   │       ├── DEKG-0050-context-resolution.md
-│   │   │       ├── DEKG-0060-search-and-indexing.md
-│   │   │       └── DEKG-0070-ai-integration.md
-│   │   ├── DESYS-ARCHITECTURE.md
-│   │   ├── DESYS-KNOWLEDGE-MAP.md
-│   │   └── README.md
+│   │   │   └── README.md
+│   │   ├── desys-architecture
+│   │   │   └── README.md
+│   │   ├── knowledge-map
+│   │   │   └── README.md
+│   │   ├── metadata
+│   │   │   └── README.md
+│   │   ├── nodes-types
+│   │   │   └── README.md
+│   │   ├── README.md
+│   │   └── relationships
+│   │       └── README.md
 │   ├── dar
 │   │   ├── README.md
 │   │   ├── reviews
@@ -63,9 +67,6 @@
 │   │   │   ├── DES-0220-type-checking-standard.md
 │   │   │   ├── DES-0230-security-standard.md
 │   │   │   └── README.md
-│   │   └── README.md
-│   ├── glossary
-│   │   ├── glossary.md
 │   │   └── README.md
 │   ├── guides
 │   │   ├── documentation
@@ -96,4 +97,4 @@
 │   └── README.md
 └── structure
 
-31 directories, 66 files
+35 directories, 63 files
