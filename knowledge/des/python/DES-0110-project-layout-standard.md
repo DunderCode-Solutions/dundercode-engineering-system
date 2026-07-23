@@ -1,96 +1,92 @@
-# DES-0110 — Project Layout Standard
+# Metadata
 
-**Document ID:** DES-0110
+**Canonical ID:** des.python.layout
 
-**Title:** Project Layout Standard
+**Document Class:** Normative
 
 **Version:** 1.0.0 (Draft)
 
 **Status:** Draft
 
-**Owner:** DunderCode Engineering
-
 **Canonical Language:** English
 
-**Category:** Engineering Standard
+**Owner:** DunderCode Engineering
 
-**Depends On:** DEC-0001, DEM-0001, DES-0001
+**Applies To:** All Python projects developed under DESys
 
 ---
 
 # 1. Purpose
 
-This standard defines the official directory structure for Python projects developed within the DunderCode Engineering System (DESys).
+The Project Layout Standard defines the canonical directory structure for Python projects developed under the DunderCode Engineering System (DESys).
 
-Its purpose is to establish a consistent project organization that promotes clarity, maintainability, scalability, and discoverability.
+Its purpose is to establish a consistent, predictable, and maintainable project organization that improves readability, scalability, onboarding, automation, and long-term maintenance.
 
-A project structure is not merely a collection of directories; it is an expression of engineering intent.
+This standard ensures that every DESys-compliant Python project follows the same organizational principles regardless of project size or business domain.
 
 ---
 
 # 2. Scope
 
-This standard applies to all Python projects maintained by DunderCode, including libraries, APIs, desktop applications, web applications, automation tools, and internal systems.
+This standard applies to every Python software project developed under DESys.
 
-Project-specific deviations shall be documented through an Architecture Decision Record (ADR).
+It defines the required organization of source code, documentation, tests, configuration files, automation assets, and supporting resources.
 
----
-
-# 3. Guiding Principles
-
-The project layout shall:
-
-* Reflect the domain before the technology.
-* Separate responsibilities clearly.
-* Minimize unnecessary nesting.
-* Promote discoverability.
-* Scale naturally as the project grows.
-* Remain understandable by both humans and AI systems.
-
-Directory names should communicate purpose rather than implementation details.
+Implementation details are intentionally excluded from this standard and are defined by other engineering standards.
 
 ---
 
-# 4. Standard Project Layout
+# 3. Audience
 
-The following structure is the reference layout for DunderCode Python projects.
+This standard is intended for:
 
-```text
-project/
-│
-├── src/
-│   └── <package_name>/
-│
-├── tests/
-│
-├── docs/
-│
-├── scripts/
-│
-├── assets/
-│
-├── .github/
-│
-├── pyproject.toml
-├── README.md
-├── LICENSE
-├── .gitignore
-├── .editorconfig
-├── .gitattributes
-└── .pre-commit-config.yaml
-```
+- Software Engineers
+- Solution Architects
+- Technical Leaders
+- Engineering Managers
+- Project Maintainers
+- AI-assisted engineering systems
 
-Reference Blueprints may extend this structure while preserving its overall organization.
+Anyone responsible for creating or maintaining Python project structures SHALL follow this standard.
 
 ---
 
-# 5. Directory Responsibilities
+# 4. Relationship with DES-0001
 
-## src/
+This standard specializes the engineering principles established by DES-0001 — Python Engineering Foundation Standard.
 
-Contains the production source code.
+While DES-0001 defines the engineering baseline, DES-0110 specifies how Python projects SHALL be organized to satisfy those principles.
 
-Business logic shall reside here.
+Project layout is considered a fundamental engineering concern because it directly impacts maintainability, discoverability, automation, and collaboration.
+---
+
+# 5. Engineering Principles
+
+Project organization SHALL follow these principles.
+
+## Consistency
+
+Projects MUST follow a common directory structure.
+
+## Separation of Concerns
+
+Each directory MUST have a single well-defined responsibility.
+
+## Discoverability
+
+Developers SHOULD locate project resources quickly without prior project knowledge.
+
+## Scalability
+
+The project layout MUST support long-term growth without requiring structural redesign.
+
+## Predictability
+
+Projects SHOULD be organized consistently across the entire DESys ecosystem.
+
+## Automation
+
+The directory structure SHOULD facilitate automation by engineering tools.
 
 ---
 
@@ -130,86 +126,87 @@ Contains repository automation, workflows, issue templates, and pull request tem
 
 ---
 
-# 6. Root Files
+# 6. Standard
 
-Every project shall include the following files.
+Every DESys-compliant Python project SHALL adopt the canonical project layout defined by this standard.
 
-| File                      | Purpose                                    |
-| ------------------------- | ------------------------------------------ |
-| `pyproject.toml`          | Project metadata and dependency management |
-| `README.md`               | Project portal                             |
-| `LICENSE`                 | Software license                           |
-| `.gitignore`              | Git exclusions                             |
-| `.editorconfig`           | Editor consistency                         |
-| `.gitattributes`          | Repository behavior                        |
-| `.pre-commit-config.yaml` | Quality automation                         |
+The project structure MUST separate source code, documentation, testing, configuration, automation, deployment assets, and engineering knowledge into clearly defined locations.
 
-Additional files may be introduced when justified.
+The canonical layout is intended to maximize readability, maintainability, and engineering consistency across all projects.
 
 ---
 
-# 7. Naming Conventions
+# 7. Mandatory Requirements
 
-Directory names shall:
+Every Python project developed under DESys MUST:
 
-* Use lowercase letters.
-* Use descriptive names.
-* Avoid abbreviations unless widely recognized.
-* Reflect responsibilities instead of technologies.
-
-Example:
-
-Good:
-
-* `documentation`
-* `assets`
-* `scripts`
-
-Avoid:
-
-* `misc`
-* `tmp`
-* `stuff`
+- Separate source code from project documentation.
+- Isolate automated tests from production code.
+- Maintain engineering documentation under a dedicated knowledge directory.
+- Store configuration independently from application logic.
+- Organize deployment assets separately from source code.
+- Keep engineering automation isolated from business logic.
+- Avoid ambiguous directory names.
+- Preserve a stable project structure throughout the project lifecycle.
 
 ---
 
-# 8. Scalability
+# 8. Recommended Structure
 
-The project structure should support growth without requiring major reorganization.
+The following represents the canonical DESys project layout.
 
-New directories shall only be introduced when they represent a clear engineering responsibility.
+```text
+project/
 
-Avoid creating structure before a demonstrated need exists.
+├── apps/
+├── config/
+├── knowledge/
+├── tests/
+├── scripts/
+├── deployment/
+├── docs/
+├── pyproject.toml
+├── README.md
+└── LICENSE
+```
+
+Additional directories MAY be introduced when justified by project requirements.
+
+However, they SHOULD preserve the organizational principles established by this standard.
+
+Projects SHOULD avoid introducing directories that duplicate existing responsibilities.
 
 ---
 
 # 9. Compliance
 
-A project complies with this standard when:
+A Python project complies with this standard when its directory organization follows the mandatory requirements defined herein.
 
-* The directory structure follows the official layout.
-* Responsibilities are clearly separated.
-* Project conventions remain consistent.
-* Exceptions are documented through ADRs.
+Compliance SHALL be verified as part of engineering reviews and assessment reports (DAR).
 
-Compliance is evaluated by architectural consistency rather than strict folder counts.
+Non-compliant structures SHOULD be corrected before major development activities continue.
 
 ---
 
-# 10. Evolution
+# 10. References
 
-The project layout is expected to evolve as engineering practices mature.
-
-Changes to this standard shall be proposed through the DunderCode engineering process and validated through real-world projects before adoption.
+- DEC-0001 — DunderCode Engineering Canon
+- DEM-0001 — DunderCode Engineering Method
+- DCSG-0001 — DunderCode Canon Style Guide
+- DES-0001 — Python Engineering Foundation Standard
 
 ---
 
-# 11. Closing Statement
+# 11. Changelog
 
-A well-organized project structure reduces cognitive load, accelerates onboarding, and improves long-term maintainability.
+## Version 1.0.0 (Draft)
 
-The project layout is therefore considered an essential engineering asset rather than a matter of personal preference.
+### Added
 
+- Initial Project Layout Standard.
+- Defined the canonical DESys directory organization.
+- Established mandatory project organization requirements.
+- Introduced the canonical project layout for Python software.
 ---
 
 > **Think First. Build Better.**
