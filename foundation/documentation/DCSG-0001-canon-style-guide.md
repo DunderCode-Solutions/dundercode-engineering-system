@@ -5,7 +5,7 @@
 **Canonical ID:** dcsg.canon.style-guide
 
 
-**Version:** 1.0.0 (Draft)
+**Version:** 1.1.0 (Draft)
 
 **Status:** Draft
 
@@ -29,7 +29,22 @@ Documentation is considered an engineering asset and therefore follows the same 
 
 ---
 
-# 2. Philosophy
+# 2. Audience
+
+This guide is intended for everyone involved in the creation, review, maintenance, and evolution of documentation within DESys.
+
+This includes:
+
+- Software Engineers
+- Solution Architects
+- Technical Writers
+- Reviewers
+- Engineering Managers
+- AI-assisted documentation systems
+
+---
+
+# 3. Philosophy
 
 Documentation is not a by-product of development.
 
@@ -43,7 +58,7 @@ Knowledge always precedes implementation.
 
 ---
 
-# 3. Scope
+# 4. Scope
 
 This guide applies to every official engineering artifact, including but not limited to:
 
@@ -61,11 +76,21 @@ This guide applies to every official engineering artifact, including but not lim
 
 ---
 
-# 4. Documentation Principles
+# 5. Non-Goals
+
+This guide does not define engineering practices, software architecture, programming standards, or development methodologies.
+
+Those responsibilities belong to the corresponding DES, DEM, DEC, ADR, and RFC documents.
+
+The sole purpose of DCSG is to define how engineering knowledge is documented.
+
+---
+
+# 6. Documentation Principles
 
 Every document produced by DunderCode shall follow these principles.
 
-## 4.1 Clarity
+## 6.1 Clarity
 
 Documents must communicate ideas unambiguously.
 
@@ -73,19 +98,19 @@ Readers should never need to infer the intended meaning.
 
 ---
 
-## 4.2 Simplicity
+## 6.2 Simplicity
 
 Complex ideas should be explained using simple language whenever possible.
 
 ---
 
-## 4.3 Consistency
+## 6.3 Consistency
 
 Terminology, formatting, and document organization shall remain consistent across the entire engineering system.
 
 ---
 
-## 4.4 Traceability
+## 6.4 Traceability
 
 Every engineering decision shall be traceable to its origin.
 
@@ -93,13 +118,13 @@ Documents must explicitly reference related principles, standards, methods, ADRs
 
 ---
 
-## 4.5 Reusability
+## 6.5 Reusability
 
 Documentation should be written to maximize reuse across projects.
 
 ---
 
-## 4.6 Evolvability
+## 6.6 Evolvability
 
 Documentation is expected to evolve continuously.
 
@@ -107,7 +132,7 @@ Every document may be improved while preserving its historical traceability.
 
 ---
 
-# 5. Documentation Lifecycle
+# 7. Documentation Lifecycle
 
 Every official document progresses through the following lifecycle:
 
@@ -133,7 +158,7 @@ Each state represents a well-defined stage in the engineering process.
 
 ---
 
-# 6. Canonical Language
+# 8. Canonical Language
 
 English is the canonical language of DESys.
 
@@ -143,7 +168,7 @@ Whenever inconsistencies exist between translated and canonical versions, the En
 
 ---
 
-# 7. Writing Style
+# 9. Writing Style
 
 Documentation shall be:
 
@@ -159,7 +184,38 @@ The objective is to teach rather than persuade.
 
 ---
 
-# 8. Voice and Tone
+# 10. Normative Language
+
+Normative documents within the DunderCode Engineering System (DESys) SHALL use standardized requirement keywords to express engineering requirements consistently.
+
+DESys adopts the normative language defined by RFC 2119 to ensure consistency across engineering standards, methods, governance documents, and architectural specifications.
+
+The following keywords SHALL be interpreted as follows.
+
+| Keyword | Meaning |
+|----------|---------|
+| **MUST** | Indicates an absolute requirement. |
+| **MUST NOT** | Indicates an absolute prohibition. |
+| **SHOULD** | Indicates a strong recommendation unless a justified reason exists not to follow it. |
+| **SHOULD NOT** | Indicates a practice that is generally discouraged. |
+| **MAY** | Indicates an optional behavior or implementation choice. |
+
+Normative keywords SHALL appear in uppercase whenever they define engineering requirements.
+
+These keywords are mandatory for normative documents, including but not limited to:
+
+- DEC — DunderCode Engineering Canon
+- DEM — DunderCode Engineering Method
+- DES — DunderCode Engineering Standard
+- DAR — DunderCode Assessment Report
+- ADR — Architecture Decision Record (when defining mandatory decisions)
+- RFC — Request for Comments (when defining proposed engineering standards)
+
+Documents intended solely for explanation, guidance, or reference (such as guides, tutorials, examples, and README files) MAY use ordinary language instead of normative keywords.
+
+---
+
+# 11. Voice and Tone
 
 Documents should be written using:
 
@@ -177,46 +233,70 @@ Finally explain how.
 
 ---
 
-# 9. Document Structure
+# 12. Document Structure
 
-Every official document shall contain the following sections whenever applicable:
+Every official document SHOULD follow a consistent organizational structure appropriate to its document type.
 
-* Purpose
-* Scope
-* Audience
-* Motivation
-* Content
-* References
-* Revision History
+Common sections include:
 
-Additional sections may be introduced when required by the document type.
+- Purpose
+- Scope
+- Audience
+- Motivation
+- Standard
+- Requirements
+- Recommendations
+- Exceptions
+- Compliance
+- References
+- Revision History
+
+Not every document is required to include all sections.
+
+Each document type defines its own canonical structure while following the editorial principles established by this guide.
+
+Examples:
+
+- README documents describe domains and provide navigation.
+- DES documents define engineering standards.
+- DEM documents define engineering methods.
+- DEC documents establish canonical engineering principles.
+- DAR documents define assessment and review criteria.
+- ADR documents record architectural decisions.
 
 ---
 
-# 10. Metadata
+# 13. Metadata
 
-Every engineering document shall contain standardized metadata.
+Every official DESys document SHOULD include standardized metadata to support traceability, knowledge management, automation, and semantic indexing.
 
 Recommended metadata includes:
 
-* Document ID
-* Title
-* Version
-* Status
-* Owner
-* Authors
-* Reviewers
-* Created
-* Updated
-* Canonical Language
-* Depends On
-* References
+- Document ID
+- Canonical ID
+- Document Type
+- Title
+- Version
+- Status
+- Owner
+- Authors
+- Reviewers
+- Created
+- Updated
+- Canonical Language
+- Document Class
+- Normative
+- Informative
+- Reference
+- Applies To
+- Depends On
+- References
 
-Metadata enables automation, traceability, and AI-assisted engineering.
+Metadata enables interoperability across the DunderCode Engineering Knowledge Graph (DEKG), documentation tooling, AI-assisted systems, and engineering governance processes.
 
 ---
 
-# 11. Cross References
+# 14. Cross References
 
 Documents shall reference related engineering assets whenever relationships exist.
 
@@ -224,9 +304,11 @@ References should be explicit rather than implied.
 
 This enables complete engineering traceability across the DESys knowledge graph.
 
+Cross references should create explicit engineering relationships rather than simple hyperlinks.
+
 ---
 
-# 12. Examples
+# 15. Examples
 
 Examples are mandatory whenever they improve understanding.
 
@@ -241,7 +323,7 @@ Examples should demonstrate engineering concepts rather than isolated syntax.
 
 ---
 
-# 13. Diagrams
+# 16. Diagrams
 
 Diagrams should prioritize understanding over artistic presentation.
 
@@ -249,7 +331,7 @@ Every diagram must communicate a single concept clearly.
 
 ---
 
-# 14. Tables
+# 17. Tables
 
 Tables should be used whenever structured comparison improves readability.
 
@@ -257,7 +339,7 @@ Avoid tables for purely narrative content.
 
 ---
 
-# 15. Code Blocks
+# 18. Code Blocks
 
 Code examples shall:
 
@@ -269,7 +351,7 @@ Pseudo-code should be explicitly identified.
 
 ---
 
-# 16. AI-Assisted Documentation
+# 19. AI-Assisted Documentation
 
 Documentation shall be written to maximize comprehension by both humans and AI systems.
 
@@ -285,9 +367,13 @@ AI is considered an engineering assistant rather than an authority.
 
 The documentation remains the single source of truth.
 
+Normative keywords, standardized metadata, and consistent document structures improve semantic indexing, automated validation, AI-assisted retrieval, and integration with the DunderCode Engineering Knowledge Graph (DEKG).
+
+AI systems should interpret engineering requirements according to the normative language defined by this guide while preserving document traceability and canonical structure.
+
 ---
 
-# 17. Documentation Quality Model (DQM)
+# 20. Documentation Quality Model (DQM)
 
 Every document shall be evaluated using the following quality model.
 
@@ -313,11 +399,15 @@ Completeness
 
 Maintainability
 
+↓
+
+Reusability
+
 A document should satisfy each level before progressing to the next.
 
 ---
 
-# 18. Governance
+# 21. Governance
 
 Changes to official documentation follow the DESys engineering workflow.
 
@@ -341,13 +431,17 @@ Publication
 
 ↓
 
+Assessment (DAR)
+
+↓
+
 Continuous Improvement
 
 Major structural changes shall be proposed through an RFC.
 
 ---
 
-# 19. Guiding Principle
+# 22. Guiding Principle
 
 Every document must teach, not merely describe.
 
@@ -357,14 +451,42 @@ The success of a document is measured by the reader's ability to understand, app
 
 ---
 
-# 20. Closing Statement
+# 23. Closing Statement
 
-The DunderCode Canon Style Guide is more than a writing guide.
+The DunderCode Canon Style Guide is the editorial foundation of the DunderCode Engineering System.
 
-It defines how DunderCode transforms ideas into knowledge, knowledge into engineering standards, and engineering standards into software.
+It establishes the principles that transform documentation into structured engineering knowledge.
 
-By standardizing documentation, DESys standardizes engineering itself.
+By standardizing documentation, DESys standardizes engineering communication, preserves organizational knowledge, and enables continuous software evolution.
+
+---
+
+# 24. Changelog
+
+## Version 1.0.0
+
+Initial release.
+
+## Version 1.1.0 (Draft)
+
+### Added
+
+- Introduced the **Normative Language** section based on RFC 2119.
+- Expanded the standardized Metadata Schema.
+- Updated Document Structure to support multiple document types.
+- Added support for Canonical IDs and Document Types.
+- Formalized editorial support for DEKG integration.
+- Improved AI-readability through standardized document semantics.
+
+### Changed
+
+- Clarified the distinction between informational and normative documents.
+- Improved guidance for engineering specifications.
+- Enhanced document interoperability across the DESys ecosystem.
+
 
 ---
 
 **Think First. Build Better.**
+
+---
