@@ -1,161 +1,209 @@
 # DES-0220 — Type Checking Standard
 
-**Document ID:** DES-0220
+# Metadata
 
 **Canonical ID:** des.quality.type-checking
 
-**Title:** Type Checking Standard
+**Document Class:** Normative
 
 **Version:** 1.0.0 (Draft)
 
 **Status:** Draft
 
-**Owner:** DunderCode Engineering
-
 **Canonical Language:** English
 
-**Category:** Engineering Standard
+**Owner:** DunderCode Engineering
 
-**Depends On:** DEC-0001, DEM-0001, DES-0001, DES-0200
+**Applies To:** All software projects developed under DESys
 
 ---
 
 # 1. Purpose
 
-This standard defines the engineering principles and practices for static type checking within the DunderCode Engineering System (DESys).
+The Type Checking Standard defines the engineering requirements for using type systems to improve software correctness, maintainability, readability, and long-term reliability within the DunderCode Engineering System (DESys).
 
-Its purpose is to improve software correctness, maintainability, readability, and developer confidence through systematic static analysis.
+Its purpose is to establish technology-independent engineering principles for defining, validating, and maintaining software type contracts throughout the software lifecycle.
 
-Type checking is regarded as an engineering practice that complements testing rather than replacing it.
+This standard applies regardless of whether a programming language provides static, dynamic, or hybrid typing.
 
 ---
 
 # 2. Scope
 
-This standard applies to every Python project maintained by DunderCode.
+This standard applies to every software project developed under DESys.
 
-Technology-specific implementations shall be defined in complementary guides and reference blueprints.
+It defines engineering expectations for type definitions, type validation, interface contracts, and type consistency independently of any programming language or type-checking tool.
 
----
-
-# 3. Guiding Principles
-
-Type checking shall:
-
-* Detect errors as early as possible.
-* Improve code readability.
-* Encourage explicit interfaces.
-* Support maintainability.
-* Facilitate safe refactoring.
-* Reduce ambiguity.
-* Integrate naturally into the development workflow.
-
-Type information is considered engineering documentation embedded in the source code.
+Implementation details related to specific type systems or analysis tools are intentionally excluded.
 
 ---
 
-# 4. Type Annotation
+# 3. Audience
 
-Projects should annotate public interfaces whenever practical.
+This standard is intended for:
 
-Typical candidates include:
+- Software Engineers
+- Solution Architects
+- Technical Leaders
+- Engineering Managers
+- Code Reviewers
+- AI-assisted engineering systems
 
-* Public functions
-* Public methods
-* Class interfaces
-* Module interfaces
-* Library APIs
-
-Internal implementation details may adopt annotations progressively according to project maturity.
-
----
-
-# 5. Static Analysis
-
-Projects shall perform automated static type analysis as part of the engineering workflow.
-
-Static analysis should execute:
-
-* During local development.
-* Before integration.
-* Within Continuous Integration pipelines.
-
-Type checking should provide fast and deterministic feedback.
+Every stakeholder responsible for software design or implementation SHALL understand and follow this standard.
 
 ---
 
-# 6. Progressive Adoption
+# 4. Relationship with DESys
 
-Projects are encouraged to increase type coverage over time.
+This standard derives its engineering principles from:
 
-Legacy codebases may adopt static typing incrementally, provided that progress is measurable and continuous.
+- DEC — DunderCode Engineering Canon
+- DEM — DunderCode Engineering Method
+- DCSG — DunderCode Canon Style Guide
+- DES-0200 — Code Quality Standard
 
-Engineering improvement takes precedence over immediate completeness.
-
----
-
-# 7. Tool Independence
-
-This standard defines engineering expectations rather than prescribing a specific type checker.
-
-Reference implementations may adopt different tools provided they satisfy the quality objectives established by DESys.
-
-Technology choices shall be documented through Architecture Decision Records (ADRs).
+Type checking complements code quality by improving correctness, reducing ambiguity, and making software contracts explicit.
 
 ---
 
-# 8. Integration with Quality
+# 5. Engineering Principles
 
-Type checking complements other engineering quality practices, including:
+Type checking SHALL follow these engineering principles.
 
-* Automated testing
-* Static code analysis
-* Documentation
-* Code review
-* Continuous Integration
+## Explicit Contracts
 
-No single quality mechanism replaces another.
+Software interfaces SHOULD define explicit type contracts whenever practical.
+
+---
+
+## Correctness
+
+Type validation SHOULD detect programming errors as early as possible.
+
+---
+
+## Readability
+
+Types SHOULD improve software readability and developer understanding.
+
+---
+
+## Maintainability
+
+Type definitions SHALL evolve together with the software they describe.
+
+Outdated or misleading type information SHOULD be corrected immediately.
+
+---
+
+## Consistency
+
+Type definitions SHOULD remain consistent across the entire codebase.
+
+Equivalent concepts SHOULD use equivalent type definitions.
+
+---
+
+## Early Verification
+
+Whenever supported by the technology, type validation SHOULD occur before software execution.
+
+---
+
+## Documentation
+
+Type information SHOULD serve as executable documentation for software interfaces.
+
+---
+
+# 6. Standard
+
+Every DESys-compliant software project SHALL adopt a consistent strategy for defining and validating software type contracts.
+
+Projects SHOULD maximize the use of type information whenever the underlying technology supports it.
+
+Languages that do not provide static type systems SHOULD apply equivalent engineering practices through interface contracts, validation mechanisms, or runtime verification.
+
+---
+
+# 7. Mandatory Requirements
+
+Every software project developed under DESys MUST:
+
+- Define consistent type contracts.
+- Avoid ambiguous interface definitions.
+- Maintain type information together with software evolution.
+- Validate public interfaces whenever practical.
+- Keep type definitions synchronized with implementation.
+- Preserve consistency across modules and services.
+
+---
+
+# 8. Type Checking Lifecycle
+
+Type verification SHALL be integrated into the software engineering lifecycle.
+
+```text
+Design
+      ↓
+Type Definition
+      ↓
+Implementation
+      ↓
+Verification
+      ↓
+Review
+      ↓
+Maintenance
+      ↓
+Continuous Improvement
+```
+
+Type contracts SHALL evolve together with the software architecture.
 
 ---
 
 # 9. Compliance
 
-A project complies with this standard when it:
+A project complies with this standard when its engineering practices satisfy the type checking requirements defined herein.
 
-* Integrates static type checking into its engineering workflow.
-* Maintains meaningful type annotations.
-* Performs automated verification.
-* Documents justified exceptions through ADRs.
+Compliance SHALL be verified during engineering reviews and assessment reports (DAR).
 
-Compliance is evaluated through engineering outcomes rather than annotation percentages.
+Projects SHOULD periodically review type consistency across the codebase.
 
 ---
 
-# 10. Related Standards
+# 10. Relationship with Other Quality Standards
 
-This standard complements:
+Type checking complements the remaining Quality Engineering Standards.
 
-* DES-0200 — Code Quality Standard
-* DES-0210 — Testing Standard
-* DES-0230 — Security Standard
-* DES-0150 — Project Configuration Standard
+| Standard | Discipline |
+|----------|------------|
+| DES-0200 | Code Quality |
+| DES-0210 | Testing |
+| DES-0220 | Type Checking |
+| DES-0230 | Security |
 
----
-
-# 11. Evolution
-
-Static typing practices evolve alongside the Python ecosystem.
-
-Changes to this standard shall be proposed through the DunderCode engineering process and validated through real-world projects before adoption.
+Together, these standards define the Quality Engineering model adopted by DESys.
 
 ---
 
-# 12. Closing Statement
+# 11. References
 
-Static type checking enables engineers to detect defects earlier, improve software design, and increase confidence when evolving systems.
-
-Within DESys, type checking is regarded as a continuous engineering practice that strengthens software quality throughout the development lifecycle.
+- DEC-0001 — DunderCode Engineering Canon
+- DEM-0001 — DunderCode Engineering Method
+- DCSG-0001 — DunderCode Canon Style Guide
+- DES-0200 — Code Quality Standard
 
 ---
 
-> **Think First. Build Better.**
+# 12. Changelog
+
+## Version 1.0.0 (Draft)
+
+### Added
+
+- Initial Type Checking Standard.
+- Defined engineering principles for software type contracts.
+- Established technology-independent requirements for type verification.
+- Introduced the type checking lifecycle.

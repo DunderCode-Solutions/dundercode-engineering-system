@@ -1,205 +1,211 @@
 # DES-0120 — Dependency Management Standard
 
-**Document ID:** DES-0120
+# Metadata
 
-**Title:** Dependency Management Standard
+**Canonical ID:** des.python.dependency-management
+
+**Document Class:** Normative
 
 **Version:** 1.0.0 (Draft)
 
 **Status:** Draft
 
-**Owner:** DunderCode Engineering
-
 **Canonical Language:** English
 
-**Category:** Engineering Standard
+**Owner:** DunderCode Engineering
 
-**Depends On:** DEC-0001, DEM-0001, DES-0001
+**Applies To:** All Python projects developed under DESys
 
 ---
 
 # 1. Purpose
 
-This standard defines the official dependency management practices for Python projects developed within the DunderCode Engineering System (DESys).
+The Dependency Management Standard defines the engineering requirements for managing software dependencies within Python projects developed under the DunderCode Engineering System (DESys).
 
-Its objective is to ensure that all projects maintain reproducible, secure, and maintainable development environments throughout their lifecycle.
+Its purpose is to ensure that project dependencies remain reproducible, maintainable, secure, traceable, and consistent throughout the software lifecycle.
 
-Dependency management is considered an engineering responsibility rather than a tooling preference.
+This standard establishes the engineering principles that govern dependency management independently of any specific package manager or tooling.
 
 ---
 
 # 2. Scope
 
-This standard applies to every Python project maintained by DunderCode, including:
+This standard applies to every Python project developed under DESys.
 
-* Libraries
-* APIs
-* Desktop applications
-* Web applications
-* CLI tools
-* Automation scripts
-* AI applications
-* Internal tools
+It defines how dependencies SHALL be declared, organized, versioned, maintained, reviewed, and updated.
 
-Any exception shall be documented through an Architecture Decision Record (ADR).
+Implementation details related to specific dependency management tools are intentionally excluded from this standard.
 
 ---
 
-# 3. Guiding Principles
+# 3. Audience
 
-Dependency management shall:
+This standard is intended for:
 
-* Be reproducible.
-* Be deterministic.
-* Minimize unnecessary dependencies.
-* Promote security.
-* Simplify maintenance.
-* Support long-term sustainability.
+- Software Engineers
+- Solution Architects
+- Technical Leaders
+- Engineering Managers
+- Project Maintainers
+- AI-assisted engineering systems
 
-Engineering decisions take precedence over convenience.
-
----
-
-# 4. Official Dependency Manager
-
-The official dependency manager for all Python projects is:
-
-**uv**
-
-Alternative dependency managers shall only be adopted through an approved ADR.
+Every stakeholder responsible for software dependencies SHALL understand and follow this standard.
 
 ---
 
-# 5. Project Metadata
+# 4. Relationship with DES-0001
 
-Project metadata shall be maintained in:
+This standard specializes the engineering principles established by DES-0001 — Python Engineering Foundation Standard.
 
-* `pyproject.toml`
-
-This file is the authoritative source for:
-
-* Project metadata
-* Runtime dependencies
-* Development dependencies
-* Build configuration
-* Tool configuration
-
-Project configuration should be centralized whenever practical.
+While DES-0001 defines the engineering baseline, DES-0120 specifies how project dependencies SHALL be managed to preserve reproducibility, maintainability, and long-term sustainability.
 
 ---
 
-# 6. Lock Files
+# 5. Engineering Principles
 
-Projects shall maintain a lock file to ensure reproducible environments.
+Dependency management SHALL follow these principles.
 
-Requirements:
+## Reproducibility
 
-* Lock files shall be committed to version control.
-* Lock files shall be updated whenever dependencies change.
-* Build environments shall be created from the lock file whenever possible.
+Projects MUST produce reproducible dependency environments.
 
-Reproducibility is mandatory.
+Every engineer SHALL obtain the same dependency set from the project's declared configuration.
 
 ---
 
-# 7. Dependency Classification
+## Explicitness
 
-Dependencies should be clearly categorized according to their purpose.
+All dependencies MUST be explicitly declared.
 
-Typical categories include:
-
-* Runtime dependencies
-* Development dependencies
-* Testing dependencies
-* Documentation dependencies
-
-Each dependency shall have a clear engineering justification.
+Implicit or undocumented dependencies are prohibited.
 
 ---
 
-# 8. Dependency Selection
+## Minimalism
 
-Before introducing a new dependency, engineers should evaluate:
+Projects SHOULD depend only on libraries that provide clear engineering value.
 
-* Necessity
-* Maintenance activity
-* Community adoption
-* Documentation quality
-* License compatibility
-* Security history
-* Long-term sustainability
-
-Adding a dependency is considered an architectural decision.
+Unused dependencies SHOULD be removed.
 
 ---
 
-# 9. Dependency Updates
+## Version Control
 
-Dependencies should be updated regularly.
+Dependency versions MUST be managed explicitly.
 
-Update frequency should balance:
-
-* Stability
-* Security
-* Compatibility
-* Maintenance effort
-
-Large dependency upgrades should be validated before adoption.
+Versioning policies SHALL minimize unexpected breaking changes while allowing controlled evolution.
 
 ---
 
-# 10. Security
+## Traceability
 
-Projects shall:
+The origin and purpose of each dependency SHOULD be identifiable.
 
-* Monitor dependency vulnerabilities.
-* Remove unused dependencies.
-* Minimize transitive dependencies whenever practical.
-* Prefer actively maintained packages.
-* Validate third-party packages before adoption.
-
-Security is part of engineering quality.
+Projects SHOULD periodically review dependency usage.
 
 ---
 
-# 11. Reproducible Environments
+## Security
 
-Development, testing, CI, and production environments should be reproducible.
+Dependencies MUST be evaluated for security risks throughout the project lifecycle.
 
-Projects should avoid undocumented local configurations.
-
-Environment setup should be automated whenever practical.
+Known vulnerable dependencies SHOULD be updated or replaced as soon as practical.
 
 ---
 
-# 12. Compliance
+## Maintainability
 
-A project complies with this standard when it:
+Projects SHOULD prefer actively maintained libraries with healthy development communities.
 
-* Uses the official dependency manager.
-* Maintains project metadata in `pyproject.toml`.
-* Maintains reproducible environments.
-* Keeps dependencies organized and justified.
-* Documents exceptions through ADRs.
-
-Compliance is evaluated through engineering practices rather than tooling alone.
+Abandoned dependencies SHOULD be avoided.
 
 ---
 
-# 13. Evolution
+# 6. Standard
 
-This standard evolves through practical experience.
+Every DESys-compliant Python project SHALL implement a structured dependency management process.
 
-Changes shall be proposed through the DunderCode engineering process and validated in real-world projects before adoption.
+Dependencies SHALL be categorized according to their engineering purpose.
+
+At a minimum, projects SHOULD distinguish between:
+
+- Runtime dependencies
+- Development dependencies
+- Testing dependencies
+- Documentation dependencies
+- Optional dependencies
+
+Projects MAY introduce additional categories when justified by engineering requirements.
 
 ---
 
-# 14. Closing Statement
+# 7. Mandatory Requirements
 
-Effective dependency management improves maintainability, strengthens security, and enables reproducible software development.
+Every Python project developed under DESys MUST:
 
-Within DESys, dependency management is treated as a strategic engineering practice rather than an operational detail.
+- Declare all dependencies explicitly.
+- Maintain reproducible dependency definitions.
+- Separate runtime and development dependencies.
+- Avoid unnecessary or duplicate dependencies.
+- Review dependency updates periodically.
+- Document dependency management decisions when appropriate.
+- Monitor dependencies for known security vulnerabilities.
+- Preserve compatibility across supported environments.
 
 ---
 
-> **Think First. Build Better.**
+# 8. Dependency Lifecycle
+
+Dependencies SHALL be managed throughout their lifecycle.
+
+```text
+Selection
+      ↓
+Evaluation
+      ↓
+Adoption
+      ↓
+Maintenance
+      ↓
+Review
+      ↓
+Upgrade
+      ↓
+Replacement
+      ↓
+Removal
+```
+
+Each stage contributes to the long-term health of the software project.
+
+---
+
+# 9. Compliance
+
+A project complies with this standard when its dependency management practices satisfy the mandatory requirements defined herein.
+
+Compliance SHALL be verified during engineering reviews and documented through assessment reports (DAR).
+
+Projects SHOULD continuously improve dependency quality throughout their lifecycle.
+
+---
+
+# 10. References
+
+- DEC-0001 — DunderCode Engineering Canon
+- DEM-0001 — DunderCode Engineering Method
+- DCSG-0001 — DunderCode Canon Style Guide
+- DES-0001 — Python Engineering Foundation Standard
+
+---
+
+# 11. Changelog
+
+## Version 1.0.0 (Draft)
+
+### Added
+
+- Initial Dependency Management Standard.
+- Defined engineering principles for dependency management.
+- Established mandatory requirements for dependency declaration and maintenance.
+- Introduced the dependency lifecycle model.

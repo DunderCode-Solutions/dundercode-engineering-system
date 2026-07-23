@@ -1,200 +1,197 @@
-# DES-0130 — Packaging Standard
+# DES-0140 — Virtual Environment Standard
 
-**Document ID:** DES-0130
+# Metadata
 
-**Title:** Packaging Standard
+**Canonical ID:** des.python.virtual-environment
+
+**Document Class:** Normative
 
 **Version:** 1.0.0 (Draft)
 
 **Status:** Draft
 
-**Owner:** DunderCode Engineering
-
 **Canonical Language:** English
 
-**Category:** Engineering Standard
+**Owner:** DunderCode Engineering
 
-**Depends On:** DEC-0001, DEM-0001, DES-0001, DES-0120
+**Applies To:** All Python projects developed under DESys
 
 ---
 
 # 1. Purpose
 
-This standard defines the official packaging practices for Python projects developed within the DunderCode Engineering System (DESys).
+The Virtual Environment Standard defines the engineering requirements for isolating Python execution environments within the DunderCode Engineering System (DESys).
 
-Its objective is to ensure that Python software is packaged, versioned, distributed, and maintained in a consistent, reliable, and reproducible manner.
+Its purpose is to ensure reproducibility, dependency isolation, consistency, and maintainability across every stage of the software lifecycle.
 
-Packaging is considered an engineering responsibility that extends beyond software distribution.
+This standard establishes engineering principles for environment isolation independently of any specific tooling or implementation.
 
 ---
 
 # 2. Scope
 
-This standard applies to every Python project intended for distribution, including:
+This standard applies to every Python project developed under DESys.
 
-* Public libraries
-* Internal libraries
-* Command-line applications
-* Reusable frameworks
-* Automation tools
-* SDKs
-* Plugins
+It defines how execution environments SHALL be isolated, reproduced, maintained, and managed throughout development, testing, packaging, deployment, and maintenance.
 
-Projects that are not distributed externally should still follow this standard whenever applicable.
+Implementation details related to specific virtual environment technologies are intentionally excluded.
 
 ---
 
-# 3. Guiding Principles
+# 3. Audience
 
-Packaging shall:
+This standard is intended for:
 
-* Promote reproducibility.
-* Be deterministic.
-* Follow Python packaging standards.
-* Minimize configuration duplication.
-* Preserve project metadata.
-* Support long-term maintainability.
+- Software Engineers
+- Solution Architects
+- Technical Leaders
+- Engineering Managers
+- Project Maintainers
+- AI-assisted engineering systems
 
-Consistency is preferred over customization.
-
----
-
-# 4. Project Metadata
-
-Every project shall maintain its metadata in:
-
-`pyproject.toml`
-
-The project metadata is the authoritative source for:
-
-* Project name
-* Version
-* Description
-* Authors
-* License
-* Python requirements
-* Dependencies
-* Build system
-* Project URLs
-
-Metadata shall remain accurate throughout the project lifecycle.
+Every stakeholder responsible for creating or maintaining Python environments SHALL understand and follow this standard.
 
 ---
 
-# 5. Build System
+# 4. Relationship with DES-0001
 
-Projects shall use a standards-compliant build backend.
+This standard specializes the engineering principles established by DES-0001 — Python Engineering Foundation Standard.
 
-The selected backend shall:
-
-* Support modern Python packaging.
-* Integrate with the official dependency manager.
-* Produce reproducible artifacts.
-* Follow PEP-compliant packaging practices.
-
-Build system selection may evolve through approved ADRs.
+While DES-0001 defines the engineering baseline, DES-0140 establishes the requirements for environment isolation and reproducibility.
 
 ---
 
-# 6. Distribution Artifacts
+# 5. Engineering Principles
 
-Whenever applicable, projects should generate:
+Virtual environments SHALL follow these engineering principles.
 
-* Source Distribution (sdist)
-* Built Distribution (wheel)
+## Isolation
 
-Distributed artifacts shall be reproducible and traceable to a released version.
+Each project MUST execute within an isolated environment.
 
----
-
-# 7. Versioning
-
-Projects shall adopt Semantic Versioning (SemVer).
-
-Version numbers communicate compatibility and release intent.
-
-Breaking changes shall increment the major version.
+Dependencies from unrelated projects MUST NOT interfere with one another.
 
 ---
 
-# 8. Release Process
+## Reproducibility
 
-Releases should:
+Environment creation MUST be reproducible.
 
-* Be reproducible.
-* Be traceable.
-* Correspond to tagged versions.
-* Be documented.
-
-Release notes should accompany every public release.
+Every engineer SHOULD obtain an equivalent execution environment from the project's configuration.
 
 ---
 
-# 9. Licensing
+## Consistency
 
-Every distributed project shall define an explicit software license.
+Development, testing, automation, and deployment SHOULD use compatible environments.
 
-The selected license shall be compatible with the project's intended distribution model.
-
-License information shall be included in project metadata.
+Environmental differences SHOULD be minimized.
 
 ---
 
-# 10. Project Identity
+## Independence
 
-Every project shall provide:
+Projects MUST NOT depend on globally installed Python packages.
 
-* README
-* LICENSE
-* CHANGELOG (recommended)
-* Project URLs
-* Repository information
-
-Public projects should clearly communicate their purpose, installation method, and usage.
+Execution environments SHALL remain self-contained.
 
 ---
 
-# 11. Distribution Repositories
+## Traceability
 
-Projects may be distributed through:
+Environment configuration SHOULD be documented and reproducible.
 
-* Public package repositories
-* Private package repositories
-* Internal artifact repositories
-
-Distribution targets shall be documented as part of the project.
+Projects SHOULD clearly identify supported Python versions.
 
 ---
 
-# 12. Compliance
+## Maintainability
 
-A project complies with this standard when it:
-
-* Maintains complete project metadata.
-* Produces reproducible distribution artifacts.
-* Uses Semantic Versioning.
-* Documents releases.
-* Includes licensing information.
-* Follows Python packaging standards.
-
-Compliance is evaluated through engineering practices rather than publication targets.
+Environment configuration SHOULD remain simple, explicit, and maintainable.
 
 ---
 
-# 13. Evolution
+# 6. Standard
 
-Packaging practices evolve with the Python ecosystem.
+Every DESys-compliant Python project SHALL execute within an isolated environment.
 
-Changes to this standard shall be validated through real projects before becoming part of DESys.
+Environment creation SHALL be automated whenever practical.
+
+Projects SHALL clearly define:
+
+- Supported Python versions
+- Environment creation requirements
+- Environment activation procedures
+- Environment maintenance responsibilities
 
 ---
 
-# 14. Closing Statement
+# 7. Mandatory Requirements
 
-Packaging is the process through which software becomes a reusable engineering asset.
+Every Python project developed under DESys MUST:
 
-Within DESys, packaging ensures that software can be reliably shared, versioned, maintained, and reused across projects and teams.
+- Use isolated execution environments.
+- Avoid relying on globally installed packages.
+- Define supported Python versions.
+- Ensure reproducible environment creation.
+- Keep environment configuration under version control.
+- Document environment setup when required.
+- Support automated environment provisioning.
 
 ---
 
-> **Think First. Build Better.**
+# 8. Environment Lifecycle
+
+Execution environments SHALL follow a controlled lifecycle.
+
+```text
+Python Installation
+        ↓
+Environment Creation
+        ↓
+Dependency Installation
+        ↓
+Development
+        ↓
+Testing
+        ↓
+Packaging
+        ↓
+Maintenance
+        ↓
+Removal
+```
+
+Environment recreation SHALL always be possible from the project's declared configuration.
+
+---
+
+# 9. Compliance
+
+A project complies with this standard when its execution environments satisfy the engineering requirements defined herein.
+
+Compliance SHALL be verified during engineering reviews and assessment reports (DAR).
+
+Projects SHOULD periodically validate that environments remain reproducible.
+
+---
+
+# 10. References
+
+- DEC-0001 — DunderCode Engineering Canon
+- DEM-0001 — DunderCode Engineering Method
+- DCSG-0001 — DunderCode Canon Style Guide
+- DES-0001 — Python Engineering Foundation Standard
+
+---
+
+# 11. Changelog
+
+## Version 1.0.0 (Draft)
+
+### Added
+
+- Initial Virtual Environment Standard.
+- Defined engineering principles for environment isolation.
+- Established mandatory requirements for reproducible execution environments.
+- Introduced the environment lifecycle model.

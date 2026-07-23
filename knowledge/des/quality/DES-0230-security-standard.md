@@ -1,205 +1,237 @@
 # DES-0230 — Security Standard
 
-**Document ID:** DES-0230
+# Metadata
 
 **Canonical ID:** des.quality.security
 
-**Title:** Security Standard
+**Document Class:** Normative
 
 **Version:** 1.0.0 (Draft)
 
 **Status:** Draft
 
-**Owner:** DunderCode Engineering
-
 **Canonical Language:** English
 
-**Category:** Engineering Standard
+**Owner:** DunderCode Engineering
 
-**Domain:** Quality
-
-**Depends On:**
-
-* dec.engineering.manifesto
-* dem.engineering.method
-* des.quality.code
-
-**Related:**
-
-* des.quality.testing
-* des.quality.type-checking
-* des.python.configuration
+**Applies To:** All software projects developed under DESys
 
 ---
 
 # 1. Purpose
 
-This standard defines the engineering principles for building secure software within the DunderCode Engineering System (DESys).
+The Security Standard defines the engineering requirements for designing, developing, maintaining, and operating secure software within the DunderCode Engineering System (DESys).
 
-Its purpose is to establish security as a continuous engineering practice integrated into every stage of software development.
+Its purpose is to establish technology-independent engineering principles that reduce security risks throughout the software lifecycle.
 
-Security is regarded as a design responsibility rather than a post-development activity.
+Security is treated as a continuous engineering discipline rather than a final validation activity.
 
 ---
 
 # 2. Scope
 
-This standard applies to every software project developed within DunderCode, regardless of technology stack or deployment environment.
+This standard applies to every software project developed under DESys.
 
-Technology-specific security implementations shall be defined in complementary guides and reference blueprints.
+It defines engineering expectations for secure software development, secure architecture, dependency management, configuration, operational security, and continuous security improvement.
 
----
-
-# 3. Guiding Principles
-
-Software security shall:
-
-* Be considered from project inception.
-* Minimize attack surface.
-* Apply the principle of least privilege.
-* Protect confidentiality, integrity, and availability.
-* Encourage secure defaults.
-* Continuously evolve.
-
-Security is an ongoing engineering discipline.
+Implementation details related to specific security tools, frameworks, or technologies are intentionally excluded.
 
 ---
 
-# 4. Secure Design
+# 3. Audience
 
-Projects should:
+This standard is intended for:
 
-* Identify security risks early.
-* Validate architectural assumptions.
-* Document security decisions with ADRs when appropriate.
-* Reduce unnecessary complexity.
-* Favor explicit security controls over implicit behavior.
+- Software Engineers
+- Solution Architects
+- Technical Leaders
+- Engineering Managers
+- Security Engineers
+- DevOps Engineers
+- AI-assisted engineering systems
 
-Security begins with architecture.
-
----
-
-# 5. Secure Development
-
-Engineering teams shall:
-
-* Validate external inputs.
-* Handle errors safely.
-* Protect sensitive information.
-* Avoid insecure coding practices.
-* Keep dependencies updated.
-
-Secure software is the result of disciplined engineering practices.
+Every stakeholder responsible for software engineering SHALL understand and follow this standard.
 
 ---
 
-# 6. Dependency Security
+# 4. Relationship with DESys
 
-Projects shall:
+This standard derives its engineering principles from:
 
-* Use trusted dependencies.
-* Monitor dependency vulnerabilities.
-* Update dependencies responsibly.
-* Remove unused packages.
+- DEC — DunderCode Engineering Canon
+- DEM — DunderCode Engineering Method
+- DCSG — DunderCode Canon Style Guide
+- DES-0200 — Code Quality Standard
 
-Dependency management is a critical aspect of software security.
-
----
-
-# 7. Secrets Management
-
-Sensitive information shall never be stored in source control.
-
-Examples include:
-
-* Passwords
-* API keys
-* Tokens
-* Certificates
-* Private keys
-
-Secrets shall be managed through secure configuration mechanisms appropriate to the deployment environment.
+Security complements software quality by reducing operational, architectural, and implementation risks.
 
 ---
 
-# 8. Continuous Verification
+# 5. Engineering Principles
 
-Security verification should be integrated into the engineering workflow.
+Software security SHALL follow these engineering principles.
 
-Typical activities include:
+## Security by Design
 
-* Static analysis
-* Dependency auditing
-* Automated security checks
-* Code review
-* Continuous Integration
-
-Security should be verified continuously rather than periodically.
+Security MUST be considered during software design rather than added after implementation.
 
 ---
 
-# 9. Incident Response
+## Least Privilege
 
-Projects should establish procedures for:
-
-* Reporting vulnerabilities.
-* Assessing security impact.
-* Correcting defects.
-* Publishing security updates when appropriate.
-
-Engineering transparency strengthens long-term trust.
+Software SHOULD operate with the minimum permissions required to perform its intended functions.
 
 ---
 
-# 10. Tool Independence
+## Defense in Depth
 
-This standard defines engineering expectations rather than prescribing specific security tools.
+Security SHOULD be implemented through multiple complementary protection layers.
 
-Reference implementations may adopt different technologies provided they satisfy the security objectives established by DESys.
-
-Technology choices shall be documented through Architecture Decision Records (ADRs).
+No single security mechanism SHOULD be considered sufficient.
 
 ---
 
-# 11. Compliance
+## Secure Defaults
 
-A project complies with this standard when it:
+Applications MUST adopt secure default behavior.
 
-* Applies secure engineering practices.
-* Protects sensitive information.
-* Integrates security verification into development.
-* Documents justified deviations through ADRs.
-
-Compliance is evaluated through engineering practices rather than individual security tools.
+Insecure configurations SHOULD require explicit engineering decisions.
 
 ---
 
-# 12. Related Standards
+## Explicit Trust Boundaries
 
-This standard complements:
+Trust boundaries SHOULD be clearly identified and validated.
 
-* DES-0200 — Code Quality Standard
-* DES-0210 — Testing Standard
-* DES-0220 — Type Checking Standard
-* DES-0120 — Dependency Management Standard
-* DES-0150 — Project Configuration Standard
+External inputs MUST be considered untrusted unless explicitly verified.
 
 ---
 
-# 13. Evolution
+## Confidentiality
 
-Software security evolves continuously as threats, technologies, and engineering practices change.
-
-This standard shall be reviewed periodically and updated through the DunderCode engineering process.
+Sensitive information MUST be protected throughout its lifecycle.
 
 ---
 
-# 14. Closing Statement
+## Integrity
 
-Security is a continuous engineering responsibility shared by every contributor.
-
-Within DESys, secure software is achieved through disciplined design, responsible implementation, continuous verification, and ongoing improvement.
+Software SHOULD preserve the integrity of data, configuration, and operational behavior.
 
 ---
 
-> **Think First. Build Better.**
+## Availability
+
+Security engineering SHOULD preserve software availability while preventing abuse.
+
+---
+
+## Continuous Improvement
+
+Security SHALL evolve continuously alongside software evolution.
+
+---
+
+# 6. Standard
+
+Every DESys-compliant software project SHALL adopt a structured security engineering strategy.
+
+Security SHALL be integrated throughout the software lifecycle, including:
+
+- Architecture
+- Development
+- Testing
+- Deployment
+- Operations
+- Maintenance
+
+Projects MAY implement additional security controls according to their business requirements.
+
+---
+
+# 7. Mandatory Requirements
+
+Every software project developed under DESys MUST:
+
+- Consider security during software design.
+- Validate untrusted inputs.
+- Protect sensitive information.
+- Separate secrets from source code.
+- Apply the principle of least privilege.
+- Review dependencies for security risks.
+- Maintain secure project configuration.
+- Periodically review security practices.
+- Correct known security issues in a timely manner.
+
+---
+
+# 8. Security Lifecycle
+
+Security SHALL be integrated into the engineering lifecycle.
+
+```text
+Requirements
+      ↓
+Threat Analysis
+      ↓
+Secure Design
+      ↓
+Implementation
+      ↓
+Verification
+      ↓
+Deployment
+      ↓
+Monitoring
+      ↓
+Continuous Improvement
+```
+
+Security SHALL remain an ongoing engineering activity.
+
+---
+
+# 9. Compliance
+
+A project complies with this standard when its engineering practices satisfy the security requirements defined herein.
+
+Compliance SHALL be verified during engineering reviews, security assessments, and assessment reports (DAR).
+
+Projects SHOULD periodically evaluate their security posture.
+
+---
+
+# 10. Relationship with Other Quality Standards
+
+Security complements the remaining Quality Engineering Standards.
+
+| Standard | Discipline |
+|----------|------------|
+| DES-0200 | Code Quality |
+| DES-0210 | Testing |
+| DES-0220 | Type Checking |
+| DES-0230 | Security |
+
+Together, these standards establish the DESys Quality Engineering Model.
+
+---
+
+# 11. References
+
+- DEC-0001 — DunderCode Engineering Canon
+- DEM-0001 — DunderCode Engineering Method
+- DCSG-0001 — DunderCode Canon Style Guide
+- DES-0200 — Code Quality Standard
+
+---
+
+# 12. Changelog
+
+## Version 1.0.0 (Draft)
+
+### Added
+
+- Initial Security Standard.
+- Defined technology-independent security engineering principles.
+- Established mandatory security requirements.
+- Introduced the security lifecycle.
+- Defined the relationship between security and the remaining Quality Engineering Standards.

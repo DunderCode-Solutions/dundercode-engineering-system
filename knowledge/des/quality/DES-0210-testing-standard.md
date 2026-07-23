@@ -1,179 +1,229 @@
 # DES-0210 — Testing Standard
 
-**Document ID:** DES-0210
+# Metadata
 
 **Canonical ID:** des.quality.testing
 
-**Title:** Testing Standard
+**Document Class:** Normative
 
 **Version:** 1.0.0 (Draft)
 
 **Status:** Draft
 
-**Owner:** DunderCode Engineering
-
 **Canonical Language:** English
 
-**Category:** Engineering Standard
+**Owner:** DunderCode Engineering
 
-**Depends On:** DEC-0001, DEM-0001, DES-0001, DES-0200
+**Applies To:** All software projects developed under DESys
 
 ---
 
 # 1. Purpose
 
-This standard defines the engineering principles and practices for software testing within the DunderCode Engineering System (DESys).
+The Testing Standard defines the engineering requirements for verifying software correctness throughout the software lifecycle within the DunderCode Engineering System (DESys).
 
-Its purpose is to ensure that software behavior is continuously verified through reliable, automated, and maintainable testing practices.
+Its purpose is to establish a consistent, technology-independent approach to software testing that improves reliability, maintainability, confidence, and long-term software quality.
 
-Testing is considered an integral part of software engineering rather than a separate development phase.
+Testing is considered an engineering discipline rather than a final validation activity.
 
 ---
 
 # 2. Scope
 
-This standard applies to every software project maintained by DunderCode.
+This standard applies to every software project developed under DESys.
 
-Technology-specific testing implementations shall be defined in complementary standards and reference blueprints.
+It defines engineering principles, test classifications, verification practices, and quality expectations independently of any programming language, testing framework, or automation platform.
 
----
-
-# 3. Guiding Principles
-
-Testing shall:
-
-* Verify observable behavior.
-* Be automated whenever practical.
-* Be deterministic.
-* Be maintainable.
-* Be reproducible.
-* Support rapid feedback.
-* Encourage confidence in change.
-
-Tests exist to validate software behavior, not implementation details.
+Implementation details related to specific testing tools are intentionally excluded.
 
 ---
 
-# 4. Testing Strategy
+# 3. Audience
 
-Projects should adopt a balanced testing strategy that combines multiple levels of verification.
+This standard is intended for:
 
-Typical testing levels include:
+- Software Engineers
+- Test Engineers
+- Solution Architects
+- Technical Leaders
+- Engineering Managers
+- AI-assisted engineering systems
 
-* Unit Testing
-* Integration Testing
-* System Testing
-* End-to-End Testing
-
-Each project shall determine the appropriate balance according to its architecture and business requirements.
-
----
-
-# 5. Test Design
-
-Tests shall:
-
-* Be independent.
-* Produce consistent results.
-* Avoid hidden dependencies.
-* Express expected behavior clearly.
-* Be easy to understand and maintain.
-
-Readability is a quality attribute of test code.
+Every stakeholder responsible for software verification SHALL understand and follow this standard.
 
 ---
 
-# 6. Automation
+# 4. Relationship with DESys
 
-Automated tests are the preferred mechanism for software validation.
+This standard derives its engineering principles from:
 
-Test execution should be integrated into the development workflow and continuous integration pipelines.
+- DEC — DunderCode Engineering Canon
+- DEM — DunderCode Engineering Method
+- DCSG — DunderCode Canon Style Guide
+- DES-0200 — Code Quality Standard
 
-Manual testing should complement, rather than replace, automated verification.
-
----
-
-# 7. Test Data
-
-Test data shall:
-
-* Be isolated.
-* Be reproducible.
-* Represent realistic scenarios.
-* Avoid unnecessary complexity.
-
-Sensitive production data shall never be used without appropriate protection.
+Testing complements code quality by providing objective evidence that software behaves according to its specified requirements.
 
 ---
 
-# 8. Failure Analysis
+# 5. Engineering Principles
 
-Test failures should provide clear, actionable information.
+Software testing SHALL follow these engineering principles.
 
-A failing test shall facilitate diagnosis rather than increase uncertainty.
+## Verification
 
-Projects should eliminate flaky or nondeterministic tests whenever identified.
-
----
-
-# 9. Continuous Verification
-
-Testing shall be performed continuously throughout the software lifecycle.
-
-Code changes should be validated before integration into the main development branch.
-
-Testing supports safe and sustainable software evolution.
+Testing MUST verify that software satisfies its specified behavior.
 
 ---
 
-# 10. Tool Independence
+## Early Feedback
 
-This standard defines engineering expectations rather than prescribing specific testing frameworks.
-
-Reference implementations may adopt different testing tools provided they satisfy the principles established by DESys.
-
-Technology choices shall be documented through Architecture Decision Records (ADRs).
+Testing SHOULD occur as early as practical during development.
 
 ---
 
-# 11. Compliance
+## Automation
 
-A project complies with this standard when it:
+Automated testing SHOULD be preferred whenever practical.
 
-* Maintains automated tests appropriate to its scope.
-* Integrates testing into the development workflow.
-* Produces reliable and reproducible test results.
-* Documents justified deviations through ADRs.
-
-Compliance is evaluated through engineering outcomes rather than framework selection.
+Manual testing SHOULD focus on scenarios that cannot be effectively automated.
 
 ---
 
-# 12. Related Standards
+## Repeatability
 
-This standard complements:
-
-* DES-0200 — Code Quality Standard
-* DES-0220 — Type Checking Standard
-* DES-0230 — Security Standard
-* DES-0240 — Code Coverage Standard (planned)
+Test execution MUST produce consistent and reproducible results under equivalent conditions.
 
 ---
 
-# 13. Evolution
+## Independence
 
-Testing practices evolve with engineering experience and technological advances.
+Tests SHOULD be independent from one another.
 
-Changes to this standard shall be proposed through the DunderCode engineering process and validated through real-world projects before adoption.
-
----
-
-# 14. Closing Statement
-
-Effective testing increases confidence, enables continuous improvement, and supports sustainable software development.
-
-Within DESys, testing is regarded as a continuous engineering practice that protects software quality throughout the entire project lifecycle.
+Individual failures SHOULD NOT invalidate unrelated tests.
 
 ---
 
-> **Think First. Build Better.**
+## Maintainability
+
+Test code SHALL be treated as production-quality engineering code.
+
+Tests SHOULD remain readable, modular, and maintainable.
+
+---
+
+## Reliability
+
+Tests MUST produce deterministic results.
+
+Flaky or non-deterministic tests SHOULD be corrected or removed.
+
+---
+
+## Continuous Verification
+
+Testing SHALL be integrated into the continuous engineering workflow.
+
+---
+
+# 6. Standard
+
+Every DESys-compliant software project SHALL implement a structured testing strategy.
+
+Testing SHALL provide confidence that software behaves according to its intended functionality throughout its lifecycle.
+
+Projects MAY adopt different testing methodologies provided they remain consistent with the engineering principles established by this standard.
+
+---
+
+# 7. Test Classification
+
+Software verification SHOULD be organized into complementary testing levels.
+
+Typical engineering classifications include:
+
+- Unit Testing
+- Integration Testing
+- System Testing
+- End-to-End Testing
+- Acceptance Testing
+- Regression Testing
+- Performance Testing
+- Security Testing
+
+Not every project is required to implement every testing category.
+
+The selected testing strategy SHOULD remain proportional to project complexity and business risk.
+
+---
+
+# 8. Test Lifecycle
+
+Testing SHALL follow a continuous engineering lifecycle.
+
+```text
+Requirements
+      ↓
+Test Design
+      ↓
+Implementation
+      ↓
+Execution
+      ↓
+Analysis
+      ↓
+Correction
+      ↓
+Regression
+      ↓
+Continuous Improvement
+```
+
+Testing SHALL accompany software evolution throughout the project lifecycle.
+
+---
+
+# 9. Mandatory Requirements
+
+Every software project developed under DESys MUST:
+
+- Define a testing strategy.
+- Verify critical software behavior.
+- Execute tests before software release.
+- Preserve deterministic test execution.
+- Maintain test code with the same engineering quality as production code.
+- Prevent known regressions whenever practical.
+- Continuously improve testing coverage according to project evolution.
+
+---
+
+# 10. Compliance
+
+A project complies with this standard when its testing practices satisfy the engineering requirements defined herein.
+
+Compliance SHALL be verified during engineering reviews and assessment reports (DAR).
+
+Testing effectiveness SHOULD be periodically reviewed throughout the software lifecycle.
+
+---
+
+# 11. References
+
+- DEC-0001 — DunderCode Engineering Canon
+- DEM-0001 — DunderCode Engineering Method
+- DCSG-0001 — DunderCode Canon Style Guide
+- DES-0200 — Code Quality Standard
+
+---
+
+# 12. Changelog
+
+## Version 1.0.0 (Draft)
+
+### Added
+
+- Initial Testing Standard.
+- Defined engineering principles for software testing.
+- Established technology-independent testing requirements.
+- Introduced test classifications.
+- Defined the testing lifecycle.

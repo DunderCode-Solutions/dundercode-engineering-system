@@ -1,167 +1,202 @@
 # DES-0150 — Project Configuration Standard
 
-**Document ID:** DES-0150
+# Metadata
 
-**Title:** Project Configuration Standard
+**Canonical ID:** des.python.configuration
+
+**Document Class:** Normative
 
 **Version:** 1.0.0 (Draft)
 
 **Status:** Draft
 
-**Owner:** DunderCode Engineering
-
 **Canonical Language:** English
 
-**Category:** Engineering Standard
+**Owner:** DunderCode Engineering
 
-**Depends On:** DEC-0001, DEM-0001, DES-0001, DES-0110, DES-0120, DES-0140
+**Applies To:** All Python projects developed under DESys
 
 ---
 
 # 1. Purpose
 
-This standard defines the official practices for configuring Python projects developed within the DunderCode Engineering System (DESys).
+The Project Configuration Standard defines the engineering requirements for managing application configuration within Python projects developed under the DunderCode Engineering System (DESys).
 
-Its objective is to establish a consistent, centralized, and maintainable configuration model that reduces duplication, improves discoverability, and supports reproducible software development.
+Its purpose is to ensure that application configuration remains explicit, secure, maintainable, reproducible, and independent from application source code.
 
-Project configuration is considered an engineering asset rather than an implementation detail.
+This standard establishes configuration management principles independently of any specific configuration library or implementation.
 
 ---
 
 # 2. Scope
 
-This standard applies to all Python projects maintained by DunderCode, including:
+This standard applies to every Python project developed under DESys.
 
-* Libraries
-* APIs
-* Desktop applications
-* Web applications
-* CLI tools
-* Automation scripts
-* AI applications
-* Internal tools
+It defines how application configuration SHALL be organized, managed, documented, validated, and maintained throughout the software lifecycle.
 
-Project-specific exceptions shall be documented through an Architecture Decision Record (ADR).
+Implementation details related to specific configuration libraries or storage mechanisms are intentionally excluded.
 
 ---
 
-# 3. Guiding Principles
+# 3. Audience
 
-Project configuration shall:
+This standard is intended for:
 
-* Be centralized whenever practical.
-* Minimize duplication.
-* Be explicit rather than implicit.
-* Be version-controlled.
-* Be reproducible.
-* Remain understandable by both humans and AI systems.
+- Software Engineers
+- Solution Architects
+- Technical Leaders
+- Engineering Managers
+- Project Maintainers
+- AI-assisted engineering systems
 
-Configuration should communicate engineering intent.
-
----
-
-# 4. Configuration Authority
-
-The authoritative configuration file for every Python project is:
-
-`pyproject.toml`
-
-Whenever supported by tools, project configuration should be consolidated into this file.
-
-Configuration fragmentation should be avoided.
+Every stakeholder responsible for application configuration SHALL understand and follow this standard.
 
 ---
 
-# 5. Configuration Categories
+# 4. Relationship with DES-0001
 
-Project configuration typically includes:
+This standard specializes the engineering principles established by DES-0001 — Python Engineering Foundation Standard.
 
-* Project metadata
-* Dependency management
-* Build configuration
-* Code quality tools
-* Type checking
-* Testing
-* Documentation
-* Packaging
-* Development tooling
-
-Each configuration shall have a clearly defined responsibility.
+While DES-0001 defines the engineering baseline, DES-0150 establishes the requirements for application configuration management.
 
 ---
 
-# 6. External Configuration
+# 5. Engineering Principles
 
-Configuration that varies between environments shall remain external to the project.
+Configuration management SHALL follow these engineering principles.
 
-Typical examples include:
+## Separation of Concerns
 
-* Secrets
-* Credentials
-* API keys
-* Environment-specific values
+Application configuration MUST remain independent from application logic.
 
-Sensitive information shall never be stored in source control.
+Business logic SHALL NOT contain environment-specific values.
 
 ---
 
-# 7. Configuration Consistency
+## Explicitness
 
-Configuration files shall:
+Every configuration value MUST have a clearly defined purpose.
 
-* Follow documented conventions.
-* Avoid redundant definitions.
-* Remain synchronized across tools.
-* Be reviewed together with code changes.
-
-Consistency is preferred over convenience.
+Configuration SHOULD be self-documenting whenever practical.
 
 ---
 
-# 8. Version Control
+## Environment Independence
 
-Project configuration files are part of the engineering knowledge base.
+Applications SHOULD support multiple execution environments without requiring source code modifications.
 
-Configuration changes shall be version-controlled and reviewed using the same engineering process applied to source code.
-
----
-
-# 9. Documentation
-
-Configuration decisions shall be documented whenever they introduce architectural impact.
-
-Projects should explain non-obvious configuration choices through Architecture Decision Records (ADRs).
+Configuration SHALL adapt the application to its environment.
 
 ---
 
-# 10. Compliance
+## Security
 
-A project complies with this standard when it:
+Sensitive configuration values MUST be protected.
 
-* Uses `pyproject.toml` as the primary configuration authority.
-* Maintains consistent configuration.
-* Avoids unnecessary duplication.
-* Separates environment-specific configuration.
-* Documents justified exceptions through ADRs.
-
-Compliance is evaluated through engineering consistency rather than file count.
+Secrets SHALL NOT be embedded in source code.
 
 ---
 
-# 11. Evolution
+## Validation
 
-Configuration practices evolve with the Python ecosystem.
+Configuration SHOULD be validated before application execution.
 
-Changes to this standard shall be proposed through the DunderCode engineering process and validated through real-world projects before adoption.
-
----
-
-# 12. Closing Statement
-
-Well-organized configuration reduces cognitive load, simplifies maintenance, and improves reproducibility.
-
-Within DESys, project configuration is regarded as a strategic engineering concern that enables consistency across projects, teams, and automation.
+Invalid configuration SHOULD prevent application startup whenever practical.
 
 ---
 
-> **Think First. Build Better.**
+## Maintainability
+
+Configuration SHOULD remain simple, organized, and easy to evolve.
+
+---
+
+## Traceability
+
+Configuration changes SHOULD be traceable throughout the project lifecycle.
+
+---
+
+# 6. Standard
+
+Every DESys-compliant Python project SHALL implement a structured configuration management strategy.
+
+Configuration SHALL be:
+
+- Externalized from application logic.
+- Explicitly documented.
+- Version-aware when applicable.
+- Suitable for multiple execution environments.
+- Securely managed.
+
+Projects MAY organize configuration according to their architectural requirements while preserving these principles.
+
+---
+
+# 7. Mandatory Requirements
+
+Every Python project developed under DESys MUST:
+
+- Separate configuration from source code.
+- Protect sensitive configuration values.
+- Support multiple execution environments.
+- Validate configuration before runtime whenever practical.
+- Document required configuration parameters.
+- Avoid hardcoded environment-specific values.
+- Maintain configuration consistency across environments.
+
+---
+
+# 8. Configuration Lifecycle
+
+Application configuration SHALL follow a controlled lifecycle.
+
+```text
+Definition
+      ↓
+Documentation
+      ↓
+Validation
+      ↓
+Deployment
+      ↓
+Execution
+      ↓
+Review
+      ↓
+Evolution
+```
+
+Configuration SHALL evolve together with the software while preserving engineering consistency.
+
+---
+
+# 9. Compliance
+
+A project complies with this standard when its configuration management satisfies the engineering requirements defined herein.
+
+Compliance SHALL be verified during engineering reviews and assessment reports (DAR).
+
+Projects SHOULD periodically review configuration quality, security, and maintainability.
+
+---
+
+# 10. References
+
+- DEC-0001 — DunderCode Engineering Canon
+- DEM-0001 — DunderCode Engineering Method
+- DCSG-0001 — DunderCode Canon Style Guide
+- DES-0001 — Python Engineering Foundation Standard
+
+---
+
+# 11. Changelog
+
+## Version 1.0.0 (Draft)
+
+### Added
+
+- Initial Project Configuration Standard.
+- Defined engineering principles for configuration management.
+- Established mandatory configuration requirements.
+- Introduced the configuration lifecycle model.
