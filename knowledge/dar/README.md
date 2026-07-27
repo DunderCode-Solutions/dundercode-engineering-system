@@ -36,6 +36,60 @@ Documentation reviews within DESys follow a set of fundamental principles.
 
 Assessments should be based on observable evidence and defined evaluation criteria.
 
+---
+
+# Standards
+
+| ID | Standard |
+|----|----------|
+| DAR-1000 | Assessment Principles |
+| DAR-1010 | Assessment Methodology |
+| DAR-1020 | Assessment Criteria |
+| DAR-1030 | Assessment Levels |
+| DAR-1040 | Evidence Collection |
+| DAR-1050 | Findings & Recommendations |
+| DAR-1060 | Quality Scoring |
+| DAR-1070 | Continuous Improvement |
+| DAR-1080 | Assessment Governance |
+
+---
+
+# Assessment Model
+
+The DAR Standards follow a progressive engineering assessment model.
+
+```text
+Assessment Principles
+        │
+        ▼
+Assessment Methodology
+        │
+        ▼
+Assessment Criteria
+        │
+        ▼
+Assessment Levels
+        │
+        ▼
+Evidence Collection
+        │
+        ▼
+Findings & Recommendations
+        │
+        ▼
+Quality Scoring
+        │
+        ▼
+Continuous Improvement
+        │
+        ▼
+Assessment Governance
+```
+
+Each standard builds upon the previous one, forming a complete engineering assessment model.
+
+---
+
 ## Consistency
 
 Equivalent engineering assets should be reviewed according to the same quality standards.
