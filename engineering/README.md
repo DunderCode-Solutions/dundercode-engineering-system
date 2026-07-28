@@ -8,120 +8,339 @@ It represents the operational layer of the DunderCode Engineering System (DESys)
 
 ---
 
-# Purpose
+# 1. Purpose
 
-The purpose of the Engineering Layer is to provide the assets required to build software consistently, efficiently, and with high quality.
+The Engineering Layer operationalizes the knowledge defined by the DunderCode Engineering System (DESys).
 
-Rather than introducing new engineering concepts, this layer operationalizes the knowledge defined throughout DESys.
+While the Knowledge Layer defines engineering principles, standards, methodologies, and governance, the Engineering Layer transforms that knowledge into reusable engineering assets, executable processes, reference architectures, and standardized documentation.
 
-It enables engineering teams to transform documented knowledge into standardized implementation.
-
----
-
-# Engineering Domains
-
-The Engineering Layer is organized into specialized domains.
-
-| Domain | Responsibility |
-|---------|----------------|
-| **Standards** | Defines implementation standards and engineering specifications. |
-| **Blueprints** | Provides reusable architectural and implementation patterns. |
-| **Templates** | Supplies standardized project and document templates. |
-| **Reference Projects** | Demonstrates engineering standards through complete examples. |
-| **Tools** | Defines and integrates engineering tooling that supports the platform. |
-
-Each domain focuses on a specific aspect of engineering execution while remaining aligned with the overall architecture.
+Its mission is to enable consistent, scalable, and repeatable software engineering across projects, products, and organizations.
 
 ---
 
-# Engineering Workflow
+# 2. Scope
 
-Engineering assets work together throughout the software development lifecycle.
+The Engineering Layer provides reusable engineering assets used throughout the software development lifecycle.
+
+It includes:
+
+* Engineering processes
+* Reference architectures
+* Architecture blueprints
+* Engineering templates
+* Reusable implementation assets
+* Engineering documentation
+
+Future extensions may include:
+
+* Reference projects
+* Engineering tooling
+* Accelerators
+* AI engineering assets
+
+---
+
+# 3. Audience
+
+This library is intended for:
+
+* Software Engineers
+* Software Architects
+* Solution Architects
+* Enterprise Architects
+* Engineering Managers
+* Technical Leaders
+* Product Managers
+* DevOps Engineers
+* Platform Engineers
+* AI-assisted engineering systems
+
+---
+
+# 4. Engineering Layer Vision
+
+The Engineering Layer transforms engineering knowledge into practical execution.
+
+It provides the operational foundation required to deliver software using standardized engineering practices.
+
+The Engineering Layer emphasizes:
+
+* Repeatability
+* Reusability
+* Scalability
+* Consistency
+* Engineering excellence
+* Long-term maintainability
+
+---
+
+# 5. Relationship with DESys
+
+The Engineering Layer is built upon the Knowledge Layer.
 
 ```text
-Engineering Principles
-        │
-        ▼
-Engineering Knowledge
-        │
-        ▼
+Foundation Layer
+
+DEC
+Engineering Philosophy
+
+        ↓
+
+DEM
+Engineering Method
+
+        ↓
+
+Knowledge Layer
+
+DES
 Engineering Standards
-        │
-        ▼
-Blueprints
-        │
-        ▼
-Templates
-        │
-        ▼
-Reference Projects
-        │
-        ▼
+
+        ↓
+
+DAR
+Engineering Assessment
+
+        ↓
+
+Engineering Layer
+
+DEP
+Engineering Processes
+
+        ↓
+
+DEA
+Engineering Architecture
+
+        ↓
+
+DET
+Engineering Templates
+
+        ↓
+
+Engineering Projects
+
+        ↓
+
 Software Products
 ```
 
-This workflow ensures that every implementation is guided by documented engineering knowledge.
+The Knowledge Layer defines **what engineering should be**.
+
+The Engineering Layer defines **how engineering is executed**.
 
 ---
 
-# Relationship with the Foundation Layer
+# 6. Engineering Domains
 
-The Foundation Layer establishes the philosophy, methodology, terminology, and documentation principles that govern engineering work.
+The Engineering Layer is organized into independent but complementary engineering libraries.
 
-The Engineering Layer applies those principles through practical engineering assets.
+## DEP — DunderCode Engineering Processes
+
+Defines standardized engineering workflows used throughout software development.
+
+Responsibilities include:
+
+* Engineering lifecycle
+* Development workflows
+* Architecture process
+* Testing process
+* Deployment process
+* AI engineering process
+* Process governance
+
+---
+
+## DEA — DunderCode Engineering Architecture
+
+Provides reusable architectural assets for engineering projects.
+
+Responsibilities include:
+
+* Reference architectures
+* Architecture blueprints
+* Architecture patterns
+* Implementation guidance
+* Architecture reviews
+* Reusable architecture assets
+* Architecture governance
+
+---
+
+## DET — DunderCode Engineering Templates
+
+Provides standardized engineering documentation.
+
+Responsibilities include:
+
+* Project templates
+* Requirements templates
+* Architecture templates
+* API templates
+* Testing templates
+* Operational templates
+* AI templates
+* Template governance
+
+---
+
+# 7. Engineering Organization
 
 ```text
-Foundation
-        │
-Engineering Principles
-        │
-        ▼
-Engineering Layer
+engineering/
+
+├── dep/
+│     DunderCode Engineering Processes
+│
+├── dea/
+│     DunderCode Engineering Architecture
+│
+├── det/
+│     DunderCode Engineering Templates
+│
+├── reference-projects/        (Future)
+│
+├── tooling/                   (Future)
+│
+└── accelerators/              (Future)
 ```
+
+Each engineering library evolves independently while remaining aligned with DESys.
 
 ---
 
-# Relationship with the Knowledge Layer
+# 8. Engineering Lifecycle
 
-The Knowledge Layer provides the architectural models, governance processes, and semantic organization that support engineering work.
-
-The Engineering Layer transforms that knowledge into practical implementation guidance.
+Engineering execution follows a standardized progression.
 
 ```text
 Knowledge
-        │
-Architecture
-        │
-Governance
-        │
-Guides
-        │
-        ▼
-Engineering Layer
+
+        ↓
+
+Engineering Processes
+
+        ↓
+
+Engineering Architecture
+
+        ↓
+
+Engineering Templates
+
+        ↓
+
+Engineering Execution
+
+        ↓
+
+Software Delivery
+
+        ↓
+
+Operational Feedback
+
+        ↓
+
+Continuous Improvement
 ```
 
-Together, the Foundation, Knowledge, and Engineering layers establish a complete engineering ecosystem.
+This lifecycle ensures engineering knowledge is consistently transformed into software products.
 
 ---
 
-# Navigation
+# 9. Engineering Assets
 
-Continue according to your objective.
+The Engineering Layer provides reusable assets such as:
 
-| If you want to... | Read |
-|-------------------|------|
-| Learn implementation standards | Standards |
-| Explore reusable architectures | Blueprints |
-| Use standardized project structures | Templates |
-| Study complete implementations | Reference Projects |
-| Configure engineering infrastructure | Tools |
+* Engineering workflows
+* Architecture blueprints
+* Reference architectures
+* Decision patterns
+* Documentation templates
+* Review checklists
+* Operational procedures
+* AI engineering artifacts
+
+These assets reduce implementation effort while improving engineering consistency.
 
 ---
 
-# Final Thought
+# 10. Navigation
 
-Engineering excellence depends on the ability to transform knowledge into consistent execution.
+| If you want to...              | Read                          |
+| ------------------------------ | ----------------------------- |
+| Learn engineering workflows    | DEP                           |
+| Explore reusable architectures | DEA                           |
+| Use standardized documentation | DET                           |
+| Study complete implementations | Reference Projects *(Future)* |
+| Use engineering automation     | Tooling *(Future)*            |
 
-The Engineering Layer exists to provide the practical standards, reusable assets, and engineering infrastructure that enable teams to build software with confidence, consistency, and long-term maintainability.
+---
 
-> **Knowledge becomes software through disciplined engineering.**
+# 11. Governance
+
+Engineering libraries SHALL:
+
+* Align with DES engineering standards.
+* Preserve traceability.
+* Follow semantic versioning.
+* Support independent evolution.
+* Undergo technical review.
+* Promote engineering consistency.
+* Encourage continuous improvement.
+
+Engineering governance is performed collaboratively across the Engineering Layer.
+
+---
+
+# 12. Future Evolution
+
+The Engineering Layer has been designed to evolve without structural changes.
+
+Future engineering libraries may include:
+
+* Reference Projects
+* Engineering Tooling
+* Engineering Accelerators
+* AI Asset Libraries
+* Domain-Specific Architectures
+* Platform Reference Implementations
+
+All future libraries SHALL follow the engineering governance principles established by DESys.
+
+---
+
+# 13. References
+
+* DEC — DunderCode Engineering Canon
+* DEM — DunderCode Engineering Method
+* DCSG — DunderCode Canon Style Guide
+* DES — DunderCode Engineering Standards
+* DAR — Documentation Assessment Reports
+* DEP — DunderCode Engineering Processes
+* DEA — DunderCode Engineering Architecture
+* DET — DunderCode Engineering Templates
+
+---
+
+# 14. Changelog
+
+## Version 2.0.0 (Draft)
+
+### Added
+
+* Complete redesign of the Engineering Layer overview.
+* Introduced the Engineering Layer Vision.
+* Defined the relationship between the Knowledge Layer and the Engineering Layer.
+* Established DEP, DEA, and DET as the official engineering libraries.
+* Added the Engineering Lifecycle.
+* Added Engineering Assets.
+* Added Governance and Future Evolution sections.
+* Updated navigation to reflect the current DESys architecture.
+
+---
+
+> **Knowledge defines engineering. Engineering operationalizes knowledge. Software is the result of disciplined execution.**
