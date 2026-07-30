@@ -1,0 +1,26 @@
+version: 1
+
+repository_root: .
+
+sources:
+  - knowledge
+  - engineering
+
+output_directory: skills/generated
+
+exclude:
+  - .git
+  - .venv
+  - __pycache__
+  - node_modules
+  - build
+  - dist
+  - site
+  - skills/generated
+
+artifacts:
+  - index.yaml
+  - graph.yaml
+  - navigation.yaml
+  - aliases.yaml
+  - search-index.json
