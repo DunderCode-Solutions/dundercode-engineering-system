@@ -33,7 +33,7 @@ bash scripts/quality.sh
 The gate performs:
 
 - Ruff static checks.
-- Unit and integration tests.
+- Pytest unit and integration tests.
 - Canonical metadata validation.
 - Deterministic index rendering.
 - Generation and cross-validation of all five index artifacts.
@@ -67,6 +67,19 @@ uv run desys-check-indexes
 ```
 
 Generated files under `skills/generated/` are local build artifacts and are not committed.
+
+# Project Initializer Changes
+
+Preview the consumer project scaffold with:
+
+```bash
+uv run desys-project-init --root <consumer-repository> --dry-run
+```
+
+Initializer changes MUST preserve non-destructive preflight behavior,
+deterministic output, idempotency, and compatibility with the generated
+consumer quality gate. Existing `AGENTS.md` content MUST be preserved outside
+the managed DESys instruction markers.
 
 # Pull Requests
 

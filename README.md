@@ -424,7 +424,7 @@ Current technologies include:
 | Programming Language | Python |
 | Documentation | Markdown and DEKG schemas |
 | Environment and Package Management | uv |
-| Quality | Ruff and unittest |
+| Quality | Ruff and pytest |
 | Type Checking | Planned |
 | Documentation Review | Planned |
 | Markdown Validation | Planned |
@@ -447,6 +447,27 @@ bash scripts/quality.sh
 ```
 
 The gate validates canonical metadata, tests the tooling, renders deterministic indexes, verifies generated artifacts, and smoke-tests the built Python package.
+
+## Consumer Project Initialization
+
+Use `desys-project-init` to scaffold DESys documentation tooling in an existing
+Git repository. Preview the complete operation before writing:
+
+```bash
+uv run desys-project-init --root /path/to/consumer-project --dry-run
+```
+
+Apply the conflict-free plan with:
+
+```bash
+uv run desys-project-init --root /path/to/consumer-project
+```
+
+The command creates project documentation collections, deterministic indexer
+configuration, a local quality script, a GitHub Actions workflow, generated
+artifact ignore rules, neutral `AGENTS.md` documentation instructions, and `uv`
+dependency guidance. It never overwrites divergent files; conflicts abort the
+complete operation before any write.
 
 ---
 

@@ -3,10 +3,9 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
-import unittest
 from pathlib import Path, PurePosixPath
-from tempfile import TemporaryDirectory
 
+import pytest
 import yaml
 
 from tools.desys_indexer.config import SUPPORTED_ARTIFACTS, ConfigurationError, load_config
@@ -67,164 +66,165 @@ def indexed_document(
     )
 
 
-class ConfigurationTests(unittest.TestCase):
+class TestConfiguration:
     def test_loads_repository_configuration(self) -> None:
         config = load_config(Path("tools/desys_indexer.yaml"))
 
-        self.assertEqual(config.repository_root, Path.cwd().resolve())
-        self.assertEqual(config.artifacts, SUPPORTED_ARTIFACTS)
-        self.assertIn(Path.cwd().resolve() / "foundation", config.sources)
+        assert config.repository_root == Path.cwd().resolve()
+        assert config.artifacts == SUPPORTED_ARTIFACTS
+        assert Path.cwd().resolve() / "foundation" in config.sources
 
-    def test_rejects_output_path_traversal(self) -> None:
-        with TemporaryDirectory() as directory:
-            root = Path(directory)
-            (root / ".git").mkdir()
-            tools = root / "tools"
-            tools.mkdir()
-            config_path = tools / "indexer.yaml"
-            config_path.write_text(
-                """version: 1
+    def test_rejects_output_path_traversal(self, tmp_path: Path) -> None:
+        (tmp_path / ".git").mkdir()
+        tools = tmp_path / "tools"
+        tools.mkdir()
+        config_path = tools / "indexer.yaml"
+        config_path.write_text(
+            """version: 1
 repository_root: ..
 sources: [tools]
 output_directory: ../outside
 exclude: [.git]
 artifacts: [index.yaml]
 """,
-                encoding="utf-8",
-            )
+            encoding="utf-8",
+        )
 
-            with self.assertRaises(ConfigurationError):
-                load_config(config_path)
+        with pytest.raises(ConfigurationError):
+            load_config(config_path)
 
-    def test_rejects_source_path_traversal(self) -> None:
-        with TemporaryDirectory() as directory:
-            root = Path(directory)
-            (root / ".git").mkdir()
-            tools = root / "tools"
-            tools.mkdir()
-            config_path = tools / "indexer.yaml"
-            config_path.write_text(
-                """version: 1
+    def test_rejects_source_path_traversal(self, tmp_path: Path) -> None:
+        (tmp_path / ".git").mkdir()
+        tools = tmp_path / "tools"
+        tools.mkdir()
+        config_path = tools / "indexer.yaml"
+        config_path.write_text(
+            """version: 1
 repository_root: ..
 sources: [tools/../tools]
 output_directory: generated
 exclude: [.git]
 artifacts: [index.yaml]
 """,
-                encoding="utf-8",
-            )
+            encoding="utf-8",
+        )
 
-            with self.assertRaises(ConfigurationError):
-                load_config(config_path)
+        with pytest.raises(ConfigurationError):
+            load_config(config_path)
 
 
-class ScannerAndParserTests(unittest.TestCase):
+class TestScannerAndParser:
     def test_scans_and_parses_real_corpus(self) -> None:
         config = load_config(Path("tools/desys_indexer.yaml"))
 
         paths = scan_markdown_documents(config)
         document = parse_document(paths[0], repository_root=config.repository_root)
 
-        self.assertGreater(len(paths), 0)
-        self.assertFalse(document.path.is_absolute())
-        self.assertTrue(document.canonical_id)
-        self.assertTrue(document.body.startswith("# "))
+        assert len(paths) > 0
+        assert not document.path.is_absolute()
+        assert document.canonical_id
+        assert document.body.startswith("# ")
 
-    def test_indexes_identifier_only_filename(self) -> None:
-        with TemporaryDirectory() as directory:
-            root = Path(directory)
-            source = root / "knowledge"
-            source.mkdir()
-            path = source / "DES-0200.md"
-            metadata_text = yaml.safe_dump(
-                metadata("DES-0200", "des.quality.code-quality", "Code Quality"),
-                sort_keys=False,
-            ).rstrip()
-            path.write_text(
-                f"---\n{metadata_text}\n---\n\n# DES-0200 - Code Quality\n\nBody.\n",
-                encoding="utf-8",
-            )
-            from tools.desys_indexer.config import IndexerConfig
-
-            config = IndexerConfig(
-                version=1,
-                repository_root=root,
-                sources=(source,),
-                output_directory=root / "generated",
-                exclude=(),
-                artifacts=("index.yaml",),
-            )
-
-            paths = scan_markdown_documents(config)
-
-        self.assertEqual([item.name for item in paths], ["DES-0200.md"])
-
-
-class ArtifactTests(unittest.TestCase):
-    def setUp(self) -> None:
-        self.target = indexed_document(
-            "knowledge/des/DES-0001-target.md",
-            "DES-0001",
-            "des.test.target",
-            "Target",
-            aliases=["des.legacy-target"],
+    def test_indexes_identifier_only_filename(self, tmp_path: Path) -> None:
+        source = tmp_path / "knowledge"
+        source.mkdir()
+        path = source / "DES-0200.md"
+        metadata_text = yaml.safe_dump(
+            metadata("DES-0200", "des.quality.code-quality", "Code Quality"),
+            sort_keys=False,
+        ).rstrip()
+        path.write_text(
+            f"---\n{metadata_text}\n---\n\n# DES-0200 - Code Quality\n\nBody.\n",
+            encoding="utf-8",
         )
-        self.source = indexed_document(
-            "knowledge/dem/DEM-0001-source.md",
-            "DEM-0001",
-            "dem.test.source",
-            "Source",
-            relationships=[{"type": "depends_on", "target": "des.legacy-target"}],
+        from tools.desys_indexer.config import IndexerConfig
+
+        config = IndexerConfig(
+            version=1,
+            repository_root=tmp_path,
+            sources=(source,),
+            output_directory=tmp_path / "generated",
+            exclude=(),
+            artifacts=("index.yaml",),
         )
 
-    def test_renders_all_artifacts_deterministically(self) -> None:
-        first = render_indexes([self.source, self.target], SUPPORTED_ARTIFACTS)
-        second = render_indexes([self.target, self.source], SUPPORTED_ARTIFACTS)
+        paths = scan_markdown_documents(config)
 
-        self.assertEqual(first, second)
-        self.assertEqual(set(first.files), set(SUPPORTED_ARTIFACTS))
+        assert [item.name for item in paths] == ["DES-0200.md"]
+
+
+@pytest.fixture
+def artifact_documents() -> tuple[IndexedDocument, IndexedDocument]:
+    target = indexed_document(
+        "knowledge/des/DES-0001-target.md",
+        "DES-0001",
+        "des.test.target",
+        "Target",
+        aliases=["des.legacy-target"],
+    )
+    source = indexed_document(
+        "knowledge/dem/DEM-0001-source.md",
+        "DEM-0001",
+        "dem.test.source",
+        "Source",
+        relationships=[{"type": "depends_on", "target": "des.legacy-target"}],
+    )
+    return source, target
+
+
+class TestArtifacts:
+    def test_renders_all_artifacts_deterministically(
+        self,
+        artifact_documents: tuple[IndexedDocument, IndexedDocument],
+    ) -> None:
+        source, target = artifact_documents
+        first = render_indexes([source, target], SUPPORTED_ARTIFACTS)
+        second = render_indexes([target, source], SUPPORTED_ARTIFACTS)
+
+        assert first == second
+        assert set(first.files) == set(SUPPORTED_ARTIFACTS)
 
         payloads = {
             name: json.loads(content) if name.endswith(".json") else yaml.safe_load(content)
             for name, content in first.files.items()
         }
-        self.assertTrue(all(payload["build_id"] == first.build_id for payload in payloads.values()))
-        self.assertEqual(
-            payloads["graph.yaml"]["edges"],
-            [
-                {
-                    "source": "dem.test.source",
-                    "type": "depends_on",
-                    "target": "des.test.target",
-                }
-            ],
-        )
-        self.assertEqual(
-            payloads["aliases.yaml"]["aliases"],
-            {"des.legacy-target": "des.test.target"},
-        )
+        assert all(payload["build_id"] == first.build_id for payload in payloads.values())
+        assert payloads["graph.yaml"]["edges"] == [
+            {
+                "source": "dem.test.source",
+                "type": "depends_on",
+                "target": "des.test.target",
+            }
+        ]
+        assert payloads["aliases.yaml"]["aliases"] == {
+            "des.legacy-target": "des.test.target"
+        }
         search_target = next(
             document
             for document in payloads["search-index.json"]["documents"]
             if document["id"] == "des.test.target"
         )
-        self.assertIn("applies_to", search_target)
-        self.assertIn("discipline", search_target)
-        self.assertIn("architecture_model", search_target)
+        assert "applies_to" in search_target
+        assert "discipline" in search_target
+        assert "architecture_model" in search_target
 
-    def test_writes_every_rendered_artifact(self) -> None:
-        rendered = render_indexes([self.source, self.target], SUPPORTED_ARTIFACTS)
+    def test_writes_every_rendered_artifact(
+        self,
+        artifact_documents: tuple[IndexedDocument, IndexedDocument],
+        tmp_path: Path,
+    ) -> None:
+        source, target = artifact_documents
+        rendered = render_indexes([source, target], SUPPORTED_ARTIFACTS)
 
-        with TemporaryDirectory() as directory:
-            output = Path(directory) / "generated"
-            write_indexes(rendered=rendered, output_dir=output)
+        output = tmp_path / "generated"
+        write_indexes(rendered=rendered, output_dir=output)
 
-            written = {path.name for path in output.iterdir()}
-            self.assertEqual(written, set(SUPPORTED_ARTIFACTS))
-            self.assertEqual((output / "index.yaml").read_text(encoding="utf-8"), rendered.files["index.yaml"])
+        written = {path.name for path in output.iterdir()}
+        assert written == set(SUPPORTED_ARTIFACTS)
+        assert (output / "index.yaml").read_text(encoding="utf-8") == rendered.files["index.yaml"]
 
 
-class CommandTests(unittest.TestCase):
+class TestCommand:
     def test_dry_run_succeeds(self) -> None:
         result = subprocess.run(
             [sys.executable, "-B", "tools/build_index.py", "--dry-run"],
@@ -234,10 +234,6 @@ class CommandTests(unittest.TestCase):
             text=True,
         )
 
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("Validated and rendered", result.stdout)
-        self.assertIn("documents", result.stdout)
-
-
-if __name__ == "__main__":
-    unittest.main()
+        assert result.returncode == 0, result.stderr
+        assert "Validated and rendered" in result.stdout
+        assert "documents" in result.stdout

@@ -18,9 +18,11 @@ desys-build-index = "tools.build_index:main"
 desys-check-indexes = "tools.check_generated_artifacts:main"
 desys-metadata-migrate = "tools.migrate_metadata:main"
 desys-metadata-validate = "tools.validate_metadata:main"
+desys-project-init = "tools.init_project:main"
 
 [dependency-groups]
 dev = [
+    "pytest==9.1.1",
     "ruff==0.16.2",
     "setuptools==80.9.0",
     "wheel==0.45.1",
