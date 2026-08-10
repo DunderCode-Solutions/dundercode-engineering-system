@@ -1,26 +1,20 @@
-# DSK-7013 | Test Modeling
-
-## Metadata
-
-**Document Number:** DSK-7013
-
-**Canonical ID:** dsk.testing.test-modeling
-
-**Engineering Domain:** Testing Engineering
-
-**Engineering Discipline:** Engineering Test Modeling
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-7013
+canonical_id: dsk.testing.test-modeling
+title: Test Modeling
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Testing Engineering
+discipline: Engineering Test Modeling
+---
+
+# DSK-7013 | Test Modeling
 
 # 1. Purpose
 

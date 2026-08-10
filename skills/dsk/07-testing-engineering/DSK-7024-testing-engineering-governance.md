@@ -1,26 +1,20 @@
-# DSK-7024 | Testing Engineering Governance
-
-## Metadata
-
-**Document Number:** DSK-7024
-
-**Canonical ID:** dsk.testing.testing-engineering-governance
-
-**Engineering Domain:** Testing Engineering
-
-**Engineering Discipline:** Testing Engineering Governance
-
-**Document Class:** Canonical Governance Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-7024
+canonical_id: dsk.testing.testing-engineering-governance
+title: Testing Engineering Governance
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Testing Engineering
+discipline: Testing Engineering Governance
+---
+
+# DSK-7024 | Testing Engineering Governance
 
 # 1. Purpose
 

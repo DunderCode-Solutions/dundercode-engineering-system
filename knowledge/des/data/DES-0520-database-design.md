@@ -1,22 +1,19 @@
-# DES-0520 — Database Design Standard
-
-# Metadata
-
-**Canonical ID:** des.data.database-design
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All persistent data stores developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0520
+canonical_id: des.data.database-design
+title: Database Design Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All persistent data stores developed under DESys
+---
+
+# DES-0520 — Database Design Standard
 
 # 1. Purpose
 

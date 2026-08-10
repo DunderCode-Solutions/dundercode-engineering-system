@@ -1,22 +1,19 @@
-# DEP-0010 — Project Lifecycle
-
-# Metadata
-
-**Canonical ID:** dep.project.lifecycle
-
-**Document Class:** Engineering Process Standard
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software projects developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEP-0010
+canonical_id: dep.project.lifecycle
+title: Project Lifecycle
+node_type: process
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software projects developed within DESys
+---
+
+# DEP-0010 — Project Lifecycle
 
 # 1. Purpose
 

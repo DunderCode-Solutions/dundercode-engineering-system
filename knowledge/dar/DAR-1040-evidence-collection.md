@@ -1,22 +1,21 @@
-# DAR-1040 — Evidence Collection
-
-# Metadata
-
-**Canonical ID:** dar.evidence-collection
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All Documentation Assessment Reports (DAR) performed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DAR-1040
+canonical_id: dar.assessment.evidence-collection
+title: Evidence Collection
+node_type: assessment
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All Documentation Assessment Reports (DAR) performed within DESys
+aliases:
+- dar.evidence-collection
+---
+
+# DAR-1040 — Evidence Collection
 
 # 1. Purpose
 

@@ -1,22 +1,19 @@
-# DES-0870 — Cloud Cost Governance Standard
-
-# Metadata
-
-**Canonical ID:** des.cloud.cost-governance
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All cloud cost and consumption activities managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0870
+canonical_id: des.cloud.cost-governance
+title: Cloud Cost Governance Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All cloud cost and consumption activities managed under DESys
+---
+
+# DES-0870 — Cloud Cost Governance Standard
 
 # 1. Purpose
 

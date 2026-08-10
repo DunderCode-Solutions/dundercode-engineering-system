@@ -1,22 +1,19 @@
-# DES-0730 — Distributed Tracing Standard
-
-# Metadata
-
-**Canonical ID:** des.observability.distributed-tracing
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All distributed software systems operating under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0730
+canonical_id: des.observability.distributed-tracing
+title: Distributed Tracing Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All distributed software systems operating under DESys
+---
+
+# DES-0730 — Distributed Tracing Standard
 
 # 1. Purpose
 

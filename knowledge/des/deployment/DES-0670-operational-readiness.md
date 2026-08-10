@@ -1,22 +1,19 @@
-# DES-0670 — Operational Readiness Standard
-
-# Metadata
-
-**Canonical ID:** des.deployment.operational-readiness
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software systems deployed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0670
+canonical_id: des.deployment.operational-readiness
+title: Operational Readiness Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software systems deployed under DESys
+---
+
+# DES-0670 — Operational Readiness Standard
 
 # 1. Purpose
 

@@ -1,22 +1,17 @@
-# DSK-3012 | Object-Oriented Design
-
-## Metadata
-
-**Document Number:** DSK-3012
-
-**Canonical ID:** dsk.design.object-oriented-design
-
-**Document Class:** Engineering Skill
-
-**Version:** 1.0.0
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-3012
+canonical_id: dsk.design.object-oriented-design
+title: Object-Oriented Design
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-3012 | Object-Oriented Design
 
 # 1. Purpose
 

@@ -1,26 +1,20 @@
-# DSK-6010 | Engineering Quality Principles
-
-## Metadata
-
-**Document Number:** DSK-6010
-
-**Canonical ID:** dsk.quality.engineering-quality-principles
-
-**Engineering Domain:** Quality Engineering
-
-**Engineering Discipline:** Engineering Quality Principles
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-6010
+canonical_id: dsk.quality.engineering-quality-principles
+title: Engineering Quality Principles
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Quality Engineering
+discipline: Engineering Quality Principles
+---
+
+# DSK-6010 | Engineering Quality Principles
 
 # 1. Purpose
 

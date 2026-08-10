@@ -1,22 +1,17 @@
-# DSK-0000 | Skill System Overview
-
-## Metadata
-
-Document Number: DSK-0000
-
-Canonical ID: dsk.foundation.skill-system-overview
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-0000
+canonical_id: dsk.foundation.skill-system-overview
+title: Skill System Overview
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-0000 | Skill System Overview
 
 # 1. Purpose
 

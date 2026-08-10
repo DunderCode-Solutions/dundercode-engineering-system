@@ -1,24 +1,19 @@
-# DSK-3015 | Interface Design
-
-## Metadata
-
-**Document Number:** DSK-3015
-
-**Canonical ID:** dsk.design.interface-design
-
-**Engineering Domain:** Design Engineering
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-3015
+canonical_id: dsk.design.interface-design
+title: Interface Design
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Design Engineering
+---
+
+# DSK-3015 | Interface Design
 
 # 1. Purpose
 

@@ -1,26 +1,20 @@
-# DSK-3021 | Code Smells
-
-## Metadata
-
-**Document Number:** DSK-3021
-
-**Canonical ID:** dsk.design.code-smells
-
-**Engineering Domain:** Design Engineering
-
-**Engineering Discipline:** Engineering Smell Detection
-
-**Document Class:** Engineering Skill
-
-**Version:** 3.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-3021
+canonical_id: dsk.design.code-smells
+title: Code Smells
+node_type: skill
+document_class: operational
+version: 3.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Design Engineering
+discipline: Engineering Smell Detection
+---
+
+# DSK-3021 | Code Smells
 
 # 1. Purpose
 

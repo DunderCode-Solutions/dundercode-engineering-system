@@ -1,26 +1,20 @@
-# DSK-4017 | Error Handling
-
-## Metadata
-
-**Document Number:** DSK-4017
-
-**Canonical ID:** dsk.software.error-handling
-
-**Engineering Domain:** Software Engineering
-
-**Engineering Discipline:** Engineering Failure Management
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-4017
+canonical_id: dsk.software.error-handling
+title: Error Handling
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Software Engineering
+discipline: Engineering Failure Management
+---
+
+# DSK-4017 | Error Handling
 
 # 1. Purpose
 

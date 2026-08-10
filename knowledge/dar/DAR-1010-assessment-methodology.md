@@ -1,22 +1,19 @@
-# DAR-1010 — Assessment Methodology
-
-# Metadata
-
-**Canonical ID:** dar.assessment.methodology
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All Documentation Assessment Reports (DAR) performed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DAR-1010
+canonical_id: dar.assessment.methodology
+title: Assessment Methodology
+node_type: assessment
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All Documentation Assessment Reports (DAR) performed within DESys
+---
+
+# DAR-1010 — Assessment Methodology
 
 # 1. Purpose
 

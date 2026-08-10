@@ -1,26 +1,20 @@
-# DSK-6020 | Quality Review
-
-## Metadata
-
-**Document Number:** DSK-6020
-
-**Canonical ID:** dsk.quality.quality-review
-
-**Engineering Domain:** Quality Engineering
-
-**Engineering Discipline:** Engineering Quality Review
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-6020
+canonical_id: dsk.quality.quality-review
+title: Quality Review
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Quality Engineering
+discipline: Engineering Quality Review
+---
+
+# DSK-6020 | Quality Review
 
 # 1. Purpose
 

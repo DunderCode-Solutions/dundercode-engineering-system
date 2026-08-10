@@ -1,20 +1,17 @@
-# DEC-0001 — The DunderCode Engineering Manifesto
-
-**Document ID:** DEC-0001
-
-**Title:** The DunderCode Engineering Manifesto
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Owner:** DunderCode Engineering
-
-**Canonical Language:** English
-
-**Category:** Engineering Canon
-
 ---
+metadata_schema: 1.0.0
+document_id: DEC-0001
+canonical_id: dec.foundation.engineering-manifesto
+title: The DunderCode Engineering Manifesto
+node_type: canon
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DEC-0001 — The DunderCode Engineering Manifesto
 
 # 1. Purpose
 

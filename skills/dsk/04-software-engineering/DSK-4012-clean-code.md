@@ -1,26 +1,20 @@
-# DSK-4012 | Clean Code
-
-## Metadata
-
-**Document Number:** DSK-4012
-
-**Canonical ID:** dsk.software.clean-code
-
-**Engineering Domain:** Software Engineering
-
-**Engineering Discipline:** Engineering Readability
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-4012
+canonical_id: dsk.software.clean-code
+title: Clean Code
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Software Engineering
+discipline: Engineering Readability
+---
+
+# DSK-4012 | Clean Code
 
 # 1. Purpose
 

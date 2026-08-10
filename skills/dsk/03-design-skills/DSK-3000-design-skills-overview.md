@@ -1,22 +1,17 @@
-# DSK-3000 | Design Skills Overview
-
-## Metadata
-
-Document Number: DSK-3000
-
-Canonical ID: dsk.design.overview
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-3000
+canonical_id: dsk.design.overview
+title: Design Skills Overview
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-3000 | Design Skills Overview
 
 # 1. Purpose
 

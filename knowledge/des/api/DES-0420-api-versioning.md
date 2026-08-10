@@ -1,22 +1,19 @@
-# DES-0420 — API Versioning Standard
-
-# Metadata
-
-**Canonical ID:** des.api.versioning
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All versioned APIs developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0420
+canonical_id: des.api.versioning
+title: API Versioning Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All versioned APIs developed under DESys
+---
+
+# DES-0420 — API Versioning Standard
 
 # 1. Purpose
 

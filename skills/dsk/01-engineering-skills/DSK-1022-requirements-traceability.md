@@ -1,22 +1,17 @@
-# DSK-1022 | Requirements Traceability
-
-## Metadata
-
-Document Number: DSK-1022
-
-Canonical ID: dsk.engineering.requirements.requirements-traceability
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1022
+canonical_id: dsk.engineering.requirements.requirements-traceability
+title: Requirements Traceability
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1022 | Requirements Traceability
 
 # 1. Purpose
 

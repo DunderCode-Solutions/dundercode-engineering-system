@@ -1,22 +1,17 @@
-# DSK-3013 | Design Patterns
-
-## Metadata
-
-**Document Number:** DSK-3013
-
-**Canonical ID:** dsk.design.design-patterns
-
-**Document Class:** Engineering Skill
-
-**Version:** 1.0.0
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-3013
+canonical_id: dsk.design.design-patterns
+title: Design Patterns
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-3013 | Design Patterns
 
 # 1. Purpose
 

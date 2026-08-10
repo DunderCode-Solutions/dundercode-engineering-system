@@ -1,22 +1,19 @@
-# DEP-0060 — Deployment Process
-
-# Metadata
-
-**Canonical ID:** dep.deployment.process
-
-**Document Class:** Engineering Process Standard
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software deployments performed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEP-0060
+canonical_id: dep.deployment.process
+title: Deployment Process
+node_type: process
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software deployments performed within DESys
+---
+
+# DEP-0060 — Deployment Process
 
 # 1. Purpose
 

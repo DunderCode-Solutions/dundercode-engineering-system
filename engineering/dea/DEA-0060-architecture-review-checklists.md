@@ -1,22 +1,19 @@
-# DEA-0060 — Architecture Review Checklists
-
-# Metadata
-
-**Canonical ID:** dea.architecture.review.checklists
-
-**Document Class:** Engineering Architecture
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All architecture reviews performed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEA-0060
+canonical_id: dea.architecture.review.checklists
+title: Architecture Review Checklists
+node_type: architecture
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All architecture reviews performed within DESys
+---
+
+# DEA-0060 — Architecture Review Checklists
 
 # 1. Purpose
 

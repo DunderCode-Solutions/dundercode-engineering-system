@@ -72,7 +72,7 @@ The metadata model should evolve without breaking existing engineering assets.
 
 # Metadata Fields
 
-The complete metadata schema is defined by the Metadata Specification.
+The complete metadata contract is defined by DEKG-0040 and serialized as YAML front matter.
 
 Typical metadata categories include:
 
@@ -84,7 +84,15 @@ Typical metadata categories include:
 | Governance | Records ownership and responsibility. |
 | Traceability | Connects related engineering assets. |
 
-The Metadata Specification defines the complete structure and validation rules for each field.
+The normative machine-readable schema is available at `knowledge/architecture/metadata/desys-metadata.schema.json`.
+
+Every non-empty, identifier-bearing DESys document must conform to that schema. README files remain navigation surfaces outside the DEKG, and empty placeholders are not indexed as nodes.
+
+Validate the repository with:
+
+```bash
+python3 tools/validate_metadata.py
+```
 
 ---
 
@@ -118,6 +126,7 @@ Continue according to your objective.
 | If you want to... | Read |
 |-------------------|------|
 | Understand the semantic graph | DEKG |
+| Apply the metadata contract | DEKG-0040 Metadata Schema |
 | Learn node classifications | Node Types |
 | Explore semantic connections | Relationships |
 | Navigate the platform | Knowledge Map |

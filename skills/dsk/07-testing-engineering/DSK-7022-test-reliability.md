@@ -1,26 +1,20 @@
-# DSK-7022 | Test Reliability
-
-## Metadata
-
-**Document Number:** DSK-7022
-
-**Canonical ID:** dsk.testing.test-reliability
-
-**Engineering Domain:** Testing Engineering
-
-**Engineering Discipline:** Engineering Test Reliability
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-7022
+canonical_id: dsk.testing.test-reliability
+title: Test Reliability
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Testing Engineering
+discipline: Engineering Test Reliability
+---
+
+# DSK-7022 | Test Reliability
 
 # 1. Purpose
 

@@ -1,22 +1,19 @@
-# DES-0480 — API Governance Standard
-
-# Metadata
-
-**Canonical ID:** des.api.governance
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All APIs developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0480
+canonical_id: des.api.governance
+title: API Governance Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All APIs developed under DESys
+---
+
+# DES-0480 — API Governance Standard
 
 # 1. Purpose
 

@@ -1,22 +1,19 @@
-# DEA-0050 — Implementation Guidance
-
-# Metadata
-
-**Canonical ID:** dea.implementation.guidance
-
-**Document Class:** Engineering Architecture
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All engineering implementations developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEA-0050
+canonical_id: dea.implementation.guidance
+title: Implementation Guidance
+node_type: architecture
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All engineering implementations developed within DESys
+---
+
+# DEA-0050 — Implementation Guidance
 
 # 1. Purpose
 

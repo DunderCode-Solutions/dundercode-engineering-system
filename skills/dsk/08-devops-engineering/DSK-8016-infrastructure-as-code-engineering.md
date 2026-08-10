@@ -1,26 +1,20 @@
-# DSK-8016 | Infrastructure as Code Engineering
-
-## Metadata
-
-**Document Number:** DSK-8016
-
-**Canonical ID:** dsk.devops.infrastructure-as-code-engineering
-
-**Engineering Domain:** DevOps Engineering
-
-**Engineering Discipline:** Infrastructure as Code Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-8016
+canonical_id: dsk.devops.infrastructure-as-code-engineering
+title: Infrastructure as Code Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: DevOps Engineering
+discipline: Infrastructure as Code Engineering
+---
+
+# DSK-8016 | Infrastructure as Code Engineering
 
 # 1. Purpose
 

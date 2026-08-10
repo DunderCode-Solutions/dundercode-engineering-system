@@ -1,22 +1,19 @@
-# DES-0610 — Environment Management Standard
-
-# Metadata
-
-**Canonical ID:** des.deployment.environment-management
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software environments managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0610
+canonical_id: des.deployment.environment-management
+title: Environment Management Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software environments managed under DESys
+---
+
+# DES-0610 — Environment Management Standard
 
 # 1. Purpose
 

@@ -1,26 +1,20 @@
-# DSK-3018 | Modularity
-
-## Metadata
-
-**Document Number:** DSK-3018
-
-**Canonical ID:** dsk.design.modularity
-
-**Engineering Domain:** Design Engineering
-
-**Engineering Discipline:** Modularity Engineering
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-3018
+canonical_id: dsk.design.modularity
+title: Modularity
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Design Engineering
+discipline: Modularity Engineering
+---
+
+# DSK-3018 | Modularity
 
 # 1. Purpose
 

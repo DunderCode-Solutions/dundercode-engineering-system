@@ -1,26 +1,20 @@
-# DSK-9000 | Operations Engineering Overview
-
-## Metadata
-
-**Document Number:** DSK-9000
-
-**Canonical ID:** dsk.operations.operations-engineering-overview
-
-**Engineering Domain:** Operations Engineering
-
-**Engineering Discipline:** Operations Engineering
-
-**Document Class:** Canonical Engineering Overview
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-9000
+canonical_id: dsk.operations.operations-engineering-overview
+title: Operations Engineering Overview
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Operations Engineering
+discipline: Operations Engineering
+---
+
+# DSK-9000 | Operations Engineering Overview
 
 # 1. Purpose
 

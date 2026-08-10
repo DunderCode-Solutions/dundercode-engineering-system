@@ -1,26 +1,20 @@
-# DSK-5023 | Compliance
-
-## Metadata
-
-**Document Number:** DSK-5023
-
-**Canonical ID:** dsk.security.compliance
-
-**Engineering Domain:** Security Engineering
-
-**Engineering Discipline:** Engineering Compliance Governance
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-5023
+canonical_id: dsk.security.compliance
+title: Compliance
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Security Engineering
+discipline: Engineering Compliance Governance
+---
+
+# DSK-5023 | Compliance
 
 # 1. Purpose
 

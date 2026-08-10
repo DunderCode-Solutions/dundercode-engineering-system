@@ -1,22 +1,19 @@
-# DAR-1000 — Assessment Principles
-
-# Metadata
-
-**Canonical ID:** dar.assessment.principles
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All engineering assessments performed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DAR-1000
+canonical_id: dar.assessment.principles
+title: Assessment Principles
+node_type: assessment
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All engineering assessments performed within DESys
+---
+
+# DAR-1000 — Assessment Principles
 
 # 1. Purpose
 

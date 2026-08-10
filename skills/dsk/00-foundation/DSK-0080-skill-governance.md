@@ -1,22 +1,17 @@
-# DSK-0080 | Skill Governance
-
-## Metadata
-
-Document Number: DSK-0080
-
-Canonical ID: dsk.foundation.skill-governance
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-0080
+canonical_id: dsk.foundation.skill-governance
+title: Skill Governance
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-0080 | Skill Governance
 
 # 1. Purpose
 

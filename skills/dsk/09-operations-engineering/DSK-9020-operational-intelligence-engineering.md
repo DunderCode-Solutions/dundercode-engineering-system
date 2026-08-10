@@ -1,26 +1,20 @@
-# DSK-9020 | Operational Intelligence Engineering
-
-## Metadata
-
-**Document Number:** DSK-9020
-
-**Canonical ID:** dsk.operations.operational-intelligence-engineering
-
-**Engineering Domain:** Operations Engineering
-
-**Engineering Discipline:** Operational Intelligence Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-9020
+canonical_id: dsk.operations.operational-intelligence-engineering
+title: Operational Intelligence Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Operations Engineering
+discipline: Operational Intelligence Engineering
+---
+
+# DSK-9020 | Operational Intelligence Engineering
 
 # 1. Purpose
 

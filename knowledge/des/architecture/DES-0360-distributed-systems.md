@@ -1,22 +1,19 @@
-# DES-0360 — Distributed Systems Standard
-
-# Metadata
-
-**Canonical ID:** des.architecture.distributed-systems
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** Software projects adopting distributed architectures under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0360
+canonical_id: des.architecture.distributed-systems
+title: Distributed Systems Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- Software projects adopting distributed architectures under DESys
+---
+
+# DES-0360 — Distributed Systems Standard
 
 # 1. Purpose
 

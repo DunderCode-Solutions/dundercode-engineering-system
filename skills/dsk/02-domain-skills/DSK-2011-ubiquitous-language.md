@@ -1,22 +1,17 @@
-# DSK-2011 | Ubiquitous Language
-
-## Metadata
-
-Document Number: DSK-2011
-
-Canonical ID: dsk.domain.ubiquitous-language
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-2011
+canonical_id: dsk.domain.ubiquitous-language
+title: Ubiquitous Language
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-2011 | Ubiquitous Language
 
 # 1. Purpose
 

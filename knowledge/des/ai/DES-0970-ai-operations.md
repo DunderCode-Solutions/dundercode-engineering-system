@@ -1,22 +1,19 @@
-# DES-0970 — AI Operations Standard
-
-# Metadata
-
-**Canonical ID:** des.ai.operations
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All AI-enabled systems and AI operational workflows managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0970
+canonical_id: des.ai.operations
+title: AI Operations Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All AI-enabled systems and AI operational workflows managed under DESys
+---
+
+# DES-0970 — AI Operations Standard
 
 # 1. Purpose
 

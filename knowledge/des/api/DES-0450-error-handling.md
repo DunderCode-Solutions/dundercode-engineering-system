@@ -1,22 +1,19 @@
-# DES-0450 — API Error Handling Standard
-
-# Metadata
-
-**Canonical ID:** des.api.error-handling
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All APIs developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0450
+canonical_id: des.api.error-handling
+title: API Error Handling Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All APIs developed under DESys
+---
+
+# DES-0450 — API Error Handling Standard
 
 # 1. Purpose
 

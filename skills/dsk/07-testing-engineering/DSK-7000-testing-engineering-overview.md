@@ -1,26 +1,20 @@
-# DSK-7000 | Testing Engineering Overview
-
-## Metadata
-
-**Document Number:** DSK-7000
-
-**Canonical ID:** dsk.testing.testing-engineering-overview
-
-**Engineering Domain:** Testing Engineering
-
-**Engineering Discipline:** Testing Engineering
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-7000
+canonical_id: dsk.testing.testing-engineering-overview
+title: Testing Engineering Overview
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Testing Engineering
+discipline: Testing Engineering
+---
+
+# DSK-7000 | Testing Engineering Overview
 
 # 1. Purpose
 

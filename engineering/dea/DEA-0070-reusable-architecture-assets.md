@@ -1,22 +1,19 @@
-# DEA-0070 — Reusable Architecture Assets
-
-# Metadata
-
-**Canonical ID:** dea.reusable.architecture.assets
-
-**Document Class:** Engineering Architecture
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All reusable architecture assets developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEA-0070
+canonical_id: dea.reusable.architecture.assets
+title: Reusable Architecture Assets
+node_type: architecture
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All reusable architecture assets developed within DESys
+---
+
+# DEA-0070 — Reusable Architecture Assets
 
 # 1. Purpose
 

@@ -1,26 +1,20 @@
-# DSK-4000 | Software Engineering Overview
-
-## Metadata
-
-**Document Number:** DSK-4000
-
-**Canonical ID:** dsk.software.overview
-
-**Engineering Domain:** Software Engineering
-
-**Engineering Discipline:** Software Implementation Engineering
-
-**Document Class:** Engineering Skill
-
-**Version:** 1.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-4000
+canonical_id: dsk.software.overview
+title: Software Engineering Overview
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Software Engineering
+discipline: Software Implementation Engineering
+---
+
+# DSK-4000 | Software Engineering Overview
 
 # 1. Purpose
 

@@ -1,22 +1,19 @@
-# DAR-1030 — Assessment Levels
-
-# Metadata
-
-**Canonical ID:** dar.assessment.levels
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All Documentation Assessment Reports (DAR) performed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DAR-1030
+canonical_id: dar.assessment.levels
+title: Assessment Levels
+node_type: assessment
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All Documentation Assessment Reports (DAR) performed within DESys
+---
+
+# DAR-1030 — Assessment Levels
 
 # 1. Purpose
 

@@ -1,22 +1,19 @@
-# DET-0000 — Engineering Templates Overview
-
-# Metadata
-
-**Canonical ID:** det.engineering.templates.overview
-
-**Document Class:** Engineering Templates
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All engineering templates developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DET-0000
+canonical_id: det.engineering.templates.overview
+title: Engineering Templates Overview
+node_type: template
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All engineering templates developed within DESys
+---
+
+# DET-0000 — Engineering Templates Overview
 
 # 1. Purpose
 

@@ -1,26 +1,20 @@
-# DSK-5024 | Zero Trust
-
-## Metadata
-
-**Document Number:** DSK-5024
-
-**Canonical ID:** dsk.security.zero-trust
-
-**Engineering Domain:** Security Engineering
-
-**Engineering Discipline:** Engineering Zero Trust
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-5024
+canonical_id: dsk.security.zero-trust
+title: Zero Trust
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Security Engineering
+discipline: Engineering Zero Trust
+---
+
+# DSK-5024 | Zero Trust
 
 # 1. Purpose
 

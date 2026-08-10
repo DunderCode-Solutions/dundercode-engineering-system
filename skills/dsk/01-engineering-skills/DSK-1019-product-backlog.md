@@ -1,22 +1,17 @@
-# DSK-1019 | Product Backlog
-
-## Metadata
-
-Document Number: DSK-1019
-
-Canonical ID: dsk.engineering.requirements.product-backlog
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1019
+canonical_id: dsk.engineering.requirements.product-backlog
+title: Product Backlog
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1019 | Product Backlog
 
 # 1. Purpose
 

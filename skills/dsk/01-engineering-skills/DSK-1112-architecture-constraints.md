@@ -1,22 +1,17 @@
-# DSK-1112 | Architecture Constraints
-
-## Metadata
-
-Document Number: DSK-1112
-
-Canonical ID: dsk.engineering.architecture.architecture-constraints
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1112
+canonical_id: dsk.engineering.architecture.architecture-constraints
+title: Architecture Constraints
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1112 | Architecture Constraints
 
 # 1. Purpose
 

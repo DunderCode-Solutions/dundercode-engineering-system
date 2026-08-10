@@ -1,26 +1,20 @@
-# DSK-5011 | Threat Modeling
-
-## Metadata
-
-**Document Number:** DSK-5011
-
-**Canonical ID:** dsk.security.threat-modeling
-
-**Engineering Domain:** Security Engineering
-
-**Engineering Discipline:** Engineering Threat Modeling
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-5011
+canonical_id: dsk.security.threat-modeling
+title: Threat Modeling
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Security Engineering
+discipline: Engineering Threat Modeling
+---
+
+# DSK-5011 | Threat Modeling
 
 # 1. Purpose
 

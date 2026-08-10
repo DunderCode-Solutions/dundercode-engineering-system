@@ -1,22 +1,19 @@
-# DET-0030 — Architecture Templates
-
-# Metadata
-
-**Canonical ID:** det.architecture.templates
-
-**Document Class:** Engineering Templates
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All architecture documentation developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DET-0030
+canonical_id: det.architecture.templates
+title: Architecture Templates
+node_type: template
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All architecture documentation developed within DESys
+---
+
+# DET-0030 — Architecture Templates
 
 # 1. Purpose
 

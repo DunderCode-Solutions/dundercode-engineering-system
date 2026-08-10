@@ -1,22 +1,19 @@
-# DES-0910 — Prompt Engineering Standard
-
-# Metadata
-
-**Canonical ID:** des.ai.prompt-engineering
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All prompts and prompt-driven interactions managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0910
+canonical_id: des.ai.prompt-engineering
+title: Prompt Engineering Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All prompts and prompt-driven interactions managed under DESys
+---
+
+# DES-0910 — Prompt Engineering Standard
 
 # 1. Purpose
 

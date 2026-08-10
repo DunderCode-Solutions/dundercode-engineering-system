@@ -1,22 +1,19 @@
-# DEA-0020 — Architecture Blueprints
-
-# Metadata
-
-**Canonical ID:** dea.architecture.blueprints
-
-**Document Class:** Engineering Architecture
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All architecture blueprints developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEA-0020
+canonical_id: dea.architecture.blueprints
+title: Architecture Blueprints
+node_type: architecture
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All architecture blueprints developed within DESys
+---
+
+# DEA-0020 — Architecture Blueprints
 
 # 1. Purpose
 

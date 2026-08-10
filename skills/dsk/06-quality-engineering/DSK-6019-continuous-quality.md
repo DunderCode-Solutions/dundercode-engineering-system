@@ -1,26 +1,20 @@
-# DSK-6019 | Continuous Quality
-
-## Metadata
-
-**Document Number:** DSK-6019
-
-**Canonical ID:** dsk.quality.continuous-quality
-
-**Engineering Domain:** Quality Engineering
-
-**Engineering Discipline:** Continuous Quality Engineering
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-6019
+canonical_id: dsk.quality.continuous-quality
+title: Continuous Quality
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Quality Engineering
+discipline: Continuous Quality Engineering
+---
+
+# DSK-6019 | Continuous Quality
 
 # 1. Purpose
 

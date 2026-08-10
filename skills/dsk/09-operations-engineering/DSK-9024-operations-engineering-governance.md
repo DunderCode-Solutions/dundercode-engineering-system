@@ -1,26 +1,20 @@
-# DSK-9024 | Operations Engineering Governance
-
-## Metadata
-
-**Document Number:** DSK-9024
-
-**Canonical ID:** dsk.operations.operations-engineering-governance
-
-**Engineering Domain:** Operations Engineering
-
-**Engineering Discipline:** Operations Engineering Governance
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-9024
+canonical_id: dsk.operations.operations-engineering-governance
+title: Operations Engineering Governance
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Operations Engineering
+discipline: Operations Engineering Governance
+---
+
+# DSK-9024 | Operations Engineering Governance
 
 # 1. Purpose
 

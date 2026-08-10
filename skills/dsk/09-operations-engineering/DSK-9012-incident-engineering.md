@@ -1,26 +1,20 @@
-# DSK-9012 | Incident Engineering
-
-## Metadata
-
-**Document Number:** DSK-9012
-
-**Canonical ID:** dsk.operations.incident-engineering
-
-**Engineering Domain:** Operations Engineering
-
-**Engineering Discipline:** Incident Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-9012
+canonical_id: dsk.operations.incident-engineering
+title: Incident Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Operations Engineering
+discipline: Incident Engineering
+---
+
+# DSK-9012 | Incident Engineering
 
 # 1. Purpose
 

@@ -1,22 +1,19 @@
-# DES-0720 — Metrics Standard
-
-# Metadata
-
-**Canonical ID:** des.observability.metrics
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software systems operating under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0720
+canonical_id: des.observability.metrics
+title: Metrics Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software systems operating under DESys
+---
+
+# DES-0720 — Metrics Standard
 
 # 1. Purpose
 

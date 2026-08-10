@@ -1,22 +1,19 @@
-# DES-0370 — Resilience Standard
-
-# Metadata
-
-**Canonical ID:** des.architecture.resilience
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** Software projects requiring resilient architectures under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0370
+canonical_id: des.architecture.resilience
+title: Resilience Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- Software projects requiring resilient architectures under DESys
+---
+
+# DES-0370 — Resilience Standard
 
 # 1. Purpose
 

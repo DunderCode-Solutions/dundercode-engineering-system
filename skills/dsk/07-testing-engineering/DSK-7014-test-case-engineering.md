@@ -1,26 +1,20 @@
-# DSK-7014 | Test Case Engineering
-
-## Metadata
-
-**Document Number:** DSK-7014
-
-**Canonical ID:** dsk.testing.test-case-engineering
-
-**Engineering Domain:** Testing Engineering
-
-**Engineering Discipline:** Engineering Test Case Engineering
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-7014
+canonical_id: dsk.testing.test-case-engineering
+title: Test Case Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Testing Engineering
+discipline: Engineering Test Case Engineering
+---
+
+# DSK-7014 | Test Case Engineering
 
 # 1. Purpose
 

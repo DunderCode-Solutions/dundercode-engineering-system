@@ -1,26 +1,20 @@
-# DSK-3017 | Package Organization
-
-## Metadata
-
-**Document Number:** DSK-3017
-
-**Canonical ID:** dsk.design.package-organization
-
-**Engineering Domain:** Design Engineering
-
-**Engineering Discipline:** Software Modularization
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-3017
+canonical_id: dsk.design.package-organization
+title: Package Organization
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Design Engineering
+discipline: Software Modularization
+---
+
+# DSK-3017 | Package Organization
 
 # 1. Purpose
 

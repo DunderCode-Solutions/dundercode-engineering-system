@@ -1,26 +1,20 @@
-# DSK-6016 | Test Data Management
-
-## Metadata
-
-**Document Number:** DSK-6016
-
-**Canonical ID:** dsk.quality.test-data-management
-
-**Engineering Domain:** Quality Engineering
-
-**Engineering Discipline:** Engineering Test Data Management
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-6016
+canonical_id: dsk.quality.test-data-management
+title: Test Data Management
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Quality Engineering
+discipline: Engineering Test Data Management
+---
+
+# DSK-6016 | Test Data Management
 
 # 1. Purpose
 

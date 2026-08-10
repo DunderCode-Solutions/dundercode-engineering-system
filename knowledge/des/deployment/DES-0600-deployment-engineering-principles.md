@@ -1,22 +1,19 @@
-# DES-0600 — Deployment Engineering Principles
-
-# Metadata
-
-**Canonical ID:** des.deployment.engineering-principles
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All deployment processes developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0600
+canonical_id: des.deployment.engineering-principles
+title: Deployment Engineering Principles
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All deployment processes developed under DESys
+---
+
+# DES-0600 — Deployment Engineering Principles
 
 # 1. Purpose
 

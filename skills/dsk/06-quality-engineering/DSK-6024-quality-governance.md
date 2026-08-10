@@ -1,26 +1,20 @@
-# DSK-6024 | Quality Governance
-
-## Metadata
-
-**Document Number:** DSK-6024
-
-**Canonical ID:** dsk.quality.quality-governance
-
-**Engineering Domain:** Quality Engineering
-
-**Engineering Discipline:** Engineering Quality Governance
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-6024
+canonical_id: dsk.quality.quality-governance
+title: Quality Governance
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Quality Engineering
+discipline: Engineering Quality Governance
+---
+
+# DSK-6024 | Quality Governance
 
 # 1. Purpose
 

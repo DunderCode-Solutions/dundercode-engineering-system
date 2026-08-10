@@ -1,26 +1,20 @@
-# DSK-4020 | Software Traceability
-
-## Metadata
-
-**Document Number:** DSK-4020
-
-**Canonical ID:** dsk.software.software-traceability
-
-**Engineering Domain:** Software Engineering
-
-**Engineering Discipline:** Software Engineering Knowledge Traceability
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-4020
+canonical_id: dsk.software.software-traceability
+title: Software Traceability
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Software Engineering
+discipline: Software Engineering Knowledge Traceability
+---
+
+# DSK-4020 | Software Traceability
 
 # 1. Purpose
 

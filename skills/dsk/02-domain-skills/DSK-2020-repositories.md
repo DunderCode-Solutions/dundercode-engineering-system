@@ -1,22 +1,17 @@
-# DSK-2020 | Repositories
-
-## Metadata
-
-Document Number: DSK-2020
-
-Canonical ID: dsk.domain.repositories
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-2020
+canonical_id: dsk.domain.repositories
+title: Repositories
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-2020 | Repositories
 
 # 1. Purpose
 

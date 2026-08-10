@@ -1,22 +1,19 @@
-# DES-0700 — Observability Engineering Principles
-
-# Metadata
-
-**Canonical ID:** des.observability.engineering-principles
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software systems operating under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0700
+canonical_id: des.observability.engineering-principles
+title: Observability Engineering Principles
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software systems operating under DESys
+---
+
+# DES-0700 — Observability Engineering Principles
 
 # 1. Purpose
 

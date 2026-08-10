@@ -1,22 +1,17 @@
-# DSK-1123 | Architecture Traceability
-
-## Metadata
-
-Document Number: DSK-1123
-
-Canonical ID: dsk.engineering.architecture.architecture-traceability
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1123
+canonical_id: dsk.engineering.architecture.architecture-traceability
+title: Architecture Traceability
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1123 | Architecture Traceability
 
 # 1. Purpose
 

@@ -1,26 +1,20 @@
-# DSK-8019 | Configuration Engineering
-
-## Metadata
-
-**Document Number:** DSK-8019
-
-**Canonical ID:** dsk.devops.configuration-engineering
-
-**Engineering Domain:** DevOps Engineering
-
-**Engineering Discipline:** Configuration Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-8019
+canonical_id: dsk.devops.configuration-engineering
+title: Configuration Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: DevOps Engineering
+discipline: Configuration Engineering
+---
+
+# DSK-8019 | Configuration Engineering
 
 # 1. Purpose
 

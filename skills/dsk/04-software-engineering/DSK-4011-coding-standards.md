@@ -1,26 +1,20 @@
-# DSK-4011 | Coding Standards
-
-## Metadata
-
-**Document Number:** DSK-4011
-
-**Canonical ID:** dsk.software.coding-standards
-
-**Engineering Domain:** Software Engineering
-
-**Engineering Discipline:** Engineering Coding Compliance
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-4011
+canonical_id: dsk.software.coding-standards
+title: Coding Standards
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Software Engineering
+discipline: Engineering Coding Compliance
+---
+
+# DSK-4011 | Coding Standards
 
 # 1. Purpose
 

@@ -1,22 +1,17 @@
-# DSK-0070 | Multi-Agent Collaboration
-
-## Metadata
-
-Document Number: DSK-0070
-
-Canonical ID: dsk.foundation.multi-agent-collaboration
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-0070
+canonical_id: dsk.foundation.multi-agent-collaboration
+title: Multi-Agent Collaboration
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-0070 | Multi-Agent Collaboration
 
 # 1. Purpose
 

@@ -1,26 +1,20 @@
-# DSK-8017 | Platform Engineering
-
-## Metadata
-
-**Document Number:** DSK-8017
-
-**Canonical ID:** dsk.devops.platform-engineering
-
-**Engineering Domain:** DevOps Engineering
-
-**Engineering Discipline:** Platform Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-8017
+canonical_id: dsk.devops.platform-engineering
+title: Platform Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: DevOps Engineering
+discipline: Platform Engineering
+---
+
+# DSK-8017 | Platform Engineering
 
 # 1. Purpose
 

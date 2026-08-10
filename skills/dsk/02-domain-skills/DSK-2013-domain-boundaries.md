@@ -1,22 +1,17 @@
-# DSK-2013 | Domain Boundaries
-
-## Metadata
-
-Document Number: DSK-2013
-
-Canonical ID: dsk.domain.domain-boundaries
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-2013
+canonical_id: dsk.domain.domain-boundaries
+title: Domain Boundaries
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-2013 | Domain Boundaries
 
 # 1. Purpose
 

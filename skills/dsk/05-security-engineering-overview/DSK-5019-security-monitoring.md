@@ -1,26 +1,20 @@
-# DSK-5019 | Security Monitoring
-
-## Metadata
-
-**Document Number:** DSK-5019
-
-**Canonical ID:** dsk.security.security-monitoring
-
-**Engineering Domain:** Security Engineering
-
-**Engineering Discipline:** Engineering Security Intelligence
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-5019
+canonical_id: dsk.security.security-monitoring
+title: Security Monitoring
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Security Engineering
+discipline: Engineering Security Intelligence
+---
+
+# DSK-5019 | Security Monitoring
 
 # 1. Purpose
 

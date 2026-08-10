@@ -1,26 +1,20 @@
-# DSK-4013 | Component Development
-
-## Metadata
-
-**Document Number:** DSK-4013
-
-**Canonical ID:** dsk.software.component-development
-
-**Engineering Domain:** Software Engineering
-
-**Engineering Discipline:** Engineering Component Construction
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-4013
+canonical_id: dsk.software.component-development
+title: Component Development
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Software Engineering
+discipline: Engineering Component Construction
+---
+
+# DSK-4013 | Component Development
 
 # 1. Purpose
 

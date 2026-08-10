@@ -1,22 +1,19 @@
-# DES-0830 — Cloud Networking Standard
-
-# Metadata
-
-**Canonical ID:** des.cloud.networking
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All cloud networking resources managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0830
+canonical_id: des.cloud.networking
+title: Cloud Networking Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All cloud networking resources managed under DESys
+---
+
+# DES-0830 — Cloud Networking Standard
 
 # 1. Purpose
 

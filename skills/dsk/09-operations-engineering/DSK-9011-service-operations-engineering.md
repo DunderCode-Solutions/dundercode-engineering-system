@@ -1,26 +1,20 @@
-# DSK-9011 | Service Operations Engineering
-
-## Metadata
-
-**Document Number:** DSK-9011
-
-**Canonical ID:** dsk.operations.service-operations-engineering
-
-**Engineering Domain:** Operations Engineering
-
-**Engineering Discipline:** Service Operations Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-9011
+canonical_id: dsk.operations.service-operations-engineering
+title: Service Operations Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Operations Engineering
+discipline: Service Operations Engineering
+---
+
+# DSK-9011 | Service Operations Engineering
 
 # 1. Purpose
 

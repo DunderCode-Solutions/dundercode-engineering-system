@@ -1,26 +1,20 @@
-# DSK-8022 | Delivery Reliability
-
-## Metadata
-
-**Document Number:** DSK-8022
-
-**Canonical ID:** dsk.devops.delivery-reliability
-
-**Engineering Domain:** DevOps Engineering
-
-**Engineering Discipline:** Delivery Reliability
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-8022
+canonical_id: dsk.devops.delivery-reliability
+title: Delivery Reliability
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: DevOps Engineering
+discipline: Delivery Reliability
+---
+
+# DSK-8022 | Delivery Reliability
 
 # 1. Purpose
 

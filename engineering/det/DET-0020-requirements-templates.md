@@ -1,22 +1,19 @@
-# DET-0020 — Requirements Templates
-
-# Metadata
-
-**Canonical ID:** det.requirements.templates
-
-**Document Class:** Engineering Templates
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All requirements documentation developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DET-0020
+canonical_id: det.requirements.templates
+title: Requirements Templates
+node_type: template
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All requirements documentation developed within DESys
+---
+
+# DET-0020 — Requirements Templates
 
 # 1. Purpose
 

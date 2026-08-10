@@ -1,26 +1,20 @@
-# DSK-9010 | Operations Engineering Principles
-
-## Metadata
-
-**Document Number:** DSK-9010
-
-**Canonical ID:** dsk.operations.operations-engineering-principles
-
-**Engineering Domain:** Operations Engineering
-
-**Engineering Discipline:** Operations Engineering Principles
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-9010
+canonical_id: dsk.operations.operations-engineering-principles
+title: Operations Engineering Principles
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Operations Engineering
+discipline: Operations Engineering Principles
+---
+
+# DSK-9010 | Operations Engineering Principles
 
 # 1. Purpose
 

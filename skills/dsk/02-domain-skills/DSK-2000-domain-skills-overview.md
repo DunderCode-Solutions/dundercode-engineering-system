@@ -1,22 +1,17 @@
-# DSK-2000 | Domain Skills Overview
-
-## Metadata
-
-Document Number: DSK-2000
-
-Canonical ID: dsk.domain.domain-skills-overview
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-2000
+canonical_id: dsk.domain.domain-skills-overview
+title: Domain Skills Overview
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-2000 | Domain Skills Overview
 
 # 1. Purpose
 

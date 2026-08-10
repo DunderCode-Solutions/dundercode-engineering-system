@@ -1,22 +1,19 @@
-# DEP-0050 — Testing Process
-
-# Metadata
-
-**Canonical ID:** dep.testing.process
-
-**Document Class:** Engineering Process Standard
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software validation activities within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEP-0050
+canonical_id: dep.testing.process
+title: Testing Process
+node_type: process
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software validation activities within DESys
+---
+
+# DEP-0050 — Testing Process
 
 # 1. Purpose
 

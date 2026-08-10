@@ -1,22 +1,17 @@
-# DSK-1020 | PRD Generation
-
-## Metadata
-
-Document Number: DSK-1020
-
-Canonical ID: dsk.engineering.requirements.prd-generation
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1020
+canonical_id: dsk.engineering.requirements.prd-generation
+title: PRD Generation
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1020 | PRD Generation
 
 # 1. Purpose
 

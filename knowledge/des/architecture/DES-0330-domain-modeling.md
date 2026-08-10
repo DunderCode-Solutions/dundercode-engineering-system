@@ -1,22 +1,19 @@
-# DES-0330 — Domain Modeling Standard
-
-# Metadata
-
-**Canonical ID:** des.architecture.domain-modeling
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software projects developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0330
+canonical_id: des.architecture.domain-modeling
+title: Domain Modeling Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software projects developed under DESys
+---
+
+# DES-0330 — Domain Modeling Standard
 
 # 1. Purpose
 

@@ -1,22 +1,17 @@
-# DSK-1110 | Architecture Vision
-
-## Metadata
-
-Document Number: DSK-1110
-
-Canonical ID: dsk.engineering.architecture.architecture-vision
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1110
+canonical_id: dsk.engineering.architecture.architecture-vision
+title: Architecture Vision
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1110 | Architecture Vision
 
 # 1. Purpose
 

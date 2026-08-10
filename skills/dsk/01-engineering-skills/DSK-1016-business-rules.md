@@ -1,22 +1,17 @@
-# DSK-1016 | Business Rules
-
-## Metadata
-
-Document Number: DSK-1016
-
-Canonical ID: dsk.engineering.requirements.business-rules
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1016
+canonical_id: dsk.engineering.requirements.business-rules
+title: Business Rules
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1016 | Business Rules
 
 # 1. Purpose
 

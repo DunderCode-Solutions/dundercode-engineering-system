@@ -1,23 +1,19 @@
-# DCSG-0001 — DunderCode Canon Style Guide
-
-
-
-**Canonical ID:** dcsg.canon.style-guide
-
-
-**Version:** 1.1.0 (Draft)
-
-**Status:** Draft
-
-
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All documentation produced within the DunderCode Engineering System (DESys)
-
 ---
+metadata_schema: 1.0.0
+document_id: DCSG-0001
+canonical_id: dcsg.canon.style-guide
+title: DunderCode Canon Style Guide
+node_type: style-guide
+document_class: normative
+version: 1.1.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All documentation produced within the DunderCode Engineering System (DESys)
+---
+
+# DCSG-0001 — DunderCode Canon Style Guide
 
 # 1. Purpose
 
@@ -268,31 +264,13 @@ Examples:
 
 # 13. Metadata
 
-Every official DESys document SHOULD include standardized metadata to support traceability, knowledge management, automation, and semantic indexing.
+Every non-empty, identifier-bearing DESys document MUST include canonical YAML front matter to support traceability, knowledge management, automation, and semantic indexing.
 
-Recommended metadata includes:
+The canonical fields, enums, syntax, and validation rules are defined by DEKG-0040 and `knowledge/architecture/metadata/desys-metadata.schema.json`.
 
-- Document ID
-- Canonical ID
-- Document Type
-- Title
-- Version
-- Status
-- Owner
-- Authors
-- Reviewers
-- Created
-- Updated
-- Canonical Language
-- Document Class
-- Normative
-- Informative
-- Reference
-- Applies To
-- Depends On
-- References
+README files are navigation surfaces and do not require canonical metadata. Empty placeholders are not engineering assets and are not indexed.
 
-Metadata enables interoperability across the DunderCode Engineering Knowledge Graph (DEKG), documentation tooling, AI-assisted systems, and engineering governance processes.
+Metadata embedded as a Markdown section is not machine-readable canonical metadata and MUST NOT be introduced in new documents.
 
 ---
 

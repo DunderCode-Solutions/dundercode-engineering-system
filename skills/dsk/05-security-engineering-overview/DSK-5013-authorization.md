@@ -1,26 +1,20 @@
-# DSK-5013 | Authorization
-
-## Metadata
-
-**Document Number:** DSK-5013
-
-**Canonical ID:** dsk.security.authorization
-
-**Engineering Domain:** Security Engineering
-
-**Engineering Discipline:** Engineering Access Decision
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-5013
+canonical_id: dsk.security.authorization
+title: Authorization
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Security Engineering
+discipline: Engineering Access Decision
+---
+
+# DSK-5013 | Authorization
 
 # 1. Purpose
 

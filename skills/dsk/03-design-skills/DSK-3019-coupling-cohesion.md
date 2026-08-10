@@ -1,26 +1,20 @@
-# DSK-3019 | Coupling & Cohesion
-
-## Metadata
-
-**Document Number:** DSK-3019
-
-**Canonical ID:** dsk.design.coupling-cohesion
-
-**Engineering Domain:** Design Engineering
-
-**Engineering Discipline:** Structural Relationship Engineering
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-3019
+canonical_id: dsk.design.coupling-cohesion
+title: Coupling & Cohesion
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Design Engineering
+discipline: Structural Relationship Engineering
+---
+
+# DSK-3019 | Coupling & Cohesion
 
 # 1. Purpose
 

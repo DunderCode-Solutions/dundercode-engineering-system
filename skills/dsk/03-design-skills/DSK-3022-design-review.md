@@ -1,26 +1,20 @@
-# DSK-3022 | Design Review
-
-## Metadata
-
-**Document Number:** DSK-3022
-
-**Canonical ID:** dsk.design.design-review
-
-**Engineering Domain:** Design Engineering
-
-**Engineering Discipline:** Engineering Review & Governance
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-3022
+canonical_id: dsk.design.design-review
+title: Design Review
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Design Engineering
+discipline: Engineering Review & Governance
+---
+
+# DSK-3022 | Design Review
 
 # 1. Purpose
 

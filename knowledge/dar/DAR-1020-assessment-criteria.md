@@ -1,22 +1,19 @@
-# DAR-1020 — Assessment Criteria
-
-# Metadata
-
-**Canonical ID:** dar.assessment.criteria
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All Documentation Assessment Reports (DAR) performed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DAR-1020
+canonical_id: dar.assessment.criteria
+title: Assessment Criteria
+node_type: assessment
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All Documentation Assessment Reports (DAR) performed within DESys
+---
+
+# DAR-1020 — Assessment Criteria
 
 # 1. Purpose
 

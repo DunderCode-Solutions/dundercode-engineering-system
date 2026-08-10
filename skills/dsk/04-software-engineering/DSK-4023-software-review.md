@@ -1,26 +1,20 @@
-# DSK-4023 | Software Review
-
-## Metadata
-
-**Document Number:** DSK-4023
-
-**Canonical ID:** dsk.software.software-review
-
-**Engineering Domain:** Software Engineering
-
-**Engineering Discipline:** Engineering Review System
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-4023
+canonical_id: dsk.software.software-review
+title: Software Review
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Software Engineering
+discipline: Engineering Review System
+---
+
+# DSK-4023 | Software Review
 
 # 1. Purpose
 

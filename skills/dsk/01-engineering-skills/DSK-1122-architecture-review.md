@@ -1,22 +1,17 @@
-# DSK-1122 | Architecture Review
-
-## Metadata
-
-Document Number: DSK-1122
-
-Canonical ID: dsk.engineering.architecture.architecture-review
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1122
+canonical_id: dsk.engineering.architecture.architecture-review
+title: Architecture Review
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1122 | Architecture Review
 
 # 1. Purpose
 

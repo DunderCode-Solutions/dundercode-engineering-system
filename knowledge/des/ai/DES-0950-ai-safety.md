@@ -1,22 +1,20 @@
-# DES-0950 — AI Safety Standard
-
-# Metadata
-
-**Canonical ID:** des.ai.safety
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All AI-enabled systems, models, prompts, and AI-assisted workflows managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0950
+canonical_id: des.ai.safety
+title: AI Safety Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All AI-enabled systems, models, prompts, and AI-assisted workflows managed under
+  DESys
+---
+
+# DES-0950 — AI Safety Standard
 
 # 1. Purpose
 

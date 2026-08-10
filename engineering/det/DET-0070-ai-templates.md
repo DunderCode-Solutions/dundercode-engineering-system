@@ -1,22 +1,19 @@
-# DET-0070 — AI Templates
-
-# Metadata
-
-**Canonical ID:** det.ai.templates
-
-**Document Class:** Engineering Templates
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All AI documentation developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DET-0070
+canonical_id: det.ai.templates
+title: AI Templates
+node_type: template
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All AI documentation developed within DESys
+---
+
+# DET-0070 — AI Templates
 
 # 1. Purpose
 

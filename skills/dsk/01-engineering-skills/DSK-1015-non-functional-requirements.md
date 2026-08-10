@@ -1,22 +1,17 @@
-# DSK-1015 | Non-Functional Requirements
-
-## Metadata
-
-Document Number: DSK-1015
-
-Canonical ID: dsk.engineering.requirements.non-functional-requirements
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1015
+canonical_id: dsk.engineering.requirements.non-functional-requirements
+title: Non-Functional Requirements
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1015 | Non-Functional Requirements
 
 # 1. Purpose
 

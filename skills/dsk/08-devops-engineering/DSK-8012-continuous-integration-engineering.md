@@ -1,26 +1,20 @@
-# DSK-8012 | Continuous Integration Engineering
-
-## Metadata
-
-**Document Number:** DSK-8012
-
-**Canonical ID:** dsk.devops.continuous-integration-engineering
-
-**Engineering Domain:** DevOps Engineering
-
-**Engineering Discipline:** Continuous Integration Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-8012
+canonical_id: dsk.devops.continuous-integration-engineering
+title: Continuous Integration Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: DevOps Engineering
+discipline: Continuous Integration Engineering
+---
+
+# DSK-8012 | Continuous Integration Engineering
 
 # 1. Purpose
 

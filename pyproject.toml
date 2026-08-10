@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dundercode-engineering-system"
+version = "0.1.0"
+description = "DunderCode Engineering System knowledge platform"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "PyYAML==6.0.3",
+]
+
+[project.scripts]
+desys-build-index = "tools.build_index:main"
+desys-check-indexes = "tools.check_generated_artifacts:main"
+desys-metadata-migrate = "tools.migrate_metadata:main"
+desys-metadata-validate = "tools.validate_metadata:main"
+
+[dependency-groups]
+dev = [
+    "ruff==0.16.2",
+    "setuptools==80.9.0",
+    "wheel==0.45.1",
+]
+
+[tool.setuptools]
+packages = [
+    "tools",
+    "tools.desys_indexer",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120

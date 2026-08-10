@@ -1,22 +1,19 @@
-# DES-0310 — System Design Standard
-
-# Metadata
-
-**Canonical ID:** des.architecture.system-design
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software projects developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0310
+canonical_id: des.architecture.system-design
+title: System Design Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software projects developed under DESys
+---
+
+# DES-0310 — System Design Standard
 
 # 1. Purpose
 

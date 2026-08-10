@@ -422,13 +422,13 @@ Current technologies include:
 | Category | Technology |
 |----------|------------|
 | Programming Language | Python |
-| Documentation | MkDocs Material |
-| Package Management | Poetry |
-| Quality | Ruff |
-| Type Checking | BasedPyright |
-| Documentation Review | Vale |
-| Markdown Validation | markdownlint |
-| Git Hooks | pre-commit |
+| Documentation | Markdown and DEKG schemas |
+| Environment and Package Management | uv |
+| Quality | Ruff and unittest |
+| Type Checking | Planned |
+| Documentation Review | Planned |
+| Markdown Validation | Planned |
+| Git Hooks | Planned |
 | Continuous Integration | GitHub Actions |
 | Version Control | Git |
 | Release Strategy | GitFlow |
@@ -436,6 +436,17 @@ Current technologies include:
 | Knowledge Representation | DEKG |
 
 Technology choices may evolve over time while preserving the engineering principles established by DESys.
+
+## Local Quality Gate
+
+DESys uses a locked Python 3.12 `uv` environment for local development and continuous integration.
+
+```bash
+uv sync --locked --group dev
+bash scripts/quality.sh
+```
+
+The gate validates canonical metadata, tests the tooling, renders deterministic indexes, verifies generated artifacts, and smoke-tests the built Python package.
 
 ---
 
@@ -787,4 +798,3 @@ And it reflects the commitment of DunderCode to engineering excellence through k
 > **Think First. Build Better.**
 >
 > *Engineering knowledge is the foundation. Continuous improvement is the journey.*
-

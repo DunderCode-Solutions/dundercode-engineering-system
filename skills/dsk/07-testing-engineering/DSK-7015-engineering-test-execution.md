@@ -1,26 +1,20 @@
-# DSK-7015 | Engineering Test Execution
-
-## Metadata
-
-**Document Number:** DSK-7015
-
-**Canonical ID:** dsk.testing.engineering-test-execution
-
-**Engineering Domain:** Testing Engineering
-
-**Engineering Discipline:** Engineering Test Execution
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-7015
+canonical_id: dsk.testing.engineering-test-execution
+title: Engineering Test Execution
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Testing Engineering
+discipline: Engineering Test Execution
+---
+
+# DSK-7015 | Engineering Test Execution
 
 # 1. Purpose
 

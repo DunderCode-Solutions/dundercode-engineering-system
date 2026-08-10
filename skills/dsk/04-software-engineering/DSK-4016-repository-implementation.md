@@ -1,26 +1,20 @@
-# DSK-4016 | Repository Implementation
-
-## Metadata
-
-**Document Number:** DSK-4016
-
-**Canonical ID:** dsk.software.repository-implementation
-
-**Engineering Domain:** Software Engineering
-
-**Engineering Discipline:** Engineering Repository Implementation
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-4016
+canonical_id: dsk.software.repository-implementation
+title: Repository Implementation
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Software Engineering
+discipline: Engineering Repository Implementation
+---
+
+# DSK-4016 | Repository Implementation
 
 # 1. Purpose
 

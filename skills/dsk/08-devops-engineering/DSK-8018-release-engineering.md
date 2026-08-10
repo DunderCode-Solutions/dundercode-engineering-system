@@ -1,26 +1,20 @@
-# DSK-8018 | Release Engineering
-
-## Metadata
-
-**Document Number:** DSK-8018
-
-**Canonical ID:** dsk.devops.release-engineering
-
-**Engineering Domain:** DevOps Engineering
-
-**Engineering Discipline:** Release Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-8018
+canonical_id: dsk.devops.release-engineering
+title: Release Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: DevOps Engineering
+discipline: Release Engineering
+---
+
+# DSK-8018 | Release Engineering
 
 # 1. Purpose
 

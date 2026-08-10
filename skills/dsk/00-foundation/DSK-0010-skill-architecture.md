@@ -1,22 +1,17 @@
-# DSK-0010 | Skill Architecture
-
-## Metadata
-
-Document Number: DSK-0010
-
-Canonical ID: dsk.foundation.skill-architecture
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-0010
+canonical_id: dsk.foundation.skill-architecture
+title: Skill Architecture
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-0010 | Skill Architecture
 
 # 1. Purpose
 

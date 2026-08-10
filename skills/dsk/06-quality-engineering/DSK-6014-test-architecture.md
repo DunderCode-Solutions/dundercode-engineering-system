@@ -1,26 +1,20 @@
-# DSK-6014 | Test Architecture
-
-## Metadata
-
-**Document Number:** DSK-6014
-
-**Canonical ID:** dsk.quality.test-architecture
-
-**Engineering Domain:** Quality Engineering
-
-**Engineering Discipline:** Engineering Test Architecture
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-6014
+canonical_id: dsk.quality.test-architecture
+title: Test Architecture
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Quality Engineering
+discipline: Engineering Test Architecture
+---
+
+# DSK-6014 | Test Architecture
 
 # 1. Purpose
 

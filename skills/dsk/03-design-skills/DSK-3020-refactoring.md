@@ -1,26 +1,20 @@
-# DSK-3020 | Refactoring
-
-## Metadata
-
-**Document Number:** DSK-3020
-
-**Canonical ID:** dsk.design.refactoring
-
-**Engineering Domain:** Design Engineering
-
-**Engineering Discipline:** Engineering Evolution
-
-**Document Class:** Engineering Skill
-
-**Version:** 3.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-3020
+canonical_id: dsk.design.refactoring
+title: Refactoring
+node_type: skill
+document_class: operational
+version: 3.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Design Engineering
+discipline: Engineering Evolution
+---
+
+# DSK-3020 | Refactoring
 
 # 1. Purpose
 

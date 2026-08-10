@@ -1,22 +1,19 @@
-# DES-0580 — Data Quality Standard
-
-# Metadata
-
-**Canonical ID:** des.data.quality
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All persistent data assets developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0580
+canonical_id: des.data.quality
+title: Data Quality Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All persistent data assets developed under DESys
+---
+
+# DES-0580 — Data Quality Standard
 
 # 1. Purpose
 

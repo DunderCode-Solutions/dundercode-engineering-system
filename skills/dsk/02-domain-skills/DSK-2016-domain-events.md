@@ -1,22 +1,17 @@
-# DSK-2016 | Domain Events
-
-## Metadata
-
-Document Number: DSK-2016
-
-Canonical ID: dsk.domain.domain-events
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-2016
+canonical_id: dsk.domain.domain-events
+title: Domain Events
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-2016 | Domain Events
 
 # 1. Purpose
 

@@ -1,22 +1,17 @@
-# DSK-1014 | Functional Requirements
-
-## Metadata
-
-Document Number: DSK-1014
-
-Canonical ID: dsk.engineering.requirements.functional-requirements
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1014
+canonical_id: dsk.engineering.requirements.functional-requirements
+title: Functional Requirements
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1014 | Functional Requirements
 
 # 1. Purpose
 

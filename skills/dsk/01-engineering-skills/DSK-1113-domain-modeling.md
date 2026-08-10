@@ -1,22 +1,17 @@
-# DSK-1113 | Domain Modeling
-
-## Metadata
-
-Document Number: DSK-1113
-
-Canonical ID: dsk.engineering.architecture.domain-modeling
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1113
+canonical_id: dsk.engineering.architecture.domain-modeling
+title: Domain Modeling
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1113 | Domain Modeling
 
 # 1. Purpose
 

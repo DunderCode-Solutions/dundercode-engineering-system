@@ -1,26 +1,20 @@
-# DSK-8023 | DevOps Governance
-
-## Metadata
-
-**Document Number:** DSK-8023
-
-**Canonical ID:** dsk.devops.devops-governance
-
-**Engineering Domain:** DevOps Engineering
-
-**Engineering Discipline:** DevOps Governance
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-8023
+canonical_id: dsk.devops.devops-governance
+title: DevOps Governance
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: DevOps Engineering
+discipline: DevOps Governance
+---
+
+# DSK-8023 | DevOps Governance
 
 # 1. Purpose
 

@@ -1,22 +1,17 @@
-# DSK-1114 | Context Modeling
-
-## Metadata
-
-Document Number: DSK-1114
-
-Canonical ID: dsk.engineering.architecture.context-modeling
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1114
+canonical_id: dsk.engineering.architecture.context-modeling
+title: Context Modeling
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1114 | Context Modeling
 
 # 1. Purpose
 

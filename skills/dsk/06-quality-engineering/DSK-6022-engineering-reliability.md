@@ -1,26 +1,20 @@
-# DSK-6022 | Engineering Reliability
-
-## Metadata
-
-**Document Number:** DSK-6022
-
-**Canonical ID:** dsk.quality.engineering-reliability
-
-**Engineering Domain:** Quality Engineering
-
-**Engineering Discipline:** Engineering Reliability
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-6022
+canonical_id: dsk.quality.engineering-reliability
+title: Engineering Reliability
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Quality Engineering
+discipline: Engineering Reliability
+---
+
+# DSK-6022 | Engineering Reliability
 
 # 1. Purpose
 

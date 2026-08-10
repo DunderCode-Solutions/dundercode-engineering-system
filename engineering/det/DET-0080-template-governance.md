@@ -1,22 +1,19 @@
-# DET-0080 — Template Governance
-
-# Metadata
-
-**Canonical ID:** det.template.governance
-
-**Document Class:** Engineering Templates
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All engineering templates maintained within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DET-0080
+canonical_id: det.template.governance
+title: Template Governance
+node_type: template
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All engineering templates maintained within DESys
+---
+
+# DET-0080 — Template Governance
 
 # 1. Purpose
 

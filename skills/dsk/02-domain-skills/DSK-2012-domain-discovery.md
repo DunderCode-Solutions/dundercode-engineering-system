@@ -1,22 +1,17 @@
-# DSK-2012 | Domain Discovery
-
-## Metadata
-
-Document Number: DSK-2012
-
-Canonical ID: dsk.domain.domain-discovery
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-2012
+canonical_id: dsk.domain.domain-discovery
+title: Domain Discovery
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-2012 | Domain Discovery
 
 # 1. Purpose
 

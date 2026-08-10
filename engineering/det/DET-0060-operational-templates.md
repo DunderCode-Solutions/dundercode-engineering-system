@@ -1,22 +1,19 @@
-# DET-0060 — Operational Templates
-
-# Metadata
-
-**Canonical ID:** det.operational.templates
-
-**Document Class:** Engineering Templates
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All operational documentation developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DET-0060
+canonical_id: det.operational.templates
+title: Operational Templates
+node_type: template
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All operational documentation developed within DESys
+---
+
+# DET-0060 — Operational Templates
 
 # 1. Purpose
 

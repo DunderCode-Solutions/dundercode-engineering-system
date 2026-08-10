@@ -1,26 +1,20 @@
-# DSK-9014 | Change Engineering
-
-## Metadata
-
-**Document Number:** DSK-9014
-
-**Canonical ID:** dsk.operations.change-engineering
-
-**Engineering Domain:** Operations Engineering
-
-**Engineering Discipline:** Change Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-9014
+canonical_id: dsk.operations.change-engineering
+title: Change Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Operations Engineering
+discipline: Change Engineering
+---
+
+# DSK-9014 | Change Engineering
 
 # 1. Purpose
 

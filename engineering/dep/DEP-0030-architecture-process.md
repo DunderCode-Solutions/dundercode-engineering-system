@@ -1,22 +1,19 @@
-# DEP-0030 — Architecture Process
-
-# Metadata
-
-**Canonical ID:** dep.architecture.process
-
-**Document Class:** Engineering Process Standard
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software architecture activities performed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEP-0030
+canonical_id: dep.architecture.process
+title: Architecture Process
+node_type: process
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software architecture activities performed within DESys
+---
+
+# DEP-0030 — Architecture Process
 
 # 1. Purpose
 

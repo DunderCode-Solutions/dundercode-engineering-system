@@ -1,22 +1,19 @@
-# DES-0200 — Code Quality Standard
-
-# Metadata
-
-**Canonical ID:** des.quality.code-quality
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software projects developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0200
+canonical_id: des.quality.code-quality
+title: Code Quality Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software projects developed under DESys
+---
+
+# DES-0200 — Code Quality Standard
 
 # 1. Purpose
 

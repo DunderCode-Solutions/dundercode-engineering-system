@@ -1,26 +1,20 @@
-# DSK-8015 | Infrastructure Engineering
-
-## Metadata
-
-**Document Number:** DSK-8015
-
-**Canonical ID:** dsk.devops.infrastructure-engineering
-
-**Engineering Domain:** DevOps Engineering
-
-**Engineering Discipline:** Infrastructure Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-8015
+canonical_id: dsk.devops.infrastructure-engineering
+title: Infrastructure Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: DevOps Engineering
+discipline: Infrastructure Engineering
+---
+
+# DSK-8015 | Infrastructure Engineering
 
 # 1. Purpose
 

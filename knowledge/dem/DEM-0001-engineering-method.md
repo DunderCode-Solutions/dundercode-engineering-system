@@ -1,22 +1,20 @@
-# DEM-0001 — The DunderCode Engineering Method
-
-**Document ID:** DEM-0001
-
-**Title:** The DunderCode Engineering Method
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Owner:** DunderCode Engineering
-
-**Canonical Language:** English
-
-**Category:** Engineering Method
-
-**Depends On:** DEC-0001
-
 ---
+metadata_schema: 1.0.0
+document_id: DEM-0001
+canonical_id: dem.foundation.engineering-method
+title: The DunderCode Engineering Method
+node_type: method
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+relationships:
+- type: depends_on
+  target: dec.foundation.engineering-manifesto
+---
+
+# DEM-0001 — The DunderCode Engineering Method
 
 # 1. Purpose
 

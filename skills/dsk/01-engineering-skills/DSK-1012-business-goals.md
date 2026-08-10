@@ -1,22 +1,17 @@
-# DSK-1012 | Business Goals
-
-## Metadata
-
-Document Number: DSK-1012
-
-Canonical ID: dsk.engineering.requirements.business-goals
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1012
+canonical_id: dsk.engineering.requirements.business-goals
+title: Business Goals
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1012 | Business Goals
 
 # 1. Purpose
 

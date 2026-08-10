@@ -1,22 +1,17 @@
-# DSK-1021 | Requirements Review
-
-## Metadata
-
-Document Number: DSK-1021
-
-Canonical ID: dsk.engineering.requirements.requirements-review
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1021
+canonical_id: dsk.engineering.requirements.requirements-review
+title: Requirements Review
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1021 | Requirements Review
 
 # 1. Purpose
 

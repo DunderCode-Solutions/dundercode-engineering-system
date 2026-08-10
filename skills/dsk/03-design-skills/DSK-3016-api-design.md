@@ -1,26 +1,20 @@
-# DSK-3016 | API Design
-
-## Metadata
-
-**Document Number:** DSK-3016
-
-**Canonical ID:** dsk.design.api-design
-
-**Engineering Domain:** Design Engineering
-
-**Engineering Discipline:** Service Engineering
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-3016
+canonical_id: dsk.design.api-design
+title: API Design
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Design Engineering
+discipline: Service Engineering
+---
+
+# DSK-3016 | API Design
 
 # 1. Purpose
 

@@ -1,22 +1,19 @@
-# DEP-0070 — AI Engineering Process
-
-# Metadata
-
-**Canonical ID:** dep.ai.engineering.process
-
-**Document Class:** Engineering Process Standard
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All AI-enabled software systems developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEP-0070
+canonical_id: dep.ai.engineering.process
+title: AI Engineering Process
+node_type: process
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All AI-enabled software systems developed within DESys
+---
+
+# DEP-0070 — AI Engineering Process
 
 # 1. Purpose
 

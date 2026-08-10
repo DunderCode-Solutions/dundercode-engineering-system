@@ -1,22 +1,19 @@
-# DEP-0000 — Engineering Processes Overview
-
-# Metadata
-
-**Canonical ID:** dep.engineering.processes.overview
-
-**Document Class:** Engineering Process Standard
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All engineering processes defined within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEP-0000
+canonical_id: dep.engineering.processes.overview
+title: Engineering Processes Overview
+node_type: process
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All engineering processes defined within DESys
+---
+
+# DEP-0000 — Engineering Processes Overview
 
 # 1. Purpose
 

@@ -1,22 +1,17 @@
-# DSK-0040 | Knowledge Resolution
-
-## Metadata
-
-Document Number: DSK-0040
-
-Canonical ID: dsk.foundation.knowledge-resolution
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-0040
+canonical_id: dsk.foundation.knowledge-resolution
+title: Knowledge Resolution
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-0040 | Knowledge Resolution
 
 # 1. Purpose
 

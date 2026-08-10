@@ -1,22 +1,19 @@
-# DET-0050 — Testing Templates
-
-# Metadata
-
-**Canonical ID:** det.testing.templates
-
-**Document Class:** Engineering Templates
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All testing documentation developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DET-0050
+canonical_id: det.testing.templates
+title: Testing Templates
+node_type: template
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All testing documentation developed within DESys
+---
+
+# DET-0050 — Testing Templates
 
 # 1. Purpose
 

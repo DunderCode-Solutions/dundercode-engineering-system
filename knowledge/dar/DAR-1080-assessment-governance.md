@@ -1,22 +1,21 @@
-# DAR-1080 — Assessment Governance
-
-# Metadata
-
-**Canonical ID:** dar.assessment-governance
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All Documentation Assessment Reports (DAR) performed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DAR-1080
+canonical_id: dar.assessment.governance
+title: Assessment Governance
+node_type: assessment
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All Documentation Assessment Reports (DAR) performed within DESys
+aliases:
+- dar.assessment-governance
+---
+
+# DAR-1080 — Assessment Governance
 
 # 1. Purpose
 

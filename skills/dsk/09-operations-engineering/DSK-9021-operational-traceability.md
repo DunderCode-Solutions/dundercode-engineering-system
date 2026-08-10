@@ -1,26 +1,20 @@
-# DSK-9021 | Operational Traceability Engineering
-
-## Metadata
-
-**Document Number:** DSK-9021
-
-**Canonical ID:** dsk.operations.operational-traceability-engineering
-
-**Engineering Domain:** Operations Engineering
-
-**Engineering Discipline:** Operational Traceability Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-9021
+canonical_id: dsk.operations.operational-traceability-engineering
+title: Operational Traceability Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Operations Engineering
+discipline: Operational Traceability Engineering
+---
+
+# DSK-9021 | Operational Traceability Engineering
 
 # 1. Purpose
 

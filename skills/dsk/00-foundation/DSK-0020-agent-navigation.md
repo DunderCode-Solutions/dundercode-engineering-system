@@ -1,22 +1,17 @@
-# DSK-0020 | Agent Navigation
-
-## Metadata
-
-Document Number: DSK-0020
-
-Canonical ID: dsk.foundation.agent-navigation
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-0020
+canonical_id: dsk.foundation.agent-navigation
+title: Agent Navigation
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-0020 | Agent Navigation
 
 # 1. Purpose
 

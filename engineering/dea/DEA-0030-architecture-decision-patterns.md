@@ -1,22 +1,19 @@
-# DEA-0030 — Architecture Decision Patterns
-
-# Metadata
-
-**Canonical ID:** dea.architecture.decision.patterns
-
-**Document Class:** Engineering Architecture
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All architectural decisions made within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEA-0030
+canonical_id: dea.architecture.decision.patterns
+title: Architecture Decision Patterns
+node_type: architecture
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All architectural decisions made within DESys
+---
+
+# DEA-0030 — Architecture Decision Patterns
 
 # 1. Purpose
 

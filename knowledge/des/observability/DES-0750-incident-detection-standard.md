@@ -1,22 +1,19 @@
-# DES-0750 — Incident Detection Standard
-
-# Metadata
-
-**Canonical ID:** des.observability.incident-detection
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software systems operating under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0750
+canonical_id: des.observability.incident-detection
+title: Incident Detection Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software systems operating under DESys
+---
+
+# DES-0750 — Incident Detection Standard
 
 # 1. Purpose
 

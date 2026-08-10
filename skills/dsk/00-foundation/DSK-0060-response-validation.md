@@ -1,22 +1,17 @@
-# DSK-0060 | Response Validation
-
-## Metadata
-
-Document Number: DSK-0060
-
-Canonical ID: dsk.foundation.response-validation
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-0060
+canonical_id: dsk.foundation.response-validation
+title: Response Validation
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-0060 | Response Validation
 
 # 1. Purpose
 

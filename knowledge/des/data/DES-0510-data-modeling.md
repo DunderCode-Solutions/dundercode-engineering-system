@@ -1,22 +1,19 @@
-# DES-0510 — Data Modeling Standard
-
-# Metadata
-
-**Canonical ID:** des.data.modeling
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All domain data models developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0510
+canonical_id: des.data.modeling
+title: Data Modeling Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All domain data models developed under DESys
+---
+
+# DES-0510 — Data Modeling Standard
 
 # 1. Purpose
 

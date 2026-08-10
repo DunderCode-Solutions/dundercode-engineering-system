@@ -1,26 +1,20 @@
-# DSK-6018 | Defect Engineering
-
-## Metadata
-
-**Document Number:** DSK-6018
-
-**Canonical ID:** dsk.quality.defect-engineering
-
-**Engineering Domain:** Quality Engineering
-
-**Engineering Discipline:** Defect Engineering
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-6018
+canonical_id: dsk.quality.defect-engineering
+title: Defect Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Quality Engineering
+discipline: Defect Engineering
+---
+
+# DSK-6018 | Defect Engineering
 
 # 1. Purpose
 

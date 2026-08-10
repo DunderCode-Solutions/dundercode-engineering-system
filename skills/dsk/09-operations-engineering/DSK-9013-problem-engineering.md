@@ -1,26 +1,20 @@
-# DSK-9013 | Problem Engineering
-
-## Metadata
-
-**Document Number:** DSK-9013
-
-**Canonical ID:** dsk.operations.problem-engineering
-
-**Engineering Domain:** Operations Engineering
-
-**Engineering Discipline:** Problem Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-9013
+canonical_id: dsk.operations.problem-engineering
+title: Problem Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Operations Engineering
+discipline: Problem Engineering
+---
+
+# DSK-9013 | Problem Engineering
 
 # 1. Purpose
 

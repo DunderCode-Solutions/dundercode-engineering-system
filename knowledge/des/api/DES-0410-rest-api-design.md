@@ -1,22 +1,19 @@
-# DES-0410 — REST API Design Standard
-
-# Metadata
-
-**Canonical ID:** des.api.rest-design
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** REST APIs developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0410
+canonical_id: des.api.rest-design
+title: REST API Design Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- REST APIs developed under DESys
+---
+
+# DES-0410 — REST API Design Standard
 
 # 1. Purpose
 

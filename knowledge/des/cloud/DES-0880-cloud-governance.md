@@ -1,22 +1,19 @@
-# DES-0880 — Cloud Governance Standard
-
-# Metadata
-
-**Canonical ID:** des.cloud.governance
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All cloud governance activities managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0880
+canonical_id: des.cloud.governance
+title: Cloud Governance Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All cloud governance activities managed under DESys
+---
+
+# DES-0880 — Cloud Governance Standard
 
 # 1. Purpose
 

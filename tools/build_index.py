@@ -20,15 +20,18 @@ Usage:
 
 """
 
-from pathlib import Path
 import argparse
 import sys
+from pathlib import Path
 
-from desys_indexer.config import load_config
-from desys_indexer.scanner import scan_markdown_documents
-from desys_indexer.parser import parse_documents
-from desys_indexer.writer import write_indexes
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from tools.desys_indexer.config import ConfigurationError, load_config
+from tools.desys_indexer.parser import IndexingError, parse_documents
+from tools.desys_indexer.scanner import scan_markdown_documents
+from tools.desys_indexer.writer import render_indexes, write_indexes
+from tools.desys_metadata import validate_repository
 
 DEFAULT_CONFIG = Path("tools/desys_indexer.yaml")
 
@@ -64,37 +67,59 @@ def parse_arguments() -> argparse.Namespace:
 def main() -> int:
     args = parse_arguments()
 
-    config = load_config(args.config)
+    try:
+        config = load_config(args.config)
+    except (ConfigurationError, FileNotFoundError) as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return 1
 
     if args.verbose:
         print(f"Loading configuration: {args.config}")
 
-    documents = scan_markdown_documents(
-        root=config.repository_root,
-        include_dirs=config.sources,
-        exclude_dirs=config.exclude,
-        verbose=args.verbose,
+    report = validate_repository(
+        config.repository_root,
+        sources=config.sources,
+        is_excluded=config.is_excluded,
     )
+    if args.verbose:
+        for issue in report.warnings:
+            print(issue)
+    if report.errors:
+        for issue in report.errors:
+            print(issue, file=sys.stderr)
+        print(f"Indexing aborted with {len(report.errors)} metadata error(s).", file=sys.stderr)
+        return 1
 
-    parsed_documents = parse_documents(
-        documents,
-        verbose=args.verbose,
-    )
+    paths = scan_markdown_documents(config, verbose=args.verbose)
+
+    try:
+        documents = parse_documents(paths, repository_root=config.repository_root)
+        rendered = render_indexes(documents, config.artifacts)
+    except IndexingError as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return 1
 
     if args.dry_run:
-        print(f"{len(parsed_documents)} documents parsed successfully.")
+        print(
+            f"Validated and rendered {len(documents)} documents "
+            f"with {len(report.warnings)} warning(s) "
+            f"({rendered.build_id})."
+        )
         return 0
 
-    write_indexes(
-        documents=parsed_documents,
-        output_dir=config.output_directory,
-        artifacts=config.artifacts,
-        verbose=args.verbose,
-    )
+    try:
+        write_indexes(
+            rendered=rendered,
+            output_dir=config.output_directory,
+            verbose=args.verbose,
+        )
+    except OSError as error:
+        print(f"ERROR: Unable to write index artifacts: {error}", file=sys.stderr)
+        return 1
 
     print(
         f"DESys index successfully generated "
-        f"({len(parsed_documents)} documents)."
+        f"({len(documents)} documents, {rendered.build_id})."
     )
 
     return 0

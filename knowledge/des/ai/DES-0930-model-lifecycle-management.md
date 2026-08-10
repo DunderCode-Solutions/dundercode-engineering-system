@@ -1,22 +1,19 @@
-# DES-0930 — Model Lifecycle Management Standard
-
-# Metadata
-
-**Canonical ID:** des.ai.model-lifecycle-management
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All AI models and model-like artifacts managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0930
+canonical_id: des.ai.model-lifecycle-management
+title: Model Lifecycle Management Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All AI models and model-like artifacts managed under DESys
+---
+
+# DES-0930 — Model Lifecycle Management Standard
 
 # 1. Purpose
 

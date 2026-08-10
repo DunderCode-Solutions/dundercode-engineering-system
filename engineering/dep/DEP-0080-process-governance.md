@@ -1,22 +1,19 @@
-# DEP-0080 — Process Governance
-
-# Metadata
-
-**Canonical ID:** dep.process.governance
-
-**Document Class:** Engineering Process Standard
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All engineering processes defined within DEP
-
 ---
+metadata_schema: 1.0.0
+document_id: DEP-0080
+canonical_id: dep.process.governance
+title: Process Governance
+node_type: process
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All engineering processes defined within DEP
+---
+
+# DEP-0080 — Process Governance
 
 # 1. Purpose
 

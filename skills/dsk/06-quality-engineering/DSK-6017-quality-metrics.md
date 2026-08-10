@@ -1,26 +1,20 @@
-# DSK-6017 | Quality Metrics
-
-## Metadata
-
-**Document Number:** DSK-6017
-
-**Canonical ID:** dsk.quality.quality-metrics
-
-**Engineering Domain:** Quality Engineering
-
-**Engineering Discipline:** Engineering Quality Metrics
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-6017
+canonical_id: dsk.quality.quality-metrics
+title: Quality Metrics
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Quality Engineering
+discipline: Engineering Quality Metrics
+---
+
+# DSK-6017 | Quality Metrics
 
 # 1. Purpose
 

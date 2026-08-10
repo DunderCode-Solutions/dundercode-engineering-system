@@ -1,26 +1,20 @@
-# DSK-8013 | Continuous Delivery Engineering
-
-## Metadata
-
-**Document Number:** DSK-8013
-
-**Canonical ID:** dsk.devops.continuous-delivery-engineering
-
-**Engineering Domain:** DevOps Engineering
-
-**Engineering Discipline:** Continuous Delivery Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-8013
+canonical_id: dsk.devops.continuous-delivery-engineering
+title: Continuous Delivery Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: DevOps Engineering
+discipline: Continuous Delivery Engineering
+---
+
+# DSK-8013 | Continuous Delivery Engineering
 
 # 1. Purpose
 

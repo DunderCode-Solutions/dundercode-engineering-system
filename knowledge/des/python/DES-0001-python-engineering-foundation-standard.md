@@ -1,22 +1,19 @@
-# DES-0001 — Python Engineering Foundation Standard
-
-# Metadata
-
-**Canonical ID:** des.python.foundation
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All Python software developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0001
+canonical_id: des.python.foundation
+title: Python Engineering Foundation Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All Python software developed under DESys
+---
+
+# DES-0001 — Python Engineering Foundation Standard
 
 # 1. Purpose
 

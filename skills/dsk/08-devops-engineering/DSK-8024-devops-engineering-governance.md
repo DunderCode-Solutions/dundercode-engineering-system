@@ -1,26 +1,20 @@
-# DSK-8024 | DevOps Engineering Governance
-
-## Metadata
-
-**Document Number:** DSK-8024
-
-**Canonical ID:** dsk.devops.devops-engineering-governance
-
-**Engineering Domain:** DevOps Engineering
-
-**Engineering Discipline:** DevOps Engineering Governance
-
-**Document Class:** Canonical Governance Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-8024
+canonical_id: dsk.devops.devops-engineering-governance
+title: DevOps Engineering Governance
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: DevOps Engineering
+discipline: DevOps Engineering Governance
+---
+
+# DSK-8024 | DevOps Engineering Governance
 
 # 1. Purpose
 

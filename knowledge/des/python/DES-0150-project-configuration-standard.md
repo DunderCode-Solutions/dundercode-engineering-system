@@ -1,22 +1,19 @@
-# DES-0150 — Project Configuration Standard
-
-# Metadata
-
-**Canonical ID:** des.python.configuration
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All Python projects developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0150
+canonical_id: des.python.configuration
+title: Project Configuration Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All Python projects developed under DESys
+---
+
+# DES-0150 — Project Configuration Standard
 
 # 1. Purpose
 

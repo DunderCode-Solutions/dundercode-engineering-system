@@ -1,22 +1,17 @@
-# DSK-2024 | Domain Traceability
-
-## Metadata
-
-Document Number: DSK-2024
-
-Canonical ID: dsk.domain.domain-traceability
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-2024
+canonical_id: dsk.domain.domain-traceability
+title: Domain Traceability
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-2024 | Domain Traceability
 
 # 1. Purpose
 
@@ -303,4 +298,3 @@ After execution, the Domain Traceability should provide:
 The Domain Traceability Skill concludes the Domain Engineering phase of DESys by transforming isolated engineering artifacts into a connected semantic knowledge network.
 
 This Knowledge Graph becomes the canonical representation of domain knowledge, enabling AI agents to reason over business concepts, navigate engineering artifacts, perform impact analysis and construct highly contextual responses throughout the entire software engineering lifecycle.
-

@@ -1,22 +1,19 @@
-# DES-0900 — AI Engineering Principles
-
-# Metadata
-
-**Canonical ID:** des.ai.engineering-principles
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All AI-enabled systems managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0900
+canonical_id: des.ai.engineering-principles
+title: AI Engineering Principles
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All AI-enabled systems managed under DESys
+---
+
+# DES-0900 — AI Engineering Principles
 
 # 1. Purpose
 

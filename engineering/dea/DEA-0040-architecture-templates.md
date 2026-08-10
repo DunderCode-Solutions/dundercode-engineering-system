@@ -1,22 +1,19 @@
-# DEA-0040 — Architecture Templates
-
-# Metadata
-
-**Canonical ID:** dea.architecture.templates
-
-**Document Class:** Engineering Architecture
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All architectural documentation produced within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEA-0040
+canonical_id: dea.architecture.templates
+title: Architecture Templates
+node_type: architecture
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All architectural documentation produced within DESys
+---
+
+# DEA-0040 — Architecture Templates
 
 # 1. Purpose
 

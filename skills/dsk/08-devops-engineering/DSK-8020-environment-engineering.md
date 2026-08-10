@@ -1,26 +1,20 @@
-# DSK-8020 | Environment Engineering
-
-## Metadata
-
-**Document Number:** DSK-8020
-
-**Canonical ID:** dsk.devops.environment-engineering
-
-**Engineering Domain:** DevOps Engineering
-
-**Engineering Discipline:** Environment Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-8020
+canonical_id: dsk.devops.environment-engineering
+title: Environment Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: DevOps Engineering
+discipline: Environment Engineering
+---
+
+# DSK-8020 | Environment Engineering
 
 # 1. Purpose
 

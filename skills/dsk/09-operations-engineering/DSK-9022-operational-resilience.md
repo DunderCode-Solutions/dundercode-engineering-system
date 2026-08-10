@@ -1,26 +1,20 @@
-# DSK-9022 | Operational Resilience Engineering
-
-## Metadata
-
-**Document Number:** DSK-9022
-
-**Canonical ID:** dsk.operations.operational-resilience-engineering
-
-**Engineering Domain:** Operations Engineering
-
-**Engineering Discipline:** Operational Resilience Engineering
-
-**Document Class:** Canonical Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-9022
+canonical_id: dsk.operations.operational-resilience-engineering
+title: Operational Resilience Engineering
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Operations Engineering
+discipline: Operational Resilience Engineering
+---
+
+# DSK-9022 | Operational Resilience Engineering
 
 # 1. Purpose
 

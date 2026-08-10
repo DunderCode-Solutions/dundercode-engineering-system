@@ -1,22 +1,19 @@
-# DES-0840 — Compute & Runtime Platforms Standard
-
-# Metadata
-
-**Canonical ID:** des.cloud.compute-runtime-platforms
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All cloud compute and runtime platforms managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0840
+canonical_id: des.cloud.compute-runtime-platforms
+title: Compute & Runtime Platforms Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All cloud compute and runtime platforms managed under DESys
+---
+
+# DES-0840 — Compute & Runtime Platforms Standard
 
 # 1. Purpose
 

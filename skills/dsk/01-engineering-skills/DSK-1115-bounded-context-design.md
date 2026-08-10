@@ -1,22 +1,17 @@
-# DSK-1115 | Bounded Context Design
-
-## Metadata
-
-Document Number: DSK-1115
-
-Canonical ID: dsk.engineering.architecture.bounded-context-design
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1115
+canonical_id: dsk.engineering.architecture.bounded-context-design
+title: Bounded Context Design
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1115 | Bounded Context Design
 
 # 1. Purpose
 

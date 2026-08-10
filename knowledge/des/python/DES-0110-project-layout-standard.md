@@ -1,23 +1,19 @@
+---
+metadata_schema: 1.0.0
+document_id: DES-0110
+canonical_id: des.python.layout
+title: Project Layout Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All Python projects developed under DESys
+---
 
 # DES-0110 — Project Layout Standard
-
-# Metadata
-
-**Canonical ID:** des.python.layout
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All Python projects developed under DESys
-
----
 
 # 1. Purpose
 

@@ -1,22 +1,19 @@
-# DEA-0000 — Engineering Architecture Overview
-
-# Metadata
-
-**Canonical ID:** dea.engineering.architecture.overview
-
-**Document Class:** Engineering Architecture
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All engineering architectures developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DEA-0000
+canonical_id: dea.engineering.architecture.overview
+title: Engineering Architecture Overview
+node_type: architecture
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All engineering architectures developed within DESys
+---
+
+# DEA-0000 — Engineering Architecture Overview
 
 # 1. Purpose
 

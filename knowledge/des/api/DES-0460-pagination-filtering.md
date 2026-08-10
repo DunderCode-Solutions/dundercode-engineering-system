@@ -1,22 +1,19 @@
-# DES-0460 — Pagination & Filtering Standard
-
-# Metadata
-
-**Canonical ID:** des.api.pagination-filtering
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** APIs exposing collections under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0460
+canonical_id: des.api.pagination-filtering
+title: Pagination & Filtering Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- APIs exposing collections under DESys
+---
+
+# DES-0460 — Pagination & Filtering Standard
 
 # 1. Purpose
 

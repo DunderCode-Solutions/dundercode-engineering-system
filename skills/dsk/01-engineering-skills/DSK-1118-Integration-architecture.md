@@ -1,22 +1,17 @@
-# DSK-1118 | Integration Architecture
-
-## Metadata
-
-Document Number: DSK-1118
-
-Canonical ID: dsk.engineering.architecture.integration-architecture
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1118
+canonical_id: dsk.engineering.architecture.integration-architecture
+title: Integration Architecture
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1118 | Integration Architecture
 
 # 1. Purpose
 

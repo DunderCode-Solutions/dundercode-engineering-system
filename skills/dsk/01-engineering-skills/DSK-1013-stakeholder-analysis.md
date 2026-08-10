@@ -1,22 +1,17 @@
-# DSK-1013 | Stakeholder Analysis
-
-## Metadata
-
-Document Number: DSK-1013
-
-Canonical ID: dsk.engineering.requirements.stakeholder-analysis
-
-Document Class: Engineering Skill
-
-Version: 1.0.0
-
-Status: Draft
-
-Canonical Language: English
-
-Owner: DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-1013
+canonical_id: dsk.engineering.requirements.stakeholder-analysis
+title: Stakeholder Analysis
+node_type: skill
+document_class: operational
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+---
+
+# DSK-1013 | Stakeholder Analysis
 
 # 1. Purpose
 

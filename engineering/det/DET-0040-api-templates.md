@@ -1,22 +1,19 @@
-# DET-0040 — API Templates
-
-# Metadata
-
-**Canonical ID:** det.api.templates
-
-**Document Class:** Engineering Templates
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All API documentation developed within DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DET-0040
+canonical_id: det.api.templates
+title: API Templates
+node_type: template
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All API documentation developed within DESys
+---
+
+# DET-0040 — API Templates
 
 # 1. Purpose
 

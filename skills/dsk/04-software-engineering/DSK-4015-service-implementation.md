@@ -1,26 +1,20 @@
-# DSK-4015 | Service Implementation
-
-## Metadata
-
-**Document Number:** DSK-4015
-
-**Canonical ID:** dsk.software.service-implementation
-
-**Engineering Domain:** Software Engineering
-
-**Engineering Discipline:** Engineering Service Implementation
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-4015
+canonical_id: dsk.software.service-implementation
+title: Service Implementation
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Software Engineering
+discipline: Engineering Service Implementation
+---
+
+# DSK-4015 | Service Implementation
 
 # 1. Purpose
 

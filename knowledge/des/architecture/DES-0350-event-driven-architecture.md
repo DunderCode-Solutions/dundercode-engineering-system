@@ -1,22 +1,19 @@
-# DES-0350 — Event-Driven Architecture Standard
-
-# Metadata
-
-**Canonical ID:** des.architecture.event-driven
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** Software projects adopting Event-Driven Architecture under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0350
+canonical_id: des.architecture.event-driven
+title: Event-Driven Architecture Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- Software projects adopting Event-Driven Architecture under DESys
+---
+
+# DES-0350 — Event-Driven Architecture Standard
 
 # 1. Purpose
 

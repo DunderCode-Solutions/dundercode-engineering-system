@@ -1,22 +1,19 @@
-# DES-0630 — Configuration Management Standard
-
-# Metadata
-
-**Canonical ID:** des.deployment.configuration-management
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All software configuration managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0630
+canonical_id: des.deployment.configuration-management
+title: Configuration Management Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All software configuration managed under DESys
+---
+
+# DES-0630 — Configuration Management Standard
 
 # 1. Purpose
 

@@ -1,26 +1,20 @@
-# DSK-5022 | Security Traceability
-
-## Metadata
-
-**Document Number:** DSK-5022
-
-**Canonical ID:** dsk.security.security-traceability
-
-**Engineering Domain:** Security Engineering
-
-**Engineering Discipline:** Engineering Security Traceability
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-5022
+canonical_id: dsk.security.security-traceability
+title: Security Traceability
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Security Engineering
+discipline: Engineering Security Traceability
+---
+
+# DSK-5022 | Security Traceability
 
 # 1. Purpose
 

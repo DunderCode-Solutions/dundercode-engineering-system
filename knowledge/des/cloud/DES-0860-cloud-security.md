@@ -1,22 +1,19 @@
-# DES-0860 — Cloud Security Standard
-
-# Metadata
-
-**Canonical ID:** des.cloud.security
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All cloud security controls and protections managed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0860
+canonical_id: des.cloud.security
+title: Cloud Security Standard
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All cloud security controls and protections managed under DESys
+---
+
+# DES-0860 — Cloud Security Standard
 
 # 1. Purpose
 

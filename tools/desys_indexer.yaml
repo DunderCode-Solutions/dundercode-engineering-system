@@ -1,10 +1,13 @@
 version: 1
 
-repository_root: .
+repository_root: ..
 
 sources:
+  - foundation
   - knowledge
   - engineering
+  - delivery
+  - skills
 
 output_directory: skills/generated
 

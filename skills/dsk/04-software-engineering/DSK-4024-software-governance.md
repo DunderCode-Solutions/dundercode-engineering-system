@@ -1,26 +1,20 @@
-# DSK-4024 | Software Governance
-
-## Metadata
-
-**Document Number:** DSK-4024
-
-**Canonical ID:** dsk.software.software-governance
-
-**Engineering Domain:** Software Engineering
-
-**Engineering Discipline:** Engineering Software Governance
-
-**Document Class:** Engineering Skill
-
-**Version:** 2.0.0
-
-**Status:** Canonical
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
 ---
+metadata_schema: 1.0.0
+document_id: DSK-4024
+canonical_id: dsk.software.software-governance
+title: Software Governance
+node_type: skill
+document_class: operational
+version: 2.0.0
+status: canonical
+legacy_status: true
+language: en
+owner: DunderCode Engineering
+domain: Software Engineering
+discipline: Engineering Software Governance
+---
+
+# DSK-4024 | Software Governance
 
 # 1. Purpose
 

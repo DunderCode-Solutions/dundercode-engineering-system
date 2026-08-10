@@ -1,22 +1,19 @@
-# DES-0500 — Data Engineering Principles
-
-# Metadata
-
-**Canonical ID:** des.data.engineering-principles
-
-**Document Class:** Normative
-
-**Version:** 1.0.0 (Draft)
-
-**Status:** Draft
-
-**Canonical Language:** English
-
-**Owner:** DunderCode Engineering
-
-**Applies To:** All data assets developed under DESys
-
 ---
+metadata_schema: 1.0.0
+document_id: DES-0500
+canonical_id: des.data.engineering-principles
+title: Data Engineering Principles
+node_type: standard
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: DunderCode Engineering
+applies_to:
+- All data assets developed under DESys
+---
+
+# DES-0500 — Data Engineering Principles
 
 # 1. Purpose
 
