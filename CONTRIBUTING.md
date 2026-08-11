@@ -79,7 +79,10 @@ uv run desys-project-init --root <consumer-repository> --dry-run
 Initializer changes MUST preserve non-destructive preflight behavior,
 deterministic output, idempotency, and compatibility with the generated
 consumer quality gate. Existing `AGENTS.md` content MUST be preserved outside
-the managed DESys instruction markers.
+the managed DESys instruction markers. Consumer tooling MUST execute through
+isolated Python 3.12 `uvx` commands and MUST NOT modify the consumer runtime or
+dependency lockfile. `tools/desys-source.txt` accepts only exact registry
+versions, full-SHA HTTPS Git references, or repository-relative wheels.
 
 # Pull Requests
 

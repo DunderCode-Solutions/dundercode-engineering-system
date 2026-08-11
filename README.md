@@ -451,23 +451,35 @@ The gate validates canonical metadata, tests the tooling, renders deterministic 
 ## Consumer Project Initialization
 
 Use `desys-project-init` to scaffold DESys documentation tooling in an existing
-Git repository. Preview the complete operation before writing:
+Git repository. During release-candidate validation, preserve the same full-SHA
+source in the generated quality gate:
 
 ```bash
-uv run desys-project-init --root /path/to/consumer-project --dry-run
+DESYS_SOURCE="dundercode-engineering-system @ git+https://<REPOSITORY_URL>@<FULL_COMMIT_SHA>"
+
+uvx --isolated --no-config --python 3.12 --from "$DESYS_SOURCE" \
+  desys-project-init \
+  --root /path/to/consumer-project \
+  --desys-source "$DESYS_SOURCE" \
+  --dry-run
 ```
 
 Apply the conflict-free plan with:
 
 ```bash
-uv run desys-project-init --root /path/to/consumer-project
+uvx --isolated --no-config --python 3.12 --from "$DESYS_SOURCE" \
+  desys-project-init \
+  --root /path/to/consumer-project \
+  --desys-source "$DESYS_SOURCE"
 ```
 
 The command creates project documentation collections, deterministic indexer
 configuration, a local quality script, a GitHub Actions workflow, generated
 artifact ignore rules, neutral `AGENTS.md` documentation instructions, and `uv`
-dependency guidance. It never overwrites divergent files; conflicts abort the
-complete operation before any write.
+tool-source guidance. DESys executes in an isolated Python 3.12 environment and
+does not modify the consumer project's runtime dependencies, virtual
+environment, or lockfile. It never overwrites divergent files; conflicts abort
+the complete operation before any write.
 
 ---
 

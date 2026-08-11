@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -13,6 +14,16 @@ from pathlib import Path, PurePosixPath
 from tempfile import NamedTemporaryFile
 
 PACKAGE_NAME = "dundercode-engineering-system"
+REGISTRY_SOURCE_PATTERN = re.compile(
+    rf"^{re.escape(PACKAGE_NAME)}=="
+    r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)"
+    r"(?:(?:a|b|rc)[0-9]+)?(?:\.post[0-9]+)?(?:\.dev[0-9]+)?"
+    r"(?:\+[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?$"
+)
+GIT_SOURCE_PATTERN = re.compile(
+    rf"^{re.escape(PACKAGE_NAME)} @ git\+https://[^\s@?#]+@(?:[0-9a-fA-F]{{40}}|[0-9a-fA-F]{{64}})$"
+)
+WHEEL_SOURCE_PATTERN = re.compile(r"^[0-9A-Za-z._/-]+\.whl$")
 
 MANAGED_DIRECTORIES = (
     PurePosixPath(".github"),
@@ -95,14 +106,59 @@ script_directory="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 repository_root="$(git -C "$script_directory/.." rev-parse --show-toplevel)"
 cd "$repository_root"
 
-uv run --locked --group desys desys-build-index \\
+source_file="$repository_root/tools/desys-source.txt"
+if [[ ! -f "$source_file" || -L "$source_file" ]]; then
+  printf 'ERROR: DESys source file is missing or unsafe: %s\n' "$source_file" >&2
+  exit 1
+fi
+
+exec 3< "$source_file"
+if ! IFS= read -r desys_source <&3 || [[ -z "$desys_source" ]]; then
+  printf 'ERROR: DESys source file must contain exactly one non-empty line.\n' >&2
+  exit 1
+fi
+if IFS= read -r extra_source_line <&3; then
+  printf 'ERROR: DESys source file must contain exactly one non-empty line.\n' >&2
+  exit 1
+fi
+exec 3<&-
+
+if [[ "$desys_source" =~ ^dundercode-engineering-system==(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)((a|b|rc)[0-9]+)?(\\.post[0-9]+)?(\\.dev[0-9]+)?(\\+[0-9A-Za-z]+([.-][0-9A-Za-z]+)*)?$ ]]; then
+  :
+elif [[ "$desys_source" =~ ^dundercode-engineering-system\\ @\\ git\\+https://[^[:space:]@?#]+@([0-9a-fA-F]{40}|[0-9a-fA-F]{64})$ ]]; then
+  :
+elif [[ "$desys_source" =~ ^[0-9A-Za-z._/-]+\\.whl$ && "$desys_source" != /* && "$desys_source" != *".."* ]]; then
+  wheel_path="$repository_root/$desys_source"
+  current_path="$repository_root"
+  IFS='/' read -r -a wheel_parts <<< "$desys_source"
+  for wheel_part in "${wheel_parts[@]}"; do
+    current_path="$current_path/$wheel_part"
+    if [[ -L "$current_path" ]]; then
+      printf 'ERROR: DESys wheel path contains a symlink: %s\n' "$desys_source" >&2
+      exit 1
+    fi
+  done
+  if [[ ! -f "$wheel_path" ]]; then
+    printf 'ERROR: DESys wheel does not exist: %s\n' "$desys_source" >&2
+    exit 1
+  fi
+else
+  printf 'ERROR: Unsupported or mutable DESys source: %s\n' "$desys_source" >&2
+  exit 1
+fi
+
+run_desys() {
+  uvx --isolated --no-config --python 3.12 --from "$desys_source" "$@"
+}
+
+run_desys desys-build-index \\
   --dry-run \\
   --config tools/desys_indexer.yaml
 
-uv run --locked --group desys desys-build-index \\
+run_desys desys-build-index \\
   --config tools/desys_indexer.yaml
 
-uv run --locked --group desys desys-check-indexes \\
+run_desys desys-check-indexes \\
   --output docs/generated
 """
 
@@ -135,20 +191,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
-        with:
-          python-version: "3.12"
-
       - name: Set up uv
         uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
         with:
           version: "0.12.3"
           enable-cache: true
-          cache-dependency-glob: uv.lock
-
-      - name: Synchronize DESys tooling
-        run: uv sync --locked --group desys
+          cache-dependency-glob: tools/desys-source.txt
 
       - name: Run documentation quality gate
         run: bash scripts/desys-docs-quality.sh
@@ -195,6 +243,13 @@ def parse_arguments() -> argparse.Namespace:
         help="Validate and print the initialization plan without writing files.",
     )
     parser.add_argument(
+        "--desys-source",
+        help=(
+            "Immutable DESys source for consumer quality commands. Defaults "
+            "to the exact installed package version."
+        ),
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version=f"%(prog)s {_installed_version()}",
@@ -205,7 +260,11 @@ def parse_arguments() -> argparse.Namespace:
 def main() -> int:
     arguments = parse_arguments()
     try:
-        plan = initialize_project(arguments.root, dry_run=arguments.dry_run)
+        plan = initialize_project(
+            arguments.root,
+            dry_run=arguments.dry_run,
+            desys_source=arguments.desys_source,
+        )
     except ProjectInitializationError as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
@@ -230,10 +289,21 @@ def initialize_project(
     *,
     dry_run: bool = False,
     version: str | None = None,
+    desys_source: str | None = None,
 ) -> InitializationPlan:
     """Plan and optionally apply a safe DESys consumer scaffold."""
     root = _validate_repository_root(root)
-    files = _render_project_files(version or _installed_version())
+    resolved_version = version or _installed_version()
+    if resolved_version == "unreleased" and desys_source is None:
+        raise ProjectInitializationError(
+            "Unable to derive a published DESys source; pass --desys-source explicitly."
+        )
+    resolved_source = _validate_desys_source(
+        root,
+        desys_source if desys_source is not None else f"{PACKAGE_NAME}=={resolved_version}",
+        resolved_version,
+    )
+    files = _render_project_files(resolved_version, resolved_source)
     operations = [
         _classify_directory(root, path)
         for path in MANAGED_DIRECTORIES
@@ -457,7 +527,45 @@ def _installed_version() -> str:
         return "unreleased"
 
 
-def _render_project_files(version: str) -> dict[PurePosixPath, bytes]:
+def _validate_desys_source(root: Path, source: str, version: str) -> str:
+    if not source or source != source.strip() or any(character in source for character in "\r\n\0"):
+        raise ProjectInitializationError(
+            "DESys source must be one non-empty line without surrounding whitespace."
+        )
+    if REGISTRY_SOURCE_PATTERN.fullmatch(source):
+        if source != f"{PACKAGE_NAME}=={version}":
+            raise ProjectInitializationError(
+                "Registry source version must match the installed DESys version."
+            )
+        return source
+    if GIT_SOURCE_PATTERN.fullmatch(source):
+        return source
+
+    source_path = PurePosixPath(source)
+    if (
+        WHEEL_SOURCE_PATTERN.fullmatch(source) is None
+        or source_path.is_absolute()
+        or ".." in source_path.parts
+        or ".." in source
+        or "\\" in source
+        or source_path.suffix != ".whl"
+    ):
+        raise ProjectInitializationError(
+            "DESys source must be an exact package version, full-SHA HTTPS Git reference, "
+            "or repository-relative wheel."
+        )
+    destination = root / source_path
+    current = root
+    for part in source_path.parts:
+        current /= part
+        if current.is_symlink():
+            raise ProjectInitializationError(f"DESys wheel path contains a symlink: {source}")
+    if not destination.is_file():
+        raise ProjectInitializationError(f"DESys wheel does not exist: {source}")
+    return source
+
+
+def _render_project_files(version: str, desys_source: str) -> dict[PurePosixPath, bytes]:
     if not version.strip():
         raise ProjectInitializationError("DESys version must not be empty.")
     text_files = {
@@ -467,6 +575,7 @@ def _render_project_files(version: str) -> dict[PurePosixPath, bytes]:
         PurePosixPath("docs/prd/README.md"): _collection_readme("Product Requirements", "PRD"),
         PurePosixPath("docs/rfc/README.md"): _collection_readme("Engineering Proposals", "RFC"),
         PurePosixPath("scripts/desys-docs-quality.sh"): QUALITY_SCRIPT,
+        PurePosixPath("tools/desys-source.txt"): f"{desys_source}\n",
         PurePosixPath("tools/desys_indexer.yaml"): INDEXER_CONFIG,
     }
     return {
@@ -491,35 +600,35 @@ This `README.md` is a navigation surface and is not indexed as a DEKG node.
 def _integration_readme(version: str) -> str:
     return f"""# DESys Project Integration
 
-This project scaffold was generated with DESys `{version}` and requires Python
-3.12 and `uv`.
+This project scaffold was generated with DESys `{version}`. DESys tooling runs
+in an isolated Python 3.12 environment managed by `uvx`; it does not constrain
+the consumer project's language, Python version, virtual environment, or
+dependency lockfile.
 
-## Dependency
+## Tool Source
 
-Add DESys to a dedicated dependency group and commit both `pyproject.toml` and
-`uv.lock`:
+`tools/desys-source.txt` is the sole source authority for documentation tooling.
+Published releases use an exact package version:
 
-```bash
-uv add --group desys "dundercode-engineering-system=={version}"
-uv lock
+```text
+dundercode-engineering-system=={version}
 ```
 
-Until a package release is available, use an immutable Git revision instead:
+Release candidates use the package name and a full Git commit SHA:
 
-```bash
-uv add --group desys \\
-  "dundercode-engineering-system @ git+<DESYS_REPOSITORY_URL>@<FULL_COMMIT_SHA>"
-uv lock
+```text
+dundercode-engineering-system @ git+https://<DESYS_REPOSITORY_URL>@<FULL_COMMIT_SHA>
 ```
 
-Do not use an unpinned branch as the project dependency source.
+Repository-relative wheel files are also supported for offline validation.
+Branches, tags, local directories, absolute paths, and version ranges are
+rejected because they are not immutable consumer sources.
 
 ## Quality Gate
 
-Synchronize the locked environment and run the documentation gate:
+Run the documentation gate without modifying the consumer environment:
 
 ```bash
-uv sync --locked --group desys
 bash scripts/desys-docs-quality.sh
 ```
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -50,6 +51,9 @@ def test_initializes_a_loadable_consumer_configuration(tmp_path: Path) -> None:
         "docs/rfc",
     }
     assert "/docs/generated/" in (root / ".gitignore").read_text(encoding="utf-8")
+    assert (root / "tools/desys-source.txt").read_text(encoding="utf-8") == (
+        "dundercode-engineering-system==0.1.0\n"
+    )
 
     documents = parse_documents(
         scan_markdown_documents(config), repository_root=config.repository_root
@@ -62,6 +66,11 @@ def test_initializes_a_loadable_consumer_configuration(tmp_path: Path) -> None:
     assert summary["artifact_count"] == 5
     quality_script = (root / "scripts/desys-docs-quality.sh").read_text(encoding="utf-8")
     assert '${BASH_SOURCE[0]}' in quality_script
+    assert "uvx --isolated --no-config --python 3.12" in quality_script
+    assert "uv sync" not in quality_script
+    workflow = (root / ".github/workflows/desys-docs-quality.yml").read_text(encoding="utf-8")
+    assert "actions/setup-python" not in workflow
+    assert "cache-dependency-glob: tools/desys-source.txt" in workflow
     agents = (root / "AGENTS.md").read_text(encoding="utf-8")
     assert "docs/generated/search-index.json" in agents
     assert "source Markdown is authoritative" in agents
@@ -140,6 +149,108 @@ def test_rejects_malformed_agents_markers_without_writing(tmp_path: Path) -> Non
     assert plan.has_conflicts
     assert agents.read_text(encoding="utf-8") == original
     assert not (root / "docs").exists()
+
+
+def test_preserves_full_sha_git_source(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    source = (
+        "dundercode-engineering-system @ "
+        f"git+https://github.com/DunderCode-Solutions/dundercode-engineering-system.git@{'a' * 40}"
+    )
+
+    initialize_project(root, version="0.1.0", desys_source=source)
+
+    assert (root / "tools/desys-source.txt").read_text(encoding="utf-8") == f"{source}\n"
+
+
+def test_accepts_repository_relative_wheel_source(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    vendor = root / "tools/vendor"
+    vendor.mkdir(parents=True)
+    wheel = vendor / "dundercode_engineering_system-0.1.0-py3-none-any.whl"
+    wheel.write_bytes(b"pilot wheel")
+    source = wheel.relative_to(root).as_posix()
+
+    initialize_project(root, version="0.1.0", desys_source=source)
+
+    assert (root / "tools/desys-source.txt").read_text(encoding="utf-8") == f"{source}\n"
+
+
+def test_rejects_mutable_or_unsafe_sources_before_writing(tmp_path: Path) -> None:
+    invalid_sources = (
+        "",
+        " dundercode-engineering-system==0.1.0",
+        "dundercode-engineering-system>=0.1.0",
+        "dundercode-engineering-system==1..0",
+        "dundercode-engineering-system==01.2.3",
+        "dundercode-engineering-system==0.2.0",
+        "dundercode-engineering-system @ git+https://example.com/desys.git@main",
+        "dundercode-engineering-system @ git+http://example.com/desys.git@" + "a" * 40,
+        "dundercode-engineering-system @ git+https://example.com/desys.git?token=secret@" + "a" * 40,
+        "/tmp/desys.whl",
+        "../desys.whl",
+        "tools/desys release.whl",
+        "desys\nsecond-line",
+    )
+
+    for index, source in enumerate(invalid_sources):
+        root = make_repository(tmp_path / f"repository-{index}")
+        with pytest.raises(ProjectInitializationError):
+            initialize_project(root, version="0.1.0", desys_source=source)
+        assert [path.name for path in root.iterdir()] == [".git"]
+
+
+def test_source_change_is_a_non_destructive_conflict(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version="0.1.0")
+    source_file = root / "tools/desys-source.txt"
+    original = source_file.read_bytes()
+    git_source = (
+        "dundercode-engineering-system @ "
+        f"git+https://example.com/desys.git@{'b' * 40}"
+    )
+
+    plan = initialize_project(root, version="0.1.0", desys_source=git_source)
+
+    source_operation = next(
+        operation for operation in plan.operations if operation.path.as_posix() == "tools/desys-source.txt"
+    )
+    assert plan.has_conflicts
+    assert source_operation.action == "CONFLICT"
+    assert source_file.read_bytes() == original
+
+
+def test_quality_script_rejects_tampered_source_before_uvx(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version="0.1.0")
+    (root / "tools/desys-source.txt").write_text(
+        "dundercode-engineering-system>=0.1.0\n",
+        encoding="utf-8",
+    )
+    fake_bin = tmp_path / "bin"
+    fake_bin.mkdir()
+    marker = tmp_path / "uvx-called"
+    fake_uvx = fake_bin / "uvx"
+    fake_uvx.write_text('#!/usr/bin/env bash\ntouch "$UVX_MARKER"\n', encoding="utf-8")
+    fake_uvx.chmod(0o755)
+    environment = {
+        **os.environ,
+        "PATH": f"{fake_bin}:{os.environ['PATH']}",
+        "UVX_MARKER": str(marker),
+    }
+
+    result = subprocess.run(
+        ["bash", str(root / "scripts/desys-docs-quality.sh")],
+        cwd=tmp_path,
+        check=False,
+        capture_output=True,
+        text=True,
+        env=environment,
+    )
+
+    assert result.returncode == 1
+    assert "Unsupported or mutable DESys source" in result.stderr
+    assert not marker.exists()
 
 
 def test_rejects_non_git_root(tmp_path: Path) -> None:

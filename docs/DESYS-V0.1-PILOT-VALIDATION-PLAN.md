@@ -1,7 +1,7 @@
 # DESys v0.1 Pilot Validation Plan
 
-Status: Draft  
-Plan version: 1.0  
+Status: Draft
+Plan version: 1.1
 Last updated: 2026-08-10
 
 ## 1. Purpose
@@ -24,7 +24,8 @@ DESys v0.1 provides documentation-as-code capabilities:
 - local and CI documentation quality gates;
 - `desys-project-init` consumer scaffolding;
 - vendor-neutral `AGENTS.md` documentation instructions;
-- Python 3.12 and `uv` environment management.
+- isolated Python 3.12 tooling managed by `uvx`, independent from the consumer
+  runtime and dependency environment.
 
 The following capabilities are outside the v0.1 release scope:
 
@@ -77,6 +78,7 @@ Record the following for every pilot before execution.
 | Operating system | |
 | CPU architecture | |
 | Python version | |
+| DESys tool Python version | |
 | `uv` version | |
 | Git version | |
 | CI platform | |
@@ -85,11 +87,11 @@ Record the following for every pilot before execution.
 | Existing `AGENTS.md` | Yes / No |
 | Existing `.gitignore` | Yes / No |
 | Existing GitHub Actions workflows | Yes / No |
-| DESys source tag or revision | |
+| DESys source version or full commit SHA | |
 
-The initial supported baseline is Python 3.12 and `uv` 0.12.3. Any additional
-working environment is useful evidence but does not expand official support
-unless explicitly approved before release.
+The DESys tool baseline is Python 3.12 and `uv` 0.12.3. The consumer project may
+use another Python version or another implementation language. The pilot must
+prove that DESys does not modify or constrain that consumer runtime.
 
 ## 6. Evidence Handling
 
@@ -123,13 +125,17 @@ Pilot execution may begin only when:
 
 ## 8. Reference Commands
 
-Replace `<DESYS_SOURCE>` with an immutable local path, Git revision, or release
-source approved for the pilot.
+Replace the placeholders with an approved HTTPS repository and full Git commit
+SHA. Exact published versions and committed repository-relative wheels are also
+supported immutable sources.
 
 ```bash
-uvx --from <DESYS_SOURCE> desys-project-init --root . --dry-run
-uvx --from <DESYS_SOURCE> desys-project-init --root .
-uv sync --locked --group desys
+DESYS_SOURCE="dundercode-engineering-system @ git+https://<REPOSITORY_URL>@<FULL_COMMIT_SHA>"
+
+uvx --isolated --no-config --python 3.12 --from "$DESYS_SOURCE" \
+  desys-project-init --root . --desys-source "$DESYS_SOURCE" --dry-run
+uvx --isolated --no-config --python 3.12 --from "$DESYS_SOURCE" \
+  desys-project-init --root . --desys-source "$DESYS_SOURCE"
 bash scripts/desys-docs-quality.sh
 ```
 
@@ -141,12 +147,12 @@ time for every test that executes a command.
 | ID | Test | Expected Result | Required Evidence |
 | --- | --- | --- | --- |
 | ENV-001 | Record all environment fields from section 5. | No required field is blank. | Completed environment table. |
-| PKG-001 | Install from a full commit SHA or immutable release tag. | Installation succeeds without an unpinned branch. | Command, source revision, and output. |
+| PKG-001 | Install from a full commit SHA or exact published package version. | Installation succeeds without an unpinned branch or tag source. | Command, source revision, and output. |
 | PKG-002 | Repeat installation in a clean environment without the DESys development virtual environment. | The command resolves and runs independently. | Clean-environment log. |
 | PKG-003 | Run `desys-project-init --version`. | Output matches package metadata and release documentation. | Version output. |
-| PKG-004 | Add DESys to the `desys` dependency group. | `pyproject.toml` and `uv.lock` contain the expected source and version. | Sanitized dependency diff. |
-| PKG-005 | Run `uv sync --locked --group desys`. | Synchronization succeeds without modifying `uv.lock`. | Command output and clean lockfile diff. |
-| PKG-006 | Inspect installed dependencies. | Only declared DESys runtime dependencies are added transitively. | Dependency summary. |
+| PKG-004 | Inspect `tools/desys-source.txt`. | It contains exactly the immutable source used to invoke the initializer. | Source file and candidate revision. |
+| PKG-005 | Run the gate in a project with its own runtime and lockfile. | DESys uses isolated Python 3.12 and does not modify `.venv`, `pyproject.toml`, or the consumer lockfile. | Before/after checksums and command output. |
+| PKG-006 | Run the gate twice with the same source. | The first run resolves the tool; the second reuses the uv cache without changing behavior. | Cold and warm logs. |
 
 ## 10. Initializer Safety And Behavior Tests
 
@@ -176,10 +182,11 @@ Confirm that the applied scaffold contains:
 | `docs/adr/README.md` | Explains ADR filename and metadata expectations. |
 | `docs/prd/README.md` | Explains PRD filename and metadata expectations. |
 | `docs/rfc/README.md` | Explains RFC filename and metadata expectations. |
-| `docs/desys/README.md` | Explains dependency, quality gate, generated output, and agent usage. |
+| `docs/desys/README.md` | Explains isolated tooling, immutable source, quality gate, generated output, and agent usage. |
+| `tools/desys-source.txt` | Contains exactly one supported immutable DESys source. |
 | `tools/desys_indexer.yaml` | Selects project sources and all five artifacts. |
-| `scripts/desys-docs-quality.sh` | Performs dry-run, generation, and artifact validation. |
-| `.github/workflows/desys-docs-quality.yml` | Uses locked dependencies and runs the local gate. |
+| `scripts/desys-docs-quality.sh` | Uses isolated Python 3.12 to perform dry-run, generation, and artifact validation. |
+| `.github/workflows/desys-docs-quality.yml` | Installs only uv and runs the isolated local gate. |
 
 ## 12. Real Documentation Tests
 
@@ -243,7 +250,7 @@ claims validation without running the required command.
 | --- | --- | --- | --- |
 | CI-001 | Open a pull request with valid project documents. | Documentation job passes. | CI link or exported log. |
 | CI-002 | Open or simulate a pull request with invalid metadata. | Documentation job fails at validation. | CI failure log. |
-| CI-003 | Make `uv.lock` inconsistent with `pyproject.toml`. | Locked synchronization fails before validation. | CI failure log. |
+| CI-003 | Make `tools/desys-source.txt` missing, malformed, mutable, or unresolvable. | CI fails before executing DESys tooling. | CI failure log. |
 | CI-004 | Run CI from a clean checkout. | No untracked local dependency is required. | CI checkout and install log. |
 | CI-005 | Run once with a cold cache and once with a warm cache. | Both runs pass; cache changes performance only. | Durations and logs. |
 | CI-006 | Run the same revision three consecutive times. | All runs pass with the same build ID. | Three run links and build IDs. |
@@ -258,7 +265,8 @@ Record rather than enforce hard limits during the first pilot cycle.
 | Measurement | Cold Run | Warm Run | Notes |
 | --- | --- | --- | --- |
 | Initial `uvx` resolution | | | |
-| `uv sync --locked --group desys` | | | |
+| Cold isolated DESys tool resolution | | | |
+| Warm isolated DESys tool reuse | | | |
 | Initializer dry-run | | | |
 | Initializer apply | | | |
 | Local documentation quality gate | | | |
@@ -296,6 +304,8 @@ Confirm that:
 - conflicts prevent unrelated writes;
 - existing `AGENTS.md` and `.gitignore` content is preserved;
 - dependency sources are immutable and reviewable;
+- `tools/desys-source.txt` contains one validated source and no credentials;
+- the consumer environment and dependency lockfile remain unchanged;
 - generated artifacts do not contain unintended secrets from source documents.
 
 The final point requires reviewing the pilot documents before generation,
@@ -319,6 +329,7 @@ Public release is recommended only when all of the following are true:
 
 - Pilot A and Pilot B complete all applicable mandatory tests;
 - installation succeeds from an immutable source in clean environments;
+- the consumer runtime, virtual environment, and lockfile remain unchanged;
 - dry-run, conflict prevention, and idempotency are demonstrated;
 - no consumer content is lost or silently replaced;
 - all valid pilot documents pass with zero errors and zero new warnings;
