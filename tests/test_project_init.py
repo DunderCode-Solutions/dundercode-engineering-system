@@ -81,6 +81,9 @@ def test_initializes_a_loadable_consumer_configuration(tmp_path: Path) -> None:
     assert "Neither field alone establishes whether a document is binding" in agents
     assert "Determine authority from explicit project\ngovernance evidence" in agents
     assert "does not imply unilateral approval\npower" in agents
+    assert "do not define a required transition sequence" in agents
+    assert "approval process, or mandatory artifact type" in agents
+    assert "optional proposals that\nrequire confirmation" in agents
     assert "only when the documented project process or requested task requires" in agents
     assert "require explicit confirmation" in agents
     assert "cannot make them authoritative" in agents

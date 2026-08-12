@@ -77,7 +77,10 @@ permanently refusing the change.
 
 Do not invent approval authority, review order, or lifecycle dependencies. The
 `owner` field identifies accountability; it does not imply unilateral approval
-power.
+power. Lifecycle status values do not define a required transition sequence,
+approval process, or mandatory artifact type. When these rules are absent,
+report the evidence gap and present next steps only as optional proposals that
+require confirmation.
 
 ### Change Discipline
 

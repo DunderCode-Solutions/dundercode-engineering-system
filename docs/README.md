@@ -53,6 +53,8 @@ The required evidence, scenarios, and go/no-go criteria are defined in
 [`DESYS-V0.1-PILOT-VALIDATION-PLAN.md`](DESYS-V0.1-PILOT-VALIDATION-PLAN.md).
 The first AI validation findings and mandatory regression scenarios are in
 [`pilot/AI-VALIDATION-ROUND-1.md`](pilot/AI-VALIDATION-ROUND-1.md).
+Round 2 results and the final `AI-009` regression requirement are in
+[`pilot/AI-VALIDATION-ROUND-2.md`](pilot/AI-VALIDATION-ROUND-2.md).
 
 ## Resume Point
 
