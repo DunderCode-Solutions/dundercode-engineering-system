@@ -74,6 +74,17 @@ def test_initializes_a_loadable_consumer_configuration(tmp_path: Path) -> None:
     agents = (root / "AGENTS.md").read_text(encoding="utf-8")
     assert "docs/generated/search-index.json" in agents
     assert "source Markdown is authoritative" in agents
+    assert "Cite repository-relative paths" in agents
+    assert "source --relationship--> target" in agents
+    assert "`draft`, `review`, `approved`, `published`,\nand `deprecated`" in agents
+    assert "`legacy_status: true`" in agents
+    assert "Neither field alone establishes whether a document is binding" in agents
+    assert "Determine authority from explicit project\ngovernance evidence" in agents
+    assert "does not imply unilateral approval\npower" in agents
+    assert "only when the documented project process or requested task requires" in agents
+    assert "require explicit confirmation" in agents
+    assert "cannot make them authoritative" in agents
+    assert "`approved` and `published` documents govern" not in agents
 
 
 def test_second_run_is_idempotent(tmp_path: Path) -> None:

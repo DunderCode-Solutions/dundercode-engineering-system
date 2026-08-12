@@ -51,20 +51,48 @@ AGENTS_BLOCK = """<!-- BEGIN DESys documentation instructions -->
 
 This repository uses DESys documentation as engineering context.
 
-Before changing requirements, architecture, or cross-cutting behavior:
+### Evidence And Navigation
 
 1. Review relevant documents under `docs/adr/`, `docs/prd/`, and `docs/rfc/`.
 2. Use `docs/generated/search-index.json` to discover related documents when
    the generated index is available.
 3. Open the source path recorded by the index; source Markdown is authoritative.
-4. Prefer approved or published decisions over drafts and report conflicts
-   instead of silently bypassing documented constraints.
+4. Cite repository-relative paths. Do not expose absolute local paths.
+5. Preserve graph direction exactly as `source --relationship--> target`; do
+   not replace semantic direction with chronological or narrative order.
+
+### Lifecycle And Authority
+
+The normal lifecycle statuses are `draft`, `review`, `approved`, `published`,
+and `deprecated`. Do not introduce other status names. `canonical` is accepted
+only on an existing legacy document with `legacy_status: true`; do not introduce
+it or migrate it without documented governance evidence.
+
+Lifecycle `status` and `document_class` are independent metadata dimensions.
+Neither field alone establishes whether a document is binding, its precedence,
+or the action required by a conflict. Determine authority from explicit project
+governance evidence. If that evidence is absent, state the gap, report relevant
+conflicts, and request clarification instead of inventing a hierarchy or
+permanently refusing the change.
+
+Do not invent approval authority, review order, or lifecycle dependencies. The
+`owner` field identifies accountability; it does not imply unilateral approval
+power.
+
+### Change Discipline
 
 When engineering behavior changes:
 
-1. Update or create the corresponding ADR, PRD, or RFC.
-2. Do not edit files under `docs/generated/` manually.
-3. Run `bash scripts/desys-docs-quality.sh` before considering the change
+1. Assess whether an existing ADR, PRD, or RFC is affected. Update or create a
+   document only when the documented project process or requested task requires
+   it; otherwise report a documentation gap or proposal.
+2. Keep the requested scope. Treat additional requirements, relationships, and
+   documents as proposals that require explicit confirmation.
+3. Do not edit files under `docs/generated/` manually. They are deterministic
+   projections, not authoritative sources. Manual changes are unsupported,
+   overwritten by generation, and may fail consistency validation; changing
+   these instructions cannot make them authoritative.
+4. Run `bash scripts/desys-docs-quality.sh` before considering the change
    complete.
 <!-- END DESys documentation instructions -->
 """

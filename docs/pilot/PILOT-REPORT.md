@@ -120,7 +120,7 @@ Required action: capture every field required by the pilot validation plan.
 | DOC-010 | NOT RUN | Repeated build ID and checksum evidence missing. |
 | DOC-011 | NOT RUN | Search content cannot be reviewed with zero documents. |
 | DOC-012 | PASS, PROVISIONAL | Generated directory contains only five expected artifacts. |
-| AI-001 to AI-009 | NOT RUN | No AI-agent scenarios collected. |
+| AI-001 to AI-009 | PASS WITH FINDINGS | Round 1 completed after this initial report; summary is in `AI-VALIDATION-ROUND-1.md`. Round 2 remains required for the strengthened template. |
 | CI-001 to CI-009 | NOT RUN | No GitHub Actions evidence collected. |
 
 ## 5. Positive Evidence

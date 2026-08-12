@@ -219,8 +219,9 @@ placeholder-only examples.
 | `search-index.json` | Contains searchable source content and correct source paths. |
 
 All five artifacts must share the same schema version and build ID. The
-artifact checker must reject missing, additional, inconsistent, or manually
-modified files.
+artifact checker rejects missing, additional, or internally inconsistent files.
+Manual edits are unsupported and overwritten by normal generation; provenance
+of a pre-generation artifact is not independently detected.
 
 ## 14. AI Agent Validation Scenarios
 
@@ -243,6 +244,12 @@ read, files changed, and final quality-gate result.
 An AI scenario fails if the agent fabricates a decision, cites the wrong source,
 edits generated artifacts directly, ignores an approved contradiction, or
 claims validation without running the required command.
+
+The generated `AGENTS.md` instructions also require valid lifecycle terms,
+repository-relative citations, exact relationship direction, independent
+interpretation of lifecycle and document class, explicit governance evidence
+gaps, and confirmation before expanding the requested scope. Results from a
+previous instruction template must be repeated after that template changes.
 
 ## 15. Continuous Integration Tests
 
