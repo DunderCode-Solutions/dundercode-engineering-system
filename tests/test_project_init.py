@@ -14,6 +14,8 @@ from tools.desys_indexer.scanner import scan_markdown_documents
 from tools.desys_indexer.writer import render_indexes, write_indexes
 from tools.init_project import ProjectInitializationError, initialize_project
 
+TEST_VERSION = "0.1.0a1"
+
 
 def make_repository(directory: Path) -> Path:
     directory.mkdir()
@@ -29,7 +31,7 @@ def make_repository(directory: Path) -> Path:
 def test_dry_run_reports_plan_without_writing(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
 
-    plan = initialize_project(root, dry_run=True, version="0.1.0")
+    plan = initialize_project(root, dry_run=True, version=TEST_VERSION)
 
     assert not plan.has_conflicts
     assert all(operation.action == "CREATE" for operation in plan.operations)
@@ -39,7 +41,7 @@ def test_dry_run_reports_plan_without_writing(tmp_path: Path) -> None:
 def test_initializes_a_loadable_consumer_configuration(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
 
-    first = initialize_project(root, version="0.1.0")
+    first = initialize_project(root, version=TEST_VERSION)
     config = load_config(root / "tools/desys_indexer.yaml")
 
     assert not first.has_conflicts
@@ -52,7 +54,7 @@ def test_initializes_a_loadable_consumer_configuration(tmp_path: Path) -> None:
     }
     assert "/docs/generated/" in (root / ".gitignore").read_text(encoding="utf-8")
     assert (root / "tools/desys-source.txt").read_text(encoding="utf-8") == (
-        "dundercode-engineering-system==0.1.0\n"
+        "dundercode-engineering-system==0.1.0a1\n"
     )
 
     documents = parse_documents(
@@ -92,13 +94,13 @@ def test_initializes_a_loadable_consumer_configuration(tmp_path: Path) -> None:
 
 def test_second_run_is_idempotent(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
-    initialize_project(root, version="0.1.0")
+    initialize_project(root, version=TEST_VERSION)
     files = tuple(
         path for path in root.rglob("*") if path.is_file() and ".git" not in path.parts
     )
     before = {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in files}
 
-    plan = initialize_project(root, version="0.1.0")
+    plan = initialize_project(root, version=TEST_VERSION)
 
     assert not plan.has_conflicts
     assert all(operation.action == "UNCHANGED" for operation in plan.operations)
@@ -112,7 +114,7 @@ def test_conflict_prevents_all_writes(tmp_path: Path) -> None:
     config = tools / "desys_indexer.yaml"
     config.write_text("consumer-owned: true\n", encoding="utf-8")
 
-    plan = initialize_project(root, version="0.1.0")
+    plan = initialize_project(root, version=TEST_VERSION)
 
     assert plan.has_conflicts
     assert config.read_text(encoding="utf-8") == "consumer-owned: true\n"
@@ -125,8 +127,8 @@ def test_extends_existing_gitignore_once(tmp_path: Path) -> None:
     gitignore = root / ".gitignore"
     gitignore.write_text(".venv/\n", encoding="utf-8")
 
-    first = initialize_project(root, version="0.1.0")
-    second = initialize_project(root, version="0.1.0")
+    first = initialize_project(root, version=TEST_VERSION)
+    second = initialize_project(root, version=TEST_VERSION)
     content = gitignore.read_text(encoding="utf-8")
 
     assert "UPDATE" in {operation.action for operation in first.operations}
@@ -140,8 +142,8 @@ def test_extends_existing_agents_file_once(tmp_path: Path) -> None:
     agents = root / "AGENTS.md"
     agents.write_text("# Existing Agent Instructions\n", encoding="utf-8")
 
-    first = initialize_project(root, version="0.1.0")
-    second = initialize_project(root, version="0.1.0")
+    first = initialize_project(root, version=TEST_VERSION)
+    second = initialize_project(root, version=TEST_VERSION)
     content = agents.read_text(encoding="utf-8")
 
     agents_operation = next(operation for operation in first.operations if operation.path.as_posix() == "AGENTS.md")
@@ -158,7 +160,7 @@ def test_rejects_malformed_agents_markers_without_writing(tmp_path: Path) -> Non
     original = "<!-- BEGIN DESys documentation instructions -->\nIncomplete\n"
     agents.write_text(original, encoding="utf-8")
 
-    plan = initialize_project(root, version="0.1.0")
+    plan = initialize_project(root, version=TEST_VERSION)
 
     assert plan.has_conflicts
     assert agents.read_text(encoding="utf-8") == original
@@ -172,7 +174,7 @@ def test_preserves_full_sha_git_source(tmp_path: Path) -> None:
         f"git+https://github.com/DunderCode-Solutions/dundercode-engineering-system.git@{'a' * 40}"
     )
 
-    initialize_project(root, version="0.1.0", desys_source=source)
+    initialize_project(root, version=TEST_VERSION, desys_source=source)
 
     assert (root / "tools/desys-source.txt").read_text(encoding="utf-8") == f"{source}\n"
 
@@ -181,11 +183,11 @@ def test_accepts_repository_relative_wheel_source(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
     vendor = root / "tools/vendor"
     vendor.mkdir(parents=True)
-    wheel = vendor / "dundercode_engineering_system-0.1.0-py3-none-any.whl"
+    wheel = vendor / "dundercode_engineering_system-0.1.0a1-py3-none-any.whl"
     wheel.write_bytes(b"pilot wheel")
     source = wheel.relative_to(root).as_posix()
 
-    initialize_project(root, version="0.1.0", desys_source=source)
+    initialize_project(root, version=TEST_VERSION, desys_source=source)
 
     assert (root / "tools/desys-source.txt").read_text(encoding="utf-8") == f"{source}\n"
 
@@ -193,8 +195,8 @@ def test_accepts_repository_relative_wheel_source(tmp_path: Path) -> None:
 def test_rejects_mutable_or_unsafe_sources_before_writing(tmp_path: Path) -> None:
     invalid_sources = (
         "",
-        " dundercode-engineering-system==0.1.0",
-        "dundercode-engineering-system>=0.1.0",
+        " dundercode-engineering-system==0.1.0a1",
+        "dundercode-engineering-system>=0.1.0a1",
         "dundercode-engineering-system==1..0",
         "dundercode-engineering-system==01.2.3",
         "dundercode-engineering-system==0.2.0",
@@ -210,13 +212,13 @@ def test_rejects_mutable_or_unsafe_sources_before_writing(tmp_path: Path) -> Non
     for index, source in enumerate(invalid_sources):
         root = make_repository(tmp_path / f"repository-{index}")
         with pytest.raises(ProjectInitializationError):
-            initialize_project(root, version="0.1.0", desys_source=source)
+            initialize_project(root, version=TEST_VERSION, desys_source=source)
         assert [path.name for path in root.iterdir()] == [".git"]
 
 
 def test_source_change_is_a_non_destructive_conflict(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
-    initialize_project(root, version="0.1.0")
+    initialize_project(root, version=TEST_VERSION)
     source_file = root / "tools/desys-source.txt"
     original = source_file.read_bytes()
     git_source = (
@@ -224,7 +226,7 @@ def test_source_change_is_a_non_destructive_conflict(tmp_path: Path) -> None:
         f"git+https://example.com/desys.git@{'b' * 40}"
     )
 
-    plan = initialize_project(root, version="0.1.0", desys_source=git_source)
+    plan = initialize_project(root, version=TEST_VERSION, desys_source=git_source)
 
     source_operation = next(
         operation for operation in plan.operations if operation.path.as_posix() == "tools/desys-source.txt"
@@ -253,9 +255,9 @@ def fake_uvx_environment(tmp_path: Path) -> tuple[dict[str, str], Path]:
 
 def test_quality_script_accepts_source_without_terminal_newline(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
-    initialize_project(root, version="0.1.0")
+    initialize_project(root, version=TEST_VERSION)
     source_file = root / "tools/desys-source.txt"
-    source_file.write_text("dundercode-engineering-system==0.1.0", encoding="utf-8")
+    source_file.write_text("dundercode-engineering-system==0.1.0a1", encoding="utf-8")
     environment, marker = fake_uvx_environment(tmp_path)
 
     result = subprocess.run(
@@ -268,14 +270,14 @@ def test_quality_script_accepts_source_without_terminal_newline(tmp_path: Path) 
     )
 
     assert result.returncode == 0, result.stderr
-    assert marker.read_text(encoding="utf-8").count("dundercode-engineering-system==0.1.0") == 3
+    assert marker.read_text(encoding="utf-8").count("dundercode-engineering-system==0.1.0a1") == 3
 
 
 def test_quality_script_rejects_tampered_source_before_uvx(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
-    initialize_project(root, version="0.1.0")
+    initialize_project(root, version=TEST_VERSION)
     (root / "tools/desys-source.txt").write_text(
-        "dundercode-engineering-system>=0.1.0\n",
+        "dundercode-engineering-system>=0.1.0a1\n",
         encoding="utf-8",
     )
     environment, marker = fake_uvx_environment(tmp_path)
@@ -296,9 +298,9 @@ def test_quality_script_rejects_tampered_source_before_uvx(tmp_path: Path) -> No
 
 def test_quality_script_rejects_multiple_source_lines_before_uvx(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
-    initialize_project(root, version="0.1.0")
+    initialize_project(root, version=TEST_VERSION)
     (root / "tools/desys-source.txt").write_text(
-        "dundercode-engineering-system==0.1.0\nsecond-source\n",
+        "dundercode-engineering-system==0.1.0a1\nsecond-source\n",
         encoding="utf-8",
     )
     environment, marker = fake_uvx_environment(tmp_path)
@@ -319,7 +321,7 @@ def test_quality_script_rejects_multiple_source_lines_before_uvx(tmp_path: Path)
 
 def test_rejects_non_git_root(tmp_path: Path) -> None:
     with pytest.raises(ProjectInitializationError):
-        initialize_project(tmp_path, dry_run=True, version="0.1.0")
+        initialize_project(tmp_path, dry_run=True, version=TEST_VERSION)
 
 
 def test_cli_returns_failure_for_non_git_root(tmp_path: Path) -> None:
@@ -340,7 +342,7 @@ def test_rejects_symlinked_managed_path(tmp_path: Path) -> None:
     external.mkdir()
     (root / "docs").symlink_to(external, target_is_directory=True)
 
-    plan = initialize_project(root, version="0.1.0")
+    plan = initialize_project(root, version=TEST_VERSION)
 
     assert plan.has_conflicts
     assert not (root / "tools").exists()

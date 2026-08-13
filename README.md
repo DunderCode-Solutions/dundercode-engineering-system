@@ -10,7 +10,7 @@ The **DunderCode Engineering System (DESys)** is an engineering platform that tr
 
 | Attribute | Value |
 |-----------|-------|
-| **Release** | v0.1.0-alpha |
+| **Release** | v0.1.0-alpha.1 |
 | **Status** | Foundation Release |
 | **Phase** | Architecture Complete |
 | **Documentation** | Under Review |

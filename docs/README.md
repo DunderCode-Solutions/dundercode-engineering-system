@@ -24,6 +24,9 @@ The latest verified result is:
 - Python wheel built and smoke-tested in an isolated environment;
 - build ID `sha256:c0df150d39a2c9f12f74fe5a92267d54364ebe2be5bf8b1b01507e8875f104c6`.
 
+The current release candidate uses PEP 440 package version `0.1.0a1` and public
+release label `v0.1.0-alpha.1`.
+
 ## Completed Milestone
 
 The `desys-project-init` command initializes DESys adoption in an existing
@@ -57,6 +60,8 @@ Completed Round 2 regression results are in
 [`pilot/AI-VALIDATION-ROUND-2.md`](pilot/AI-VALIDATION-ROUND-2.md).
 Pilot defects and their candidate impact are tracked in
 [`pilot/PILOT-DEFECTS.md`](pilot/PILOT-DEFECTS.md).
+Pilot A environment and packaging evidence is in
+[`pilot/PILOT-A-ENVIRONMENT-PACKAGING.md`](pilot/PILOT-A-ENVIRONMENT-PACKAGING.md).
 
 ## Resume Point
 

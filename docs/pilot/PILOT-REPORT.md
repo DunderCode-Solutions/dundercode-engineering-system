@@ -92,13 +92,13 @@ Required action: capture every field required by the pilot validation plan.
 
 | Test ID | Current Result | Evidence Gap Or Note |
 | --- | --- | --- |
-| ENV-001 | PARTIAL | Python recorded; OS, architecture, `uv`, Git, CI, and agent are missing. |
-| PKG-001 | NOT RUN | Local mutable path is not an immutable source. |
-| PKG-002 | PARTIAL | New environment used, but isolation from the DESys workspace is not established. |
-| PKG-003 | NOT RUN | No `desys-project-init --version` evidence. |
-| PKG-004 | NOT RUN | Current `tools/desys-source.txt` behavior was not present. |
-| PKG-005 | NOT RUN | Isolated tooling and consumer-environment preservation were not tested. |
-| PKG-006 | NOT RUN | Cold and warm isolated tool resolution were not compared. |
+| ENV-001 | PARTIAL | Core environment is recorded in `PILOT-A-ENVIRONMENT-PACKAGING.md`; exact agent revision and remote CI evidence remain missing. |
+| PKG-001 | PARTIAL | Candidate wheel is checksum-fixed but untracked in Pilot A; clean-clone reproducibility remains pending. |
+| PKG-002 | PASS | Isolated execution succeeded with a dedicated empty uv cache. |
+| PKG-003 | RETEST REQUIRED | Tested candidate failed version identity; next candidate aligns package `0.1.0a1` with release `v0.1.0-alpha.1`. |
+| PKG-004 | PASS | `tools/desys-source.txt` contains exactly the validated relative wheel source. |
+| PKG-005 | PARTIAL | Consumer `pyproject.toml` was preserved and no environment or lockfile was created; populated-runtime preservation remains for Pilot B. |
+| PKG-006 | PASS | Cold and warm isolated CLI and gate runs passed with deterministic output. |
 | INIT-001 | PASS, PROVISIONAL | Dry-run succeeded for the older 17-path scaffold. |
 | INIT-002 | PASS, PROVISIONAL | Apply succeeded for the older 17-path scaffold. |
 | INIT-003 | NOT RUN | No second initializer run showing all paths `UNCHANGED`. |
