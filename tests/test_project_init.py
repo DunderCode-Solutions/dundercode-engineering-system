@@ -234,6 +234,43 @@ def test_source_change_is_a_non_destructive_conflict(tmp_path: Path) -> None:
     assert source_file.read_bytes() == original
 
 
+def fake_uvx_environment(tmp_path: Path) -> tuple[dict[str, str], Path]:
+    fake_bin = tmp_path / "bin"
+    fake_bin.mkdir()
+    marker = tmp_path / "uvx-called"
+    fake_uvx = fake_bin / "uvx"
+    fake_uvx.write_text('#!/usr/bin/env bash\nprintf "%s\\n" "$*" >> "$UVX_MARKER"\n', encoding="utf-8")
+    fake_uvx.chmod(0o755)
+    return (
+        {
+            **os.environ,
+            "PATH": f"{fake_bin}:{os.environ['PATH']}",
+            "UVX_MARKER": str(marker),
+        },
+        marker,
+    )
+
+
+def test_quality_script_accepts_source_without_terminal_newline(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version="0.1.0")
+    source_file = root / "tools/desys-source.txt"
+    source_file.write_text("dundercode-engineering-system==0.1.0", encoding="utf-8")
+    environment, marker = fake_uvx_environment(tmp_path)
+
+    result = subprocess.run(
+        ["bash", str(root / "scripts/desys-docs-quality.sh")],
+        cwd=tmp_path,
+        check=False,
+        capture_output=True,
+        text=True,
+        env=environment,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert marker.read_text(encoding="utf-8").count("dundercode-engineering-system==0.1.0") == 3
+
+
 def test_quality_script_rejects_tampered_source_before_uvx(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
     initialize_project(root, version="0.1.0")
@@ -241,17 +278,7 @@ def test_quality_script_rejects_tampered_source_before_uvx(tmp_path: Path) -> No
         "dundercode-engineering-system>=0.1.0\n",
         encoding="utf-8",
     )
-    fake_bin = tmp_path / "bin"
-    fake_bin.mkdir()
-    marker = tmp_path / "uvx-called"
-    fake_uvx = fake_bin / "uvx"
-    fake_uvx.write_text('#!/usr/bin/env bash\ntouch "$UVX_MARKER"\n', encoding="utf-8")
-    fake_uvx.chmod(0o755)
-    environment = {
-        **os.environ,
-        "PATH": f"{fake_bin}:{os.environ['PATH']}",
-        "UVX_MARKER": str(marker),
-    }
+    environment, marker = fake_uvx_environment(tmp_path)
 
     result = subprocess.run(
         ["bash", str(root / "scripts/desys-docs-quality.sh")],
@@ -264,6 +291,29 @@ def test_quality_script_rejects_tampered_source_before_uvx(tmp_path: Path) -> No
 
     assert result.returncode == 1
     assert "Unsupported or mutable DESys source" in result.stderr
+    assert not marker.exists()
+
+
+def test_quality_script_rejects_multiple_source_lines_before_uvx(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version="0.1.0")
+    (root / "tools/desys-source.txt").write_text(
+        "dundercode-engineering-system==0.1.0\nsecond-source\n",
+        encoding="utf-8",
+    )
+    environment, marker = fake_uvx_environment(tmp_path)
+
+    result = subprocess.run(
+        ["bash", str(root / "scripts/desys-docs-quality.sh")],
+        cwd=tmp_path,
+        check=False,
+        capture_output=True,
+        text=True,
+        env=environment,
+    )
+
+    assert result.returncode == 1
+    assert "must contain exactly one non-empty line" in result.stderr
     assert not marker.exists()
 
 

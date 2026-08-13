@@ -19,7 +19,7 @@ The latest verified result is:
 
 - 278 canonical documents validated;
 - 0 metadata errors and 127 governed legacy warnings;
-- 38 native pytest tests passing;
+- 40 native pytest tests passing;
 - 5 deterministic index artifacts generated and cross-validated;
 - Python wheel built and smoke-tested in an isolated environment;
 - build ID `sha256:c0df150d39a2c9f12f74fe5a92267d54364ebe2be5bf8b1b01507e8875f104c6`.
@@ -53,8 +53,10 @@ The required evidence, scenarios, and go/no-go criteria are defined in
 [`DESYS-V0.1-PILOT-VALIDATION-PLAN.md`](DESYS-V0.1-PILOT-VALIDATION-PLAN.md).
 The first AI validation findings and mandatory regression scenarios are in
 [`pilot/AI-VALIDATION-ROUND-1.md`](pilot/AI-VALIDATION-ROUND-1.md).
-Round 2 results and the final `AI-009` regression requirement are in
+Completed Round 2 regression results are in
 [`pilot/AI-VALIDATION-ROUND-2.md`](pilot/AI-VALIDATION-ROUND-2.md).
+Pilot defects and their candidate impact are tracked in
+[`pilot/PILOT-DEFECTS.md`](pilot/PILOT-DEFECTS.md).
 
 ## Resume Point
 

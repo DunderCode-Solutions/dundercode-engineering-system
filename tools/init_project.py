@@ -144,7 +144,8 @@ if [[ ! -f "$source_file" || -L "$source_file" ]]; then
 fi
 
 exec 3< "$source_file"
-if ! IFS= read -r desys_source <&3 || [[ -z "$desys_source" ]]; then
+IFS= read -r desys_source <&3 || true
+if [[ -z "$desys_source" ]]; then
   printf 'ERROR: DESys source file must contain exactly one non-empty line.\n' >&2
   exit 1
 fi
