@@ -92,10 +92,10 @@ Required action: capture every field required by the pilot validation plan.
 
 | Test ID | Current Result | Evidence Gap Or Note |
 | --- | --- | --- |
-| ENV-001 | PARTIAL | Core environment is recorded in `PILOT-A-ENVIRONMENT-PACKAGING.md`; exact agent revision and remote CI evidence remain missing. |
-| PKG-001 | PARTIAL | Candidate wheel is checksum-fixed but untracked in Pilot A; clean-clone reproducibility remains pending. |
+| ENV-001 | PARTIAL | Core environment and successful GitHub Actions execution are recorded; exact agent revision remains missing. |
+| PKG-001 | PASS | Candidate wheel and scaffold are committed; clean local clone reproduced the gate with an empty uv cache. |
 | PKG-002 | PASS | Isolated execution succeeded with a dedicated empty uv cache. |
-| PKG-003 | RETEST REQUIRED | Tested candidate failed version identity; next candidate aligns package `0.1.0a1` with release `v0.1.0-alpha.1`. |
+| PKG-003 | PASS | Wheel, CLI, generated guide, and public release label are aligned to `0.1.0a1` / `v0.1.0-alpha.1`. |
 | PKG-004 | PASS | `tools/desys-source.txt` contains exactly the validated relative wheel source. |
 | PKG-005 | PARTIAL | Consumer `pyproject.toml` was preserved and no environment or lockfile was created; populated-runtime preservation remains for Pilot B. |
 | PKG-006 | PASS | Cold and warm isolated CLI and gate runs passed with deterministic output. |
@@ -121,7 +121,15 @@ Required action: capture every field required by the pilot validation plan.
 | DOC-011 | NOT RUN | Search content cannot be reviewed with zero documents. |
 | DOC-012 | PASS, PROVISIONAL | Generated directory contains only five expected artifacts. |
 | AI-001 to AI-009 | PASS | Round 1 findings were addressed and all mandatory Round 2 regressions passed. See `AI-VALIDATION-ROUND-1.md` and `AI-VALIDATION-ROUND-2.md`. |
-| CI-001 to CI-009 | NOT RUN | No GitHub Actions evidence collected. |
+| CI-001 | PASS | Valid-document pull request passed run `32033553632`; post-merge push and manual dispatch also passed on `master`. |
+| CI-002 | PASS | PR 2 run `32036573425` rejected unsupported document metadata as expected. |
+| CI-003 | PASS | PR 3 run `32036679891` rejected a mutable package source before DESys execution as expected. |
+| CI-004 | PASS | GitHub-hosted runner completed the gate from the committed Pilot A checkout. |
+| CI-005 | PASS | Cold run `32036295650` created cache `6713876916`; warm run `32036377737` reused it. Both passed the same revision. |
+| CI-006 | PASS | Final merge revision `f2d160c2e5b60297dce04b253ad6be0875cb6ff9` passed three consecutive runs with deterministic gate output. |
+| CI-007 | PASS | Clean-clone generation left only ignored generated artifacts and a clean worktree. |
+| CI-008 | PASS | Workflow grants only `contents: read`. |
+| CI-009 | PASS | Concurrent run `32036766700` was cancelled; superseding run `32036767097` passed. |
 
 ## 5. Positive Evidence
 
@@ -148,8 +156,7 @@ Required action: capture every field required by the pilot validation plan.
 10. Create one meaningful ADR, PRD, and RFC with one valid relationship.
 11. Execute positive, negative, recovery, and determinism documentation tests.
 12. Execute AI-agent scenarios using the generated `AGENTS.md`.
-13. Execute the GitHub Actions matrix from a clean checkout.
-14. Complete usability, performance, defect, and final recommendation sections.
+13. Complete usability, performance, defect, and final recommendation sections.
 
 ## 7. Current Recommendation
 
