@@ -1,167 +1,230 @@
-# DESys v0.1 Pilot A Partial Report
+# DESys v0.1 Pilot A Final Report
 
-Pilot identifier: Pilot A - New Project  
-Project profile: New Python project  
-Execution status: PARTIAL  
-Release decision: BLOCKED  
-Assessment date: 2026-08-10
+Pilot identifier: Pilot A - New Project
+Project: `pilot-a-test`
+Assessment date: 2026-08-19
+Technical status: Pass on `d959114`; usability corrections pending rebuild
+Final decision: Additional evidence required
 
-## 1. Assessment Summary
+## 1. Executive Summary
 
-The collected evidence demonstrates that an earlier DESys scaffold could be
-initialized in a new repository, installed from a local path, synchronized by
-`uv`, and used to generate and validate all five artifacts for an empty corpus.
+Pilot A validates DESys adoption in a new repository. The accepted Pilot A
+commit is `ac51c943ba9e0be1b5221acc4345d231b73e7143`, produced by squash-merging
+pull request 4. It contains one immutable DESys wheel from candidate
+`d959114699b19a0cb1aa9b4523bceeac6e8fcf0f`.
 
-The evidence does not yet validate the current v0.1 release candidate. The
-recorded initializer created 17 paths and did not create `AGENTS.md` or
-`tools/desys-source.txt`; the current candidate creates 19 paths and includes
-vendor-neutral agent instructions plus isolated tool-source configuration. The
-pilot must therefore be repeated from a clean baseline using one immutable
-candidate revision.
+Installation, initialization, metadata validation, indexing, deterministic
+generation, agent behavior, and remote CI passed. Negative metadata, source,
+relationship, conflict, malformed-marker, invalid-root, symlink, and
+concurrency scenarios failed safely as expected. No critical or high defect
+remains open.
 
-The original pilot also exposed undesirable runtime coupling: DESys was added
-to a CPython 3.14.2 free-threaded consumer environment even though the DESys
-package targets Python 3.12. The corrected candidate runs DESys through an
-isolated `uvx --python 3.12` environment and must be retested while leaving the
-consumer's Python 3.14 environment unchanged.
+The tester completed the usability review and confirmed participation only as a
+tester and consumer, satisfying the independent-tester requirement. Two review
+findings require a rebuilt candidate: the `.gitignore` block lacked an
+explanation, and an earlier agent generated Portuguese prose under
+`language: en`. Both template corrections are implemented and under retest.
 
-## 2. Evidence Inventory
+## 2. Accepted Candidate
 
-| Evidence | Observation | Assessment |
+| Field | Value |
+| --- | --- |
+| DESys commit | `d959114699b19a0cb1aa9b4523bceeac6e8fcf0f` |
+| Package version | `0.1.0a1` |
+| Public release label | `v0.1.0-alpha.1` |
+| Pilot commit | `ac51c943ba9e0be1b5221acc4345d231b73e7143` |
+| Source file | `tools/desys-source.txt` |
+| Source path | `tools/vendor/d959114699b19a0cb1aa9b4523bceeac6e8fcf0f/dundercode_engineering_system-0.1.0a1-py3-none-any.whl` |
+| Wheel SHA-256 | `1244266ad11bc3eb8b1853aa844201fbb330b83b12662bcd00202bed26b35810` |
+| Final local build ID | `sha256:d00ef1aca0f0406d8e5c1e4238817af208d6aa784eb5fb1bb96834df646d622a` |
+| Final GitHub Actions run | `https://github.com/joiltonrsilva/pilot-a-test/actions/runs/32272787769` |
+
+All superseded wheels were removed. The committed Pilot A repository contains
+only the accepted wheel.
+
+## 3. Environment
+
+| Field | Recorded Value |
+| --- | --- |
+| Pilot identifier | Pilot A - New Project |
+| Project type | New Python repository without an application framework |
+| Project lifecycle stage | Greenfield pilot |
+| Primary language and framework | Python; no application framework |
+| Operating system | Pop!_OS 24.04 LTS, Linux 7.0.11-76070011-generic |
+| CPU architecture | x86_64, 64-bit |
+| Consumer Python | CPython 3.14.2 in a project `.venv` |
+| DESys tool Python | CPython 3.12.3 in an isolated uv archive environment |
+| `uv` | 0.12.3 |
+| Git | 2.43.0 |
+| CI platform | GitHub Actions, `ubuntu-latest` |
+| AI agent or assistant | OpenCode orchestrator `openai/gpt-5.6-sol`; fresh `general` subagent sessions |
+| Existing documentation structure | None at baseline |
+| Existing `AGENTS.md` | No |
+| Existing `.gitignore` | No |
+| Existing GitHub Actions workflows | No |
+| DESys source | Candidate `d959114699b19a0cb1aa9b4523bceeac6e8fcf0f` relative wheel |
+
+The subagent runtime did not expose a model identifier separate from the
+orchestrator. This is recorded as a tooling limitation rather than omitted
+environment data.
+
+## 4. Test Results
+
+### Environment And Packaging
+
+| Test | Result | Evidence |
 | --- | --- | --- |
-| `01-git-flow-init` | Git Flow was initialized, but the log contains an absolute local path. | Context only; sanitize before publication. |
-| `02-uv-init` | Project `sovereign-demigod` was initialized. | Partial environment evidence. |
-| `03-new-project-with-dry-run` | Dry-run reported 17 `CREATE` operations and no writes. | Provisional pass for an older candidate. |
-| `04-new-project-without-dry-run` | Initializer applied 17 changes successfully. | Provisional pass for an older candidate. |
-| `05-structure` | Documentation, workflow, script, and indexer paths exist. | Missing current `AGENTS.md` and `tools/desys-source.txt`. |
-| `06-uv-add-group-desys` | Local editable source installed DESys 0.1.0 and PyYAML 6.0.3. | Historical evidence for the rejected coupled architecture. |
-| `07-uv-sync-locked-group-desys` | Locked group synchronization completed. | Historical evidence; current design does not synchronize consumer dependencies. |
-| `08-desys-docs-quality` | Five artifacts validated for zero documents. | Pass for empty-corpus smoke test only. |
-| `docs/generated/` | All five generated artifacts are present. | Valid zero-document artifact set. |
+| `ENV-001` | Pass | All section 5 environment fields are populated above. |
+| `PKG-001` | Pass | Committed repository-relative wheel is checksum-fixed and reproducible from a clean clone. |
+| `PKG-002` | Pass | Empty-cache local and GitHub-hosted environments resolved the wheel without the DESys development environment. |
+| `PKG-003` | Pass | Wheel metadata, CLI, generated guide, package metadata, and release label align to `0.1.0a1` / `v0.1.0-alpha.1`. |
+| `PKG-004` | Pass | `tools/desys-source.txt` contains exactly the invoked accepted wheel path. |
+| `PKG-005` | Pass | Pilot A did not modify project metadata, lock state, or Python 3.14.2 environment; Pilot B separately proved preservation of a populated environment. |
+| `PKG-006` | Pass | Cold and warm local and remote runs passed with identical output and build ID. |
 
-## 3. Blocking Findings
+### Initializer
 
-### PILOT-A-001 - Candidate Mismatch
-
-Severity: High
-
-The initializer evidence predates the `AGENTS.md` integration. It cannot be
-used as release evidence for the current candidate because generated behavior
-and scaffold content differ.
-
-Required action: select one full commit SHA, recreate Pilot A from a clean
-repository, and record that revision in every result.
-
-### PILOT-A-002 - Consumer Runtime Coupling
-
-Severity: High
-
-The old workflow installed DESys into the consumer's CPython 3.14.2
-free-threaded environment even though DESys tooling is validated on Python
-3.12. A documentation tool should not constrain or mutate the application
-runtime.
-
-Correction implemented: the current scaffold records one immutable source in
-`tools/desys-source.txt` and runs DESys with
-`uvx --isolated --no-config --python 3.12`.
-
-Required action: retain the consumer's Python 3.14 runtime during the repeated
-pilot and prove that its `.venv`, `pyproject.toml`, and `uv.lock` remain
-unchanged.
-
-### PILOT-A-003 - Mutable Package Source
-
-Severity: Medium
-
-DESys was installed from a local working directory. That validates local
-development but not installation from an immutable public source.
-
-Required action: repeat with a full Git commit SHA or exact published package
-version.
-
-### PILOT-A-004 - Incomplete Evidence
-
-Severity: Medium
-
-Logs do not consistently include commands, exit codes, elapsed time, before and
-after repository status, environment versions, or sanitized diffs.
-
-Required action: capture every field required by the pilot validation plan.
-
-## 4. Validation Status
-
-| Test ID | Current Result | Evidence Gap Or Note |
+| Test | Result | Evidence |
 | --- | --- | --- |
-| ENV-001 | PARTIAL | Core environment and successful GitHub Actions execution are recorded; exact agent revision remains missing. |
-| PKG-001 | PASS | Candidate wheel and scaffold are committed; clean local clone reproduced the gate with an empty uv cache. |
-| PKG-002 | PASS | Isolated execution succeeded with a dedicated empty uv cache. |
-| PKG-003 | PASS | Wheel, CLI, generated guide, and public release label are aligned to `0.1.0a1` / `v0.1.0-alpha.1`. |
-| PKG-004 | PASS | `tools/desys-source.txt` contains exactly the validated relative wheel source. |
-| PKG-005 | PASS | Pilot B preserved a populated Python 3.13 environment, project metadata, and lockfile locally and in remote CI while DESys ran under isolated Python 3.12. |
-| PKG-006 | PASS | Cold and warm isolated CLI and gate runs passed with deterministic output. |
-| INIT-001 | PASS, PROVISIONAL | Dry-run succeeded for the older 17-path scaffold. |
-| INIT-002 | PASS, PROVISIONAL | Apply succeeded for the older 17-path scaffold. |
-| INIT-003 | PASS | Pilot B second initializer run reported every path `UNCHANGED` and zero changes. |
-| INIT-004 | PASS | Pilot B preserved all existing `.gitignore` content outside one managed block. |
-| INIT-005 | PASS | Pilot B preserved all existing `AGENTS.md` content outside one managed block. |
-| INIT-006 | NOT RUN | Divergent managed-file conflict not tested. |
-| INIT-007 | NOT RUN | Malformed marker conflict not tested. |
-| INIT-008 | NOT RUN | Invalid Git root not tested. |
-| INIT-009 | NOT RUN | Managed symlink not tested. |
-| INIT-010 | PASS | Pilot B quality script passed when invoked from outside the repository. |
-| INIT-011 | NOT RUN | Equivalent scaffold determinism not compared. |
-| INIT-012 | PASS | Pilot B project owner reviewed the generated structure, managed instructions, ignore block, and immutable source layout. |
-| DOC-001 | NOT RUN | No real ADR. |
-| DOC-002 | NOT RUN | No real PRD. |
-| DOC-003 | NOT RUN | No real RFC. |
-| DOC-004 | NOT RUN | No semantic relationship. |
-| DOC-005 | NOT RUN | Empty-corpus success does not validate real documents. |
-| DOC-006 to DOC-009 | NOT RUN | Negative and recovery scenarios missing. |
-| DOC-010 | NOT RUN | Repeated build ID and checksum evidence missing. |
-| DOC-011 | NOT RUN | Search content cannot be reviewed with zero documents. |
-| DOC-012 | PASS, PROVISIONAL | Generated directory contains only five expected artifacts. |
-| AI-001 to AI-009 | PASS | Round 1 findings were addressed and all mandatory Round 2 regressions passed. See `AI-VALIDATION-ROUND-1.md` and `AI-VALIDATION-ROUND-2.md`. |
-| CI-001 | PASS | Valid-document pull request passed run `32033553632`; post-merge push and manual dispatch also passed on `master`. |
-| CI-002 | PASS | PR 2 run `32036573425` rejected unsupported document metadata as expected. |
-| CI-003 | PASS | PR 3 run `32036679891` rejected a mutable package source before DESys execution as expected. |
-| CI-004 | PASS | GitHub-hosted runners completed gates from committed Pilot A and Pilot B checkouts; Pilot B run `32257430389` also proved automatic push handling on `develop`. |
-| CI-005 | PASS | Cold run `32036295650` created cache `6713876916`; warm run `32036377737` reused it. Both passed the same revision. |
-| CI-006 | PASS | Final merge revision `f2d160c2e5b60297dce04b253ad6be0875cb6ff9` passed three consecutive runs with deterministic gate output. |
-| CI-007 | PASS | Clean-clone generation left only ignored generated artifacts and a clean worktree. |
-| CI-008 | PASS | Workflow grants only `contents: read`. |
-| CI-009 | PASS | Concurrent run `32036766700` was cancelled; superseding run `32036767097` passed. |
+| `INIT-001` | Pass | Final-candidate dry-run exited 0 in 0.13 seconds and wrote no files. |
+| `INIT-002` | Pass | Apply exited 0 in 0.07 seconds and created the expected current scaffold. |
+| `INIT-003` | Pass | Second normal invocation reported every managed path `UNCHANGED` and zero changes. |
+| `INIT-004` | Pass | Pilot B preserved existing `.gitignore` bytes outside one managed block. |
+| `INIT-005` | Pass | Pilot B preserved existing `AGENTS.md` bytes outside one managed block. |
+| `INIT-006` | Pass | Divergent managed workflow produced exit 1; all unrelated checksums remained unchanged. |
+| `INIT-007` | Pass | Missing `AGENTS.md` end marker produced an actionable malformed-marker conflict and exit 1. |
+| `INIT-008` | Pass | Non-Git root produced `Repository root must contain a non-symlinked .git entry`, exit 1, and no writes. |
+| `INIT-009` | Pass | Managed `AGENTS.md` symlink produced exit 1; target content and repository remained unchanged. |
+| `INIT-010` | Pass | Absolute quality-script invocation from `/tmp/opencode` passed in 0.33 seconds. |
+| `INIT-011` | Pass | Two equivalent fresh repositories produced recursively identical scaffolds and matching per-file checksums. |
+| `INIT-012` | Pass | Independent tester completed the path and usability review; findings are recorded below. |
 
-## 5. Positive Evidence
+### Real Documentation
 
-- The old dry-run completed without reported conflicts.
-- The old scaffold applied successfully.
-- Local DESys and PyYAML installation completed quickly.
-- Locked synchronization completed successfully under the superseded coupled design.
-- Empty-corpus rendering is supported.
-- All five artifact files were generated and cross-validated.
-- The zero-document build ID was
-  `sha256:32604f9d8cdae5ba4d3bb8264adb95d21dd1c7f95fbeba0e8bce8cc8fa24ad58`.
+| Test | Result | Evidence |
+| --- | --- | --- |
+| `DOC-001` | Pass | `docs/adr/ADR-0001-architecture-baseline.md` has canonical metadata and valid naming. |
+| `DOC-002` | Pass | `docs/prd/PRD-0001-product-foundation.md` has canonical metadata and valid naming. |
+| `DOC-003` | Pass | `docs/rfc/RFC-0001-initial-architecture.md` has canonical metadata and valid naming. |
+| `DOC-004` | Pass | Three deliberate directed relationships resolve in `graph.yaml`. |
+| `DOC-005` | Pass | Three-document gate exits 0 with zero errors and zero warnings. |
+| `DOC-006` | Pass | Unsupported ADR status identifies the source path and blocks indexing with exit 1. |
+| `DOC-007` | Pass | Duplicate `ADR-0001` identifies both the filename mismatch and duplicate source path, exit 1. |
+| `DOC-008` | Pass | Missing PRD relationship target identifies source path and unresolved target, exit 1. |
+| `DOC-009` | Pass | Byte-exact source restoration returns the gate to exit 0 and the original build ID. |
+| `DOC-010` | Pass | Repeated generations preserve build ID `d00ef1...` and all five artifact checksums. |
+| `DOC-011` | Pass | Search titles, paths, summaries, metadata, and content match all three authoritative sources. |
+| `DOC-012` | Pass | `docs/generated/` contains exactly five ignored generated artifacts and no maintained source. |
 
-## 6. Required Next Execution
+### AI Agent
 
-1. Create a fresh Pilot A repository or restore its clean baseline.
-2. Record OS, architecture, Python, `uv`, Git, CI, and agent versions.
-3. Keep the consumer's Python 3.14 runtime and record checksums of its environment files.
-4. Select and record one immutable DESys commit SHA as `DESYS_SOURCE`.
-5. Capture `desys-project-init --version`.
-6. Run dry-run and prove no filesystem change with `git status`.
-7. Apply the current 19-path scaffold and capture its sanitized diff.
-8. Run the initializer again and confirm every path is `UNCHANGED`.
-9. Prove that `.venv`, `pyproject.toml`, and `uv.lock` remain unchanged.
-10. Create one meaningful ADR, PRD, and RFC with one valid relationship.
-11. Execute positive, negative, recovery, and determinism documentation tests.
-12. Execute AI-agent scenarios using the generated `AGENTS.md`.
-13. Complete usability, performance, defect, and final recommendation sections.
+| Test | Result | Evidence |
+| --- | --- | --- |
+| `AI-001` to `AI-009` | Pass | Nine fresh sessions recorded in `AI-VALIDATION-FINAL.md`, including exact prompts, responses, paths, diffs, and gate build IDs. |
 
-## 7. Current Recommendation
+The final AI round preferred source Markdown over stale generated data,
+reported approved-decision conflicts, created valid canonical ADR/PRD changes,
+preserved traceability, refused direct generated edits, ran required gates, and
+reported undocumented governance without invention.
 
-Decision: ADDITIONAL PILOT EXECUTION REQUIRED
+### Continuous Integration
 
-The existing evidence is useful as an early smoke test but is insufficient for
-release approval. Do not discard the logs; retain them as historical evidence
-and produce a new result set for the immutable current candidate.
+| Test | Result | Evidence |
+| --- | --- | --- |
+| `CI-001` | Pass | Valid PR checks passed, including final PR 4 run `32272669898`. |
+| `CI-002` | Pass | PR 2 run `32036573425` rejected invalid ADR metadata. |
+| `CI-003` | Pass | PR 3 run `32036679891` rejected a mutable source before DESys execution. |
+| `CI-004` | Pass | GitHub-hosted clean checkouts used only committed source and wheel inputs. |
+| `CI-005` | Pass | Cold cache run `32036295650` created cache `6713876916`; warm run `32036377737` reused it. |
+| `CI-006` | Pass | Three consecutive same-revision runs passed with build ID `d00ef1...`. |
+| `CI-007` | Pass | Generated output remains ignored and absent from commits. |
+| `CI-008` | Pass | Workflow grants only `contents: read`; action credentials are not persisted. |
+| `CI-009` | Pass | Same-PR run `32272326171` was cancelled by run `32272413359`, which passed. |
+
+The final squash merge triggered successful `master` run `32272787769` at
+commit `ac51c943ba9e0be1b5221acc4345d231b73e7143`.
+
+## 5. Performance
+
+| Measurement | Cold | Warm | Notes |
+| --- | --- | --- | --- |
+| Isolated CLI resolution | 1.27 s | 0.12 s | Earlier candidate; behavior unchanged in final alpha. |
+| Initializer dry-run | 0.13 s | 0.08 s | Final candidate fixture. |
+| Initializer apply | 0.07 s | Not applicable | Final candidate fixture. |
+| Local documentation gate | 0.49 s | 0.34 s | Three documents, identical output. |
+| External-cwd gate | Not applicable | 0.33 s | Same build ID. |
+| GitHub Actions job | 16 s | 12 s | Cold/warm final-revision observations. |
+
+No intermittent failure, network-sensitive package source, unexpected rebuild,
+or output difference was observed.
+
+## 6. Security And Integrity
+
+- No credential beyond normal private-repository access was required.
+- No token, environment secret, or absolute local path is committed in generated artifacts.
+- Workflow repository permission is read-only and checkout credentials are not persisted.
+- Repository-root checks and path containment prevent writes outside the consumer repository.
+- Managed symlinks are rejected before writes.
+- Conflicts are atomic and prevent unrelated writes.
+- Existing `AGENTS.md` and `.gitignore` preservation passed in Pilot B.
+- The dependency source is immutable, reviewable, checksum-fixed, and credential-free.
+- `tools/desys-source.txt` contains one source line.
+- Consumer environments and lockfiles remained unchanged.
+- Pilot source documents contain no secret; generated search content was reviewed.
+
+## 7. Defects And Limitations
+
+| ID | Severity | Status |
+| --- | --- | --- |
+| `PILOT-A-005` | High | Fixed and verified in final candidate. |
+| `PILOT-B-001` | High | Fixed and verified locally and remotely. |
+| `PILOT-A-006` | Low | Fix implemented; rebuilt candidate required. |
+| `PILOT-A-007` | Medium | Fix implemented; rebuilt candidate and language-sensitive AI retest required. |
+
+Known limitations:
+
+- GitHub currently warns that pinned third-party actions using Node.js 20 are
+  forced onto Node.js 24. Workflows pass, but action revisions should be
+  refreshed during routine maintenance.
+- The validation harness exposes the orchestrator model ID but not a separate
+  subagent model revision.
+- Pilot documents are intentionally minimal examples, not production product
+  documentation.
+
+## 8. Usability Review
+
+Tester role: independent tester and consumer; not an implementer of
+`desys-project-init`.
+
+| Question | Answer |
+| --- | --- |
+| Unclear instruction, command, or generated file | The managed `.gitignore` block was unclear. |
+| Step requiring maintainer assistance | None. |
+| Dry-run sufficient to approve writes | Yes. |
+| Conflict messages actionable | Yes. |
+| Scaffold fit repository structure | Yes. |
+| `AGENTS.md` improved observable behavior | Yes. |
+| ADR, PRD, and RFC conventions understandable | Yes, but an earlier agent wrote Portuguese prose while metadata declared English. |
+| Metadata errors easy to locate and correct | Yes. |
+| Quality-gate duration acceptable | Yes. |
+| Unnecessary generated file | None. |
+| Missing template or instruction blocked adoption | None. |
+| Active adoption time | 10 minutes. |
+
+The `.gitignore` clarity finding is `PILOT-A-006`. The prose-language mismatch
+is `PILOT-A-007`.
+
+## 9. Remaining Evidence
+
+1. Commit and rebuild the template corrections as a new immutable candidate.
+2. Upgrade both pilots and repeat initializer idempotency and gates.
+3. Repeat language-sensitive AI generation with the corrected `AGENTS.md`.
+
+## 10. Recommendation
+
+Decision: ADDITIONAL EVIDENCE REQUIRED
+
+All tests on candidate `d959114...` pass and human validation is complete. The
+recommendation can become `GO` after the two usability corrections are rebuilt,
+retested, and recorded, followed by completion of the release-preparation
+checklist.

@@ -1,107 +1,84 @@
 # DESys v0.1 Pilot A Environment And Packaging Evidence
 
-Status: Partial, version identity approved
-Collection date: 2026-08-12
+Status: Pass
+Final collection date: 2026-08-19
 
 ## Environment
 
 | Field | Recorded Value |
 | --- | --- |
-| Pilot identifier | Pilot A - New Project |
-| Project | `sovereign-demigod` |
-| Project type | Python project without an application framework |
-| Project lifecycle stage | New project |
+| Pilot | Pilot A - New Project |
+| Project | `pilot-a-test` |
+| Baseline commit | `18de9e7cd54975ef707d9a6db63c23701dca6ce8` |
+| Final commit | `ac51c943ba9e0be1b5221acc4345d231b73e7143` |
 | Operating system | Pop!_OS 24.04 LTS |
 | Kernel | Linux 7.0.11-76070011-generic |
-| CPU architecture | x86_64, 64-bit |
-| Consumer Python declaration | `requires-python = ">=3.12"` |
-| Consumer Python environment | No `.venv`, `.python-version`, or `uv.lock` present |
-| Additional installed Python | CPython 3.14.2 free-threaded |
-| DESys tool Python | CPython 3.12.3 in an isolated uv archive environment |
+| Architecture | x86_64, 64-bit |
+| Consumer Python | CPython 3.14.2 in `.venv` |
+| DESys Python | CPython 3.12.3 in an isolated uv archive environment |
 | `uv` | 0.12.3 |
 | Git | 2.43.0 |
-| Pilot branch | `develop` |
-| Pilot baseline commit | `18de9e7cd54975ef707d9a6db63c23701dca6ce8` |
-| Committed pilot candidate | `3388a1d3ec20e5a381016ba373b500a036f0611b` |
-| CI platform | GitHub Actions; remote pull-request run passed |
-| AI agent | Claude Opus; exact model revision not archived |
+| CI | GitHub Actions |
 | Existing documentation before DESys | None |
-| Existing `AGENTS.md` before DESys | No |
-| Existing `.gitignore` before DESys | No |
-| DESys candidate commit | `411cc16c1ac77cca26d95fd49272146a295c4b68` |
-| DESys source | Repository-relative wheel |
-| Wheel SHA-256 | `724138ecd901b9f7f731c5ed6d4c76a5804d176440e40ddd7cb10fc8fa6d93a2` |
+| Existing agent instructions before DESys | None |
+| Existing workflow before DESys | None |
 
-Version identity was subsequently retested with candidate
-`74ee350c3513a4eb992339d1b646ba9dfdf5bca1` and wheel SHA-256
-`dd4bcf65f3e2994bb846586aa5da026f02d8905a6bfc4ffd76514bb05c9eb971`.
+## Accepted Package
 
-## Package Inspection
-
-The candidate wheel reports:
-
-```text
-Name: dundercode-engineering-system
-Version: 0.1.0
-Requires-Python: <3.13,>=3.12
-Requires-Dist: PyYAML==6.0.3
-```
-
-The wheel contains all five expected console entry points:
-
-- `desys-build-index`;
-- `desys-check-indexes`;
-- `desys-metadata-migrate`;
-- `desys-metadata-validate`;
-- `desys-project-init`.
-
-The wheel contains 19 files and no undeclared runtime dependency was observed.
-
-## Integrity Snapshots
-
-The following values were identical before and after cold and warm isolated
-execution:
-
-| File | SHA-256 |
+| Field | Value |
 | --- | --- |
-| `pyproject.toml` | `63f9443d080c08631dc68e96dd631344af9aec29c21f7e13323ea0a75735f744` |
-| `tools/desys-source.txt` | `3059ec907363e8a697a882cd1243f55f7570ae678feed7173d44076f7b15338d` |
-| Candidate wheel | `724138ecd901b9f7f731c5ed6d4c76a5804d176440e40ddd7cb10fc8fa6d93a2` |
+| DESys candidate | `d959114699b19a0cb1aa9b4523bceeac6e8fcf0f` |
+| Package version | `0.1.0a1` |
+| `Requires-Python` | `>=3.12,<3.13` |
+| Runtime dependency | `PyYAML==6.0.3` |
+| Source type | Committed repository-relative wheel |
+| Wheel SHA-256 | `1244266ad11bc3eb8b1853aa844201fbb330b83b12662bcd00202bed26b35810` |
+| CLI output | `desys-project-init 0.1.0a1` |
 
-DESys created no `.venv`, `.python-version`, or `uv.lock` in the consumer
-repository.
-
-## Cold And Warm Measurements
-
-Measurements used dedicated empty uv cache directories under `/tmp`.
-
-| Operation | Cold | Warm | Result |
-| --- | --- | --- | --- |
-| `desys-project-init --version` | 1.27 s | 0.12 s | `desys-project-init 0.1.0`, exit 0 |
-| Complete documentation quality gate | 1.29 s | 0.40 s | 3 documents, 0 warnings, 5 artifacts, exit 0 |
-
-Both gate executions produced:
+`tools/desys-source.txt` contains exactly:
 
 ```text
-sha256:d00ef1aca0f0406d8e5c1e4238817af208d6aa784eb5fb1bb96834df646d622a
+tools/vendor/d959114699b19a0cb1aa9b4523bceeac6e8fcf0f/dundercode_engineering_system-0.1.0a1-py3-none-any.whl
 ```
 
-The effective DESys interpreter was CPython 3.12.3 under the uv cache, not a
-consumer virtual environment.
+The final repository contains only this wheel. Earlier candidate wheels were
+removed before squash merge.
 
-## Test Status
+## Consumer Integrity
 
-| Test ID | Result | Evidence And Remaining Work |
-| --- | --- | --- |
-| `ENV-001` | Partial | Core environment and successful remote CI platform execution recorded. Exact Claude model revision remains missing. |
-| `PKG-001` | Pass | Scaffold and wheel are committed in Pilot A. A local clean clone with an empty uv cache reproduced the gate from commit `3388a1d3ec20e5a381016ba373b500a036f0611b`. |
-| `PKG-002` | Pass | Dedicated empty cache resolved and executed the wheel independently from the DESys development environment. |
-| `PKG-003` | Pass | Candidate wheel, CLI, and generated integration guide report package `0.1.0a1`; public README reports `v0.1.0-alpha.1`. |
-| `PKG-004` | Pass | `tools/desys-source.txt` contains exactly the validated repository-relative wheel source. |
-| `PKG-005` | Partial | `pyproject.toml` remained unchanged and no environment or lockfile was created. Pilot A has no preexisting `.venv` or `uv.lock`; preservation of populated consumer files remains for Pilot B. |
-| `PKG-006` | Pass | Cold and warm runs succeeded; warm cache materially reduced execution time without changing output. |
+| File Or Manifest | SHA-256 After Final Local Gate |
+| --- | --- |
+| `pyproject.toml` | `ad421f1a50cd57b8e438efba9bb05b35841605a389aa1f0f0e9c8dd187aa0e10` |
+| `uv.lock` | `3f108935f82395f7ed1cb46ec6e4602817e09c6c5395237449c2b70ed032ff30` |
+| `.venv/pyvenv.cfg` | `607f49cb93048092b1e1088e768844977252cf487870d8d0e964ce2ccd8d1129` |
+| Installed-package manifest | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 
-## Generated Artifact Checksums
+Pilot A's virtual environment contains its Python interpreter and no installed
+package. DESys did not install into it or change project dependency files.
+Pilot B separately proved preservation of a populated 64-package environment.
+
+## Local Verification
+
+Final-candidate CLI and interpreter evidence:
+
+```text
+desys-project-init 0.1.0a1
+DESys Python 3.12.3
+Consumer Python 3.14.2
+```
+
+The final gate passed repeatedly from the repository root and an unrelated
+working directory:
+
+```text
+3 documents
+0 warnings
+5 artifacts
+sha256:d00ef1aca0f0406d8e5c1e4238817af208d6aa784eb5fb1bb96834df646d622a
+exit 0
+```
+
+The five artifact checksums were stable:
 
 | Artifact | SHA-256 |
 | --- | --- |
@@ -111,60 +88,34 @@ consumer virtual environment.
 | `navigation.yaml` | `f24184a32f07115b4cdfbb26c14fb35683017d0b487139f79be7a22fd09acdd0` |
 | `search-index.json` | `76f8dda42116fdc11947b7cfd7da431d9dd618a616f7018e8af8e01bcbe24c8f` |
 
-`docs/generated/` is correctly ignored. The candidate wheel and source file are
-tracked in the pilot commit.
+## Cache And Clean Checkout
 
-## Clean Clone Verification
+Local cold and warm measurements passed without output changes. GitHub Actions
+run `32036295650` created cache `6713876916`; run `32036377737` reused it.
+Clean local and GitHub-hosted checkouts required no untracked dependency.
 
-A `git clone --no-local` clone of Pilot A was created outside the source
-workspace. Before execution it contained no `docs/generated/`, `.venv`,
-`uv.lock`, or `.python-version`.
+## Remote Verification
 
-With a dedicated empty uv cache, the complete gate finished in 1.66 seconds and
-reported:
+Final pull request:
+`https://github.com/joiltonrsilva/pilot-a-test/pull/4`
 
-```text
-3 documents
-0 warnings
-5 validated artifacts
-sha256:d00ef1aca0f0406d8e5c1e4238817af208d6aa784eb5fb1bb96834df646d622a
-exit 0
-```
+Final post-merge run:
+`https://github.com/joiltonrsilva/pilot-a-test/actions/runs/32272787769`
 
-The worktree remained clean because generated output is ignored. Wheel,
-consumer project, source-file, and artifact checksums matched the original
-pilot execution.
+The final run passed commit `ac51c943ba9e0be1b5221acc4345d231b73e7143`.
+Workflow permissions are limited to `contents: read`, checkout credentials are
+not persisted, and push handling is independent from consumer branch naming.
 
-## Remote CI Verification
+## Test Status
 
-GitHub Actions ran the `DESys Documentation Quality` workflow for Pilot A pull
-request 1 at commit `3388a1d3ec20e5a381016ba373b500a036f0611b`.
-
-| Field | Result |
+| Test | Result |
 | --- | --- |
-| Pull request | Success; `develop`; commit `3388a1d3ec20e5a381016ba373b500a036f0611b`; 12 seconds; run `32033553632` |
-| Push after merge | Success; `master`; commit `f2d160c2e5b60297dce04b253ad6be0875cb6ff9`; 14 seconds; run `32035734317` |
-| Manual dispatch | Success; `master`; commit `f2d160c2e5b60297dce04b253ad6be0875cb6ff9`; 12 seconds; run `32035779701` |
-| Repeated dispatch | Success; `master`; commit `f2d160c2e5b60297dce04b253ad6be0875cb6ff9`; 11 seconds; run `32036033693` |
+| `ENV-001` | Pass |
+| `PKG-001` | Pass |
+| `PKG-002` | Pass |
+| `PKG-003` | Pass |
+| `PKG-004` | Pass |
+| `PKG-005` | Pass with complementary populated-environment proof in Pilot B |
+| `PKG-006` | Pass |
 
-This proves the valid-document path, clean remote checkout, push trigger,
-manual trigger, and three consecutive successful runs of the final merge
-revision.
-
-The remaining CI scenarios were executed independently:
-
-| Test | Evidence | Result |
-| --- | --- | --- |
-| `CI-002` | PR 2 changed ADR status to an unsupported value; run `32036573425` failed the `Documentation` job as expected. | Pass |
-| `CI-003` | PR 3 changed the source to mutable range `dundercode-engineering-system>=0.1.0a1`; run `32036679891` failed before DESys execution as expected. | Pass |
-| `CI-005` | All caches were removed before cold run `32036295650`. It passed in 16 seconds and created cache `6713876916`; warm run `32036377737` passed in 12 seconds and updated the same cache's last-access time. | Pass |
-| `CI-009` | Concurrent dispatch `32036766700` was cancelled in favor of `32036767097`, which completed successfully. | Pass |
-
-Both negative PRs were closed without merge. `master` remained on merge commit
-`f2d160c2e5b60297dce04b253ad6be0875cb6ff9` throughout the cache and
-concurrency tests.
-
-## Release Blockers
-
-1. Record the exact AI model revision if available.
-2. Complete runtime and lockfile preservation evidence in Pilot B.
+No environment or packaging blocker remains.
