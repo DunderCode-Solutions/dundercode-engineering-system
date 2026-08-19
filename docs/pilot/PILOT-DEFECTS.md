@@ -2,8 +2,8 @@
 
 ## PILOT-A-005 - Source File Without Terminal Newline Rejected
 
-Severity: High  
-Status: Fixed, candidate rebuild required  
+Severity: High
+Status: Fixed, candidate rebuild required
 Detected during: `PKG-006` cold/warm quality-gate measurement
 
 ### Environment
@@ -53,3 +53,52 @@ source files before invoking `uvx`.
 The affected candidate must not be used for final packaging evidence. Generate
 a new commit and wheel, update the Pilot A scaffold, and repeat `PKG-001`
 through `PKG-006`.
+
+## PILOT-B-001 - Push Workflow Excludes Nonstandard Default Branch
+
+Severity: High
+Status: Fixed, candidate rebuild required
+Detected during: Pilot B remote CI preflight
+
+### Environment
+
+- Pilot: Pilot B, existing project
+- Project default branch: `develop`
+- DESys candidate: `30445a280e1210a158d93bf33e322258dbdf7167`
+- Generated workflow: `.github/workflows/desys-docs-quality.yml`
+
+### Reproduction
+
+Initialize a repository whose default branch is neither `main` nor `master`.
+The generated workflow contains:
+
+```yaml
+push:
+  branches:
+    - main
+    - master
+```
+
+Committing and pushing the scaffold to the actual default branch does not
+trigger the documentation job.
+
+### Root Cause
+
+The workflow template assumed two conventional default-branch names instead of
+remaining independent from consumer branch policy.
+
+### Correction
+
+The generated workflow now accepts push events on every branch. Pull-request
+and manual-dispatch behavior is unchanged. This avoids encoding consumer branch
+governance into DESys.
+
+### Regression Coverage
+
+The initializer test now asserts that the generated workflow contains the push
+event without a branch-name filter.
+
+### Release Impact
+
+Generate a new immutable candidate and replace the Pilot B wheel before remote
+CI evidence is collected.

@@ -199,9 +199,6 @@ QUALITY_WORKFLOW = """name: DESys Documentation Quality
 on:
   pull_request:
   push:
-    branches:
-      - main
-      - master
   workflow_dispatch:
 
 permissions:

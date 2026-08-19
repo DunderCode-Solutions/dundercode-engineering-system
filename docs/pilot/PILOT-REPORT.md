@@ -97,18 +97,18 @@ Required action: capture every field required by the pilot validation plan.
 | PKG-002 | PASS | Isolated execution succeeded with a dedicated empty uv cache. |
 | PKG-003 | PASS | Wheel, CLI, generated guide, and public release label are aligned to `0.1.0a1` / `v0.1.0-alpha.1`. |
 | PKG-004 | PASS | `tools/desys-source.txt` contains exactly the validated relative wheel source. |
-| PKG-005 | PARTIAL | Consumer `pyproject.toml` was preserved and no environment or lockfile was created; populated-runtime preservation remains for Pilot B. |
+| PKG-005 | PASS | Pilot B preserved a populated Python 3.13 environment, project metadata, and lockfile while DESys ran under isolated Python 3.12. |
 | PKG-006 | PASS | Cold and warm isolated CLI and gate runs passed with deterministic output. |
 | INIT-001 | PASS, PROVISIONAL | Dry-run succeeded for the older 17-path scaffold. |
 | INIT-002 | PASS, PROVISIONAL | Apply succeeded for the older 17-path scaffold. |
-| INIT-003 | NOT RUN | No second initializer run showing all paths `UNCHANGED`. |
-| INIT-004 | NOT APPLICABLE | Pilot A started without an existing `.gitignore`. |
-| INIT-005 | NOT RUN | Current `AGENTS.md` behavior was not present. |
+| INIT-003 | PASS | Pilot B second initializer run reported every path `UNCHANGED` and zero changes. |
+| INIT-004 | PASS | Pilot B preserved all existing `.gitignore` content outside one managed block. |
+| INIT-005 | PASS | Pilot B preserved all existing `AGENTS.md` content outside one managed block. |
 | INIT-006 | NOT RUN | Divergent managed-file conflict not tested. |
 | INIT-007 | NOT RUN | Malformed marker conflict not tested. |
 | INIT-008 | NOT RUN | Invalid Git root not tested. |
 | INIT-009 | NOT RUN | Managed symlink not tested. |
-| INIT-010 | NOT RUN | Quality script was not invoked from another working directory. |
+| INIT-010 | PASS | Pilot B quality script passed when invoked from outside the repository. |
 | INIT-011 | NOT RUN | Equivalent scaffold determinism not compared. |
 | INIT-012 | PARTIAL | Structure captured; team review notes are missing. |
 | DOC-001 | NOT RUN | No real ADR. |

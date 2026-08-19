@@ -73,6 +73,8 @@ def test_initializes_a_loadable_consumer_configuration(tmp_path: Path) -> None:
     workflow = (root / ".github/workflows/desys-docs-quality.yml").read_text(encoding="utf-8")
     assert "actions/setup-python" not in workflow
     assert "cache-dependency-glob: tools/desys-source.txt" in workflow
+    assert "  push:\n" in workflow
+    assert "    branches:\n" not in workflow
     agents = (root / "AGENTS.md").read_text(encoding="utf-8")
     assert "docs/generated/search-index.json" in agents
     assert "source Markdown is authoritative" in agents
