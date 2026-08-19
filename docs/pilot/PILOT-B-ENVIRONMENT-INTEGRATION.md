@@ -19,6 +19,7 @@ Collection date: 2026-08-19
 | Consumer Python | CPython 3.13.1 in `.venv` |
 | Consumer lock | 69 resolved packages in `uv.lock` |
 | Consumer environment | 64 installed packages after baseline `uv sync --locked --all-packages` |
+| Application database | PostgreSQL 16 Alpine under Docker Compose |
 | DESys Python | CPython 3.12.3 in an isolated uv archive environment |
 | `uv` | 0.12.3 |
 | Git | 2.43.0 |
@@ -54,8 +55,21 @@ Python 3.12.3 under the uv cache.
 
 After the consumer environment was populated, the existing backend test suite
 reported 2 passing tests and 53 setup errors. Every setup error was caused by
-the preexisting PostgreSQL service at `localhost:5432` being unavailable. This
-is an application-infrastructure baseline condition, not a DESys regression.
+the preexisting PostgreSQL service at `localhost:5432` being unavailable.
+
+The existing `db` Compose service was then started and `pg_isready` confirmed
+that it accepted connections. Repeating the same command produced:
+
+```text
+55 passed
+37 warnings
+20.81 seconds
+```
+
+The warnings concern the application's short test HMAC key and a deprecated
+response-tuple API in `django-ninja-extra`; they are unrelated to DESys. Tests
+left the Git worktree, lockfile, Python declaration, virtual environment, and
+installed-package manifest unchanged.
 
 ## Initializer Results
 
@@ -126,6 +140,7 @@ Run URL:
 | `INIT-004` | Pass | Existing `.gitignore` content was preserved outside one managed block. |
 | `INIT-005` | Pass | Existing `AGENTS.md` content was preserved outside one managed block. |
 | `INIT-010` | Pass | Quality script passed when invoked from outside the repository. |
+| Consumer regression | Pass | Existing backend suite passed all 55 tests with the containerized PostgreSQL service active. |
 | Pilot B remote CI | Pass | Push to nonstandard default branch `develop` automatically triggered successful run `32257430389`. |
 
 ## Remaining Work
