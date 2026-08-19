@@ -97,7 +97,7 @@ Required action: capture every field required by the pilot validation plan.
 | PKG-002 | PASS | Isolated execution succeeded with a dedicated empty uv cache. |
 | PKG-003 | PASS | Wheel, CLI, generated guide, and public release label are aligned to `0.1.0a1` / `v0.1.0-alpha.1`. |
 | PKG-004 | PASS | `tools/desys-source.txt` contains exactly the validated relative wheel source. |
-| PKG-005 | PASS | Pilot B preserved a populated Python 3.13 environment, project metadata, and lockfile while DESys ran under isolated Python 3.12. |
+| PKG-005 | PASS | Pilot B preserved a populated Python 3.13 environment, project metadata, and lockfile locally and in remote CI while DESys ran under isolated Python 3.12. |
 | PKG-006 | PASS | Cold and warm isolated CLI and gate runs passed with deterministic output. |
 | INIT-001 | PASS, PROVISIONAL | Dry-run succeeded for the older 17-path scaffold. |
 | INIT-002 | PASS, PROVISIONAL | Apply succeeded for the older 17-path scaffold. |
@@ -124,7 +124,7 @@ Required action: capture every field required by the pilot validation plan.
 | CI-001 | PASS | Valid-document pull request passed run `32033553632`; post-merge push and manual dispatch also passed on `master`. |
 | CI-002 | PASS | PR 2 run `32036573425` rejected unsupported document metadata as expected. |
 | CI-003 | PASS | PR 3 run `32036679891` rejected a mutable package source before DESys execution as expected. |
-| CI-004 | PASS | GitHub-hosted runner completed the gate from the committed Pilot A checkout. |
+| CI-004 | PASS | GitHub-hosted runners completed gates from committed Pilot A and Pilot B checkouts; Pilot B run `32257430389` also proved automatic push handling on `develop`. |
 | CI-005 | PASS | Cold run `32036295650` created cache `6713876916`; warm run `32036377737` reused it. Both passed the same revision. |
 | CI-006 | PASS | Final merge revision `f2d160c2e5b60297dce04b253ad6be0875cb6ff9` passed three consecutive runs with deterministic gate output. |
 | CI-007 | PASS | Clean-clone generation left only ignored generated artifacts and a clean worktree. |

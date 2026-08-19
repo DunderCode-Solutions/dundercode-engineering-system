@@ -1,6 +1,6 @@
 # DESys v0.1 Pilot B Environment And Integration Evidence
 
-Status: Local validation passed; candidate rebuild and remote CI pending
+Status: Local and remote validation passed; team review pending
 Collection date: 2026-08-19
 
 ## Environment
@@ -15,6 +15,7 @@ Collection date: 2026-08-19
 | CPU architecture | x86_64, 64-bit |
 | Pilot branch | `develop` |
 | Pilot baseline commit | `76370ff50fda111e4137f0a8ad6a6e01a527622e` |
+| Pilot integration commit | `f9273a32f427b877fea11b4cfa069b0e2c4bbf04` |
 | Consumer Python | CPython 3.13.1 in `.venv` |
 | Consumer lock | 69 resolved packages in `uv.lock` |
 | Consumer environment | 64 installed packages after baseline `uv sync --locked --all-packages` |
@@ -23,10 +24,10 @@ Collection date: 2026-08-19
 | Git | 2.43.0 |
 | Existing `.gitignore` | Yes, seven project-owned lines |
 | Existing `AGENTS.md` | Yes, 310 project-owned lines |
-| Existing project CI | No |
-| DESys candidate commit | `30445a280e1210a158d93bf33e322258dbdf7167` |
+| Existing project CI | No; DESys workflow added and verified |
+| DESys candidate commit | `d959114699b19a0cb1aa9b4523bceeac6e8fcf0f` |
 | DESys package version | `0.1.0a1` |
-| Wheel SHA-256 | `dd4bcf65f3e2994bb846586aa5da026f02d8905a6bfc4ffd76514bb05c9eb971` |
+| Wheel SHA-256 | `1244266ad11bc3eb8b1853aa844201fbb330b83b12662bcd00202bed26b35810` |
 
 The initially created `.venv` contained only its interpreter. It was populated
 from the preexisting locked workspace before DESys execution so preservation
@@ -88,6 +89,30 @@ exit 0
 
 `docs/generated/` is ignored. Artifact checksums were stable across both runs.
 
+The replacement candidate removed the hard-coded `main` and `master` push
+filter from the generated workflow. A dry-run with that candidate reported all
+managed paths `UNCHANGED`, and the local gate passed again without changing any
+consumer checksum.
+
+## Remote CI Result
+
+Pushing the committed scaffold to the repository's default `develop` branch
+automatically triggered the corrected workflow:
+
+| Field | Result |
+| --- | --- |
+| Workflow | `DESys Documentation Quality` |
+| Event | `push` |
+| Branch | `develop` |
+| Commit | `f9273a32f427b877fea11b4cfa069b0e2c4bbf04` |
+| Run | `32257430389` |
+| Conclusion | Success |
+| Duration | 20 seconds |
+| Cache | Created cache `6785411041` |
+
+Run URL:
+`https://github.com/joiltonrsilva/car-wash/actions/runs/32257430389`
+
 ## Test Status
 
 | Test ID | Result | Evidence And Remaining Work |
@@ -101,13 +126,8 @@ exit 0
 | `INIT-004` | Pass | Existing `.gitignore` content was preserved outside one managed block. |
 | `INIT-005` | Pass | Existing `AGENTS.md` content was preserved outside one managed block. |
 | `INIT-010` | Pass | Quality script passed when invoked from outside the repository. |
-| Pilot B remote CI | Pending | Scaffold and wheel must be committed and pushed before GitHub Actions execution. |
+| Pilot B remote CI | Pass | Push to nonstandard default branch `develop` automatically triggered successful run `32257430389`. |
 
 ## Remaining Work
 
-1. Rebuild the candidate with the branch-independent push trigger discovered by
-   Pilot B.
-2. Replace the Pilot B wheel and regenerate the managed workflow.
-3. Commit and push the Pilot B scaffold and candidate wheel.
-4. Capture the remote GitHub Actions result.
-5. Record a team review of the generated structure and instructions.
+1. Record a team review of the generated structure and instructions.

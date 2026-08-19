@@ -3,7 +3,7 @@
 ## PILOT-A-005 - Source File Without Terminal Newline Rejected
 
 Severity: High
-Status: Fixed, candidate rebuild required
+Status: Fixed and verified in rebuilt candidate
 Detected during: `PKG-006` cold/warm quality-gate measurement
 
 ### Environment
@@ -57,7 +57,7 @@ through `PKG-006`.
 ## PILOT-B-001 - Push Workflow Excludes Nonstandard Default Branch
 
 Severity: High
-Status: Fixed, candidate rebuild required
+Status: Fixed and verified in rebuilt candidate
 Detected during: Pilot B remote CI preflight
 
 ### Environment
@@ -100,5 +100,7 @@ event without a branch-name filter.
 
 ### Release Impact
 
-Generate a new immutable candidate and replace the Pilot B wheel before remote
-CI evidence is collected.
+Candidate `d959114699b19a0cb1aa9b4523bceeac6e8fcf0f` was rebuilt and installed in
+Pilot B. The corrected workflow passed local dry-run, idempotency, and quality
+gate verification. A push to Pilot B's default `develop` branch then triggered
+successful GitHub Actions run `32257430389` automatically.
