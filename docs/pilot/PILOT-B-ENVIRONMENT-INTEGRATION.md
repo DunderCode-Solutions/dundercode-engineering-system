@@ -1,6 +1,6 @@
 # DESys v0.1 Pilot B Environment And Integration Evidence
 
-Status: Local and remote validation passed; team review pending
+Status: Complete; local, remote, consumer, and team validation passed
 Collection date: 2026-08-19
 
 ## Environment
@@ -142,7 +142,18 @@ Run URL:
 | `INIT-010` | Pass | Quality script passed when invoked from outside the repository. |
 | Consumer regression | Pass | Existing backend suite passed all 55 tests with the containerized PostgreSQL service active. |
 | Pilot B remote CI | Pass | Push to nonstandard default branch `develop` automatically triggered successful run `32257430389`. |
+| `INIT-012` | Pass | Project owner inspected the generated structure, managed instruction block, ignore block, and vendored source layout. |
 
-## Remaining Work
+## Team Review
 
-1. Record a team review of the generated structure and instructions.
+The project owner reviewed the generated `docs/`, `scripts/`, and `tools/`
+structure together with the appended `AGENTS.md` and `.gitignore` blocks. The
+review confirmed that source documentation remains separate from ignored
+generated artifacts, existing instructions remain before the managed block, and
+the active wheel is isolated under its immutable candidate commit.
+
+An empty local directory for the superseded candidate `30445a...` was found and
+removed. It contained no file, was not tracked by Git, and had no effect on the
+committed scaffold or tool-source authority.
+
+No Pilot B work remains.

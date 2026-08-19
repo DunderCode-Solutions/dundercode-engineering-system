@@ -362,7 +362,7 @@ Any failed criterion results in no-go or a documented additional pilot cycle.
 - [ ] Replace placeholder source instructions with the official repository URL.
 - [ ] Verify installation from the release candidate source.
 - [ ] Complete Pilot A report.
-- [ ] Complete Pilot B report.
+- [x] Complete Pilot B report.
 - [ ] Resolve all critical and high defects.
 - [ ] Record dispositions for medium defects.
 - [ ] Publish supported platforms and known limitations.

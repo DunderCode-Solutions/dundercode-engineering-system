@@ -110,7 +110,7 @@ Required action: capture every field required by the pilot validation plan.
 | INIT-009 | NOT RUN | Managed symlink not tested. |
 | INIT-010 | PASS | Pilot B quality script passed when invoked from outside the repository. |
 | INIT-011 | NOT RUN | Equivalent scaffold determinism not compared. |
-| INIT-012 | PARTIAL | Structure captured; team review notes are missing. |
+| INIT-012 | PASS | Pilot B project owner reviewed the generated structure, managed instructions, ignore block, and immutable source layout. |
 | DOC-001 | NOT RUN | No real ADR. |
 | DOC-002 | NOT RUN | No real PRD. |
 | DOC-003 | NOT RUN | No real RFC. |
