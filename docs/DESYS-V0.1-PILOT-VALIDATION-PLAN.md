@@ -355,16 +355,16 @@ Any failed criterion results in no-go or a documented additional pilot cycle.
 
 ## 21. Release Preparation Checklist
 
-- [ ] Select the final v0.1 package version.
+- [x] Select the final v0.1 package version.
 - [ ] Align `pyproject.toml`, README, changelog, and Git tag.
 - [ ] Commit and push all candidate changes.
 - [ ] Create an immutable release candidate tag.
 - [ ] Replace placeholder source instructions with the official repository URL.
 - [ ] Verify installation from the release candidate source.
-- [ ] Complete Pilot A report.
+- [x] Complete Pilot A report.
 - [x] Complete Pilot B report.
-- [ ] Resolve all critical and high defects.
-- [ ] Record dispositions for medium defects.
+- [x] Resolve all critical and high defects.
+- [x] Record dispositions for medium defects.
 - [ ] Publish supported platforms and known limitations.
 - [ ] Approve release notes.
 - [ ] Sign the go/no-go decision.

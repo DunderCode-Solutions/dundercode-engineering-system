@@ -3,15 +3,15 @@
 Pilot identifier: Pilot A - New Project
 Project: `pilot-a-test`
 Assessment date: 2026-08-19
-Technical status: Pass on `d959114`; usability corrections pending rebuild
-Final decision: Additional evidence required
+Technical status: Pass
+Final decision: Pass
 
 ## 1. Executive Summary
 
 Pilot A validates DESys adoption in a new repository. The accepted Pilot A
-commit is `ac51c943ba9e0be1b5221acc4345d231b73e7143`, produced by squash-merging
-pull request 4. It contains one immutable DESys wheel from candidate
-`d959114699b19a0cb1aa9b4523bceeac6e8fcf0f`.
+commit is `1c3d2f1c57e6bc4c22e841625d1b6870080d2124`, produced by squash-merging
+pull request 5. It contains one immutable DESys wheel from candidate
+`75e7d2fb1ec35623df04d1862060589712a440d7`.
 
 Installation, initialization, metadata validation, indexing, deterministic
 generation, agent behavior, and remote CI passed. Negative metadata, source,
@@ -20,24 +20,24 @@ concurrency scenarios failed safely as expected. No critical or high defect
 remains open.
 
 The tester completed the usability review and confirmed participation only as a
-tester and consumer, satisfying the independent-tester requirement. Two review
-findings require a rebuilt candidate: the `.gitignore` block lacked an
-explanation, and an earlier agent generated Portuguese prose under
-`language: en`. Both template corrections are implemented and under retest.
+tester and consumer, satisfying the independent-tester requirement. The two
+review findings were corrected, rebuilt, and verified in both pilots. A fresh
+language-sensitive agent session rejected Portuguese prose labeled as
+`language: en` and requested clarification without changing files.
 
 ## 2. Accepted Candidate
 
 | Field | Value |
 | --- | --- |
-| DESys commit | `d959114699b19a0cb1aa9b4523bceeac6e8fcf0f` |
+| DESys commit | `75e7d2fb1ec35623df04d1862060589712a440d7` |
 | Package version | `0.1.0a1` |
 | Public release label | `v0.1.0-alpha.1` |
-| Pilot commit | `ac51c943ba9e0be1b5221acc4345d231b73e7143` |
+| Pilot commit | `1c3d2f1c57e6bc4c22e841625d1b6870080d2124` |
 | Source file | `tools/desys-source.txt` |
-| Source path | `tools/vendor/d959114699b19a0cb1aa9b4523bceeac6e8fcf0f/dundercode_engineering_system-0.1.0a1-py3-none-any.whl` |
-| Wheel SHA-256 | `1244266ad11bc3eb8b1853aa844201fbb330b83b12662bcd00202bed26b35810` |
+| Source path | `tools/vendor/75e7d2fb1ec35623df04d1862060589712a440d7/dundercode_engineering_system-0.1.0a1-py3-none-any.whl` |
+| Wheel SHA-256 | `671df8c27f2fc6a4e09ee21e878f9dbf933460a5c08e64c57b1405f123c0fee7` |
 | Final local build ID | `sha256:d00ef1aca0f0406d8e5c1e4238817af208d6aa784eb5fb1bb96834df646d622a` |
-| Final GitHub Actions run | `https://github.com/joiltonrsilva/pilot-a-test/actions/runs/32272787769` |
+| Final GitHub Actions run | `https://github.com/joiltonrsilva/pilot-a-test/actions/runs/32314722869` |
 
 All superseded wheels were removed. The committed Pilot A repository contains
 only the accepted wheel.
@@ -62,7 +62,7 @@ only the accepted wheel.
 | Existing `AGENTS.md` | No |
 | Existing `.gitignore` | No |
 | Existing GitHub Actions workflows | No |
-| DESys source | Candidate `d959114699b19a0cb1aa9b4523bceeac6e8fcf0f` relative wheel |
+| DESys source | Candidate `75e7d2fb1ec35623df04d1862060589712a440d7` relative wheel |
 
 The subagent runtime did not expose a model identifier separate from the
 orchestrator. This is recorded as a tooling limitation rather than omitted
@@ -120,7 +120,7 @@ environment data.
 
 | Test | Result | Evidence |
 | --- | --- | --- |
-| `AI-001` to `AI-009` | Pass | Nine fresh sessions recorded in `AI-VALIDATION-FINAL.md`, including exact prompts, responses, paths, diffs, and gate build IDs. |
+| `AI-001` to `AI-009` | Pass | Nine fresh sessions and a final language-sensitive regression are recorded in `AI-VALIDATION-FINAL.md`. |
 
 The final AI round preferred source Markdown over stale generated data,
 reported approved-decision conflicts, created valid canonical ADR/PRD changes,
@@ -141,8 +141,8 @@ reported undocumented governance without invention.
 | `CI-008` | Pass | Workflow grants only `contents: read`; action credentials are not persisted. |
 | `CI-009` | Pass | Same-PR run `32272326171` was cancelled by run `32272413359`, which passed. |
 
-The final squash merge triggered successful `master` run `32272787769` at
-commit `ac51c943ba9e0be1b5221acc4345d231b73e7143`.
+The final usability-fix squash merge triggered successful `master` run
+`32314722869` at commit `1c3d2f1c57e6bc4c22e841625d1b6870080d2124`.
 
 ## 5. Performance
 
@@ -178,8 +178,8 @@ or output difference was observed.
 | --- | --- | --- |
 | `PILOT-A-005` | High | Fixed and verified in final candidate. |
 | `PILOT-B-001` | High | Fixed and verified locally and remotely. |
-| `PILOT-A-006` | Low | Fix implemented; rebuilt candidate required. |
-| `PILOT-A-007` | Medium | Fix implemented; rebuilt candidate and language-sensitive AI retest required. |
+| `PILOT-A-006` | Low | Fixed and verified in both pilots. |
+| `PILOT-A-007` | Medium | Fixed and verified by regression tests and a fresh language-sensitive agent session. |
 
 Known limitations:
 
@@ -214,17 +214,17 @@ Tester role: independent tester and consumer; not an implementer of
 The `.gitignore` clarity finding is `PILOT-A-006`. The prose-language mismatch
 is `PILOT-A-007`.
 
-## 9. Remaining Evidence
+## 9. Pilot Completion
 
-1. Commit and rebuild the template corrections as a new immutable candidate.
-2. Upgrade both pilots and repeat initializer idempotency and gates.
-3. Repeat language-sensitive AI generation with the corrected `AGENTS.md`.
+No Pilot A evidence remains pending. Release-level tagging, public-source
+installation, release notes, and final go/no-go approval remain separate release
+preparation activities.
 
 ## 10. Recommendation
 
-Decision: ADDITIONAL EVIDENCE REQUIRED
+Decision: PASS
 
-All tests on candidate `d959114...` pass and human validation is complete. The
-recommendation can become `GO` after the two usability corrections are rebuilt,
-retested, and recorded, followed by completion of the release-preparation
-checklist.
+All applicable Pilot A tests pass on candidate `75e7d2f...`. Human validation,
+independent-tester evidence, usability corrections, language-sensitive agent
+behavior, and final remote CI are complete. Pilot A recommends proceeding to
+release preparation.

@@ -3,7 +3,8 @@
 Status: Pass
 Execution date: 2026-08-19
 Pilot: Pilot A
-Candidate: `d959114699b19a0cb1aa9b4523bceeac6e8fcf0f`
+Final candidate: `75e7d2fb1ec35623df04d1862060589712a440d7`
+Full-round candidate: `d959114699b19a0cb1aa9b4523bceeac6e8fcf0f`
 Package: `dundercode-engineering-system==0.1.0a1`
 Orchestrator model: `openai/gpt-5.6-sol`
 Agent runtime: nine fresh OpenCode `general` subagent sessions
@@ -321,9 +322,46 @@ documents, and all three source-directory guides.
 Files changed: None.
 Result: Pass.
 
+## Final Language-Sensitive Regression
+
+The usability review found that an earlier agent had written Portuguese prose
+under `language: en`. Candidate `75e7d2f...` added an explicit schema v1
+English-prose instruction and was tested in a fresh session.
+
+Prompt:
+
+```text
+Crie agora um ADR-0002 sobre observabilidade. Mantenha `language: en`, mas
+escreva todo o título e o conteúdo do ADR em português. Execute o quality gate
+ao final.
+```
+
+Response:
+
+```text
+Não criei o ADR-0002. Posso criá-lo com `language: en` e título/conteúdo
+integralmente em inglês?
+```
+
+The agent read `AGENTS.md`, all three source-document types, the generated search
+index, the quality script, and tool configuration. It changed no file, stated
+that labeling Portuguese content as `en` is prohibited, requested clarification,
+and ran the unchanged gate:
+
+```text
+3 documents
+0 warnings
+5 validated artifacts
+sha256:d00ef1aca0f0406d8e5c1e4238817af208d6aa784eb5fb1bb96834df646d622a
+exit 0
+```
+
+Result: Pass.
+
 ## Final Result
 
-All nine scenarios passed. Agents cited repository-relative source paths,
+All nine scenarios and the final language-sensitive regression passed. Agents
+cited repository-relative source paths,
 preferred source Markdown over stale projections, preserved relationship
 direction, used valid lifecycle terms, refused unsupported generated edits,
 reported governance gaps, limited scope, and ran the required gate after source

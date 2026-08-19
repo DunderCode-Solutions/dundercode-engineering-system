@@ -15,7 +15,7 @@ Collection date: 2026-08-19
 | CPU architecture | x86_64, 64-bit |
 | Pilot branch | `develop` |
 | Pilot baseline commit | `76370ff50fda111e4137f0a8ad6a6e01a527622e` |
-| Pilot integration commit | `f9273a32f427b877fea11b4cfa069b0e2c4bbf04` |
+| Pilot integration commit | `b5c700900ad0756ce8eb70164daa93f45b03ea14` |
 | Consumer Python | CPython 3.13.1 in `.venv` |
 | Consumer lock | 69 resolved packages in `uv.lock` |
 | Consumer environment | 64 installed packages after baseline `uv sync --locked --all-packages` |
@@ -26,9 +26,9 @@ Collection date: 2026-08-19
 | Existing `.gitignore` | Yes, seven project-owned lines |
 | Existing `AGENTS.md` | Yes, 310 project-owned lines |
 | Existing project CI | No; DESys workflow added and verified |
-| DESys candidate commit | `d959114699b19a0cb1aa9b4523bceeac6e8fcf0f` |
+| DESys candidate commit | `75e7d2fb1ec35623df04d1862060589712a440d7` |
 | DESys package version | `0.1.0a1` |
-| Wheel SHA-256 | `1244266ad11bc3eb8b1853aa844201fbb330b83b12662bcd00202bed26b35810` |
+| Wheel SHA-256 | `671df8c27f2fc6a4e09ee21e878f9dbf933460a5c08e64c57b1405f123c0fee7` |
 
 The initially created `.venv` contained only its interpreter. It was populated
 from the preexisting locked workspace before DESys execution so preservation
@@ -108,6 +108,11 @@ filter from the generated workflow. A dry-run with that candidate reported all
 managed paths `UNCHANGED`, and the local gate passed again without changing any
 consumer checksum.
 
+The final candidate added an explanatory generated-artifact ignore comment and
+an explicit schema v1 English-prose rule. Dry-run, normal idempotency, the local
+gate, all 55 backend tests, and every consumer checksum passed unchanged after
+that upgrade.
+
 ## Remote CI Result
 
 Pushing the committed scaffold to the repository's default `develop` branch
@@ -118,14 +123,14 @@ automatically triggered the corrected workflow:
 | Workflow | `DESys Documentation Quality` |
 | Event | `push` |
 | Branch | `develop` |
-| Commit | `f9273a32f427b877fea11b4cfa069b0e2c4bbf04` |
-| Run | `32257430389` |
+| Commit | `b5c700900ad0756ce8eb70164daa93f45b03ea14` |
+| Run | `32314796582` |
 | Conclusion | Success |
 | Duration | 20 seconds |
 | Cache | Created cache `6785411041` |
 
 Run URL:
-`https://github.com/joiltonrsilva/car-wash/actions/runs/32257430389`
+`https://github.com/joiltonrsilva/car-wash/actions/runs/32314796582`
 
 ## Test Status
 
@@ -141,7 +146,7 @@ Run URL:
 | `INIT-005` | Pass | Existing `AGENTS.md` content was preserved outside one managed block. |
 | `INIT-010` | Pass | Quality script passed when invoked from outside the repository. |
 | Consumer regression | Pass | Existing backend suite passed all 55 tests with the containerized PostgreSQL service active. |
-| Pilot B remote CI | Pass | Push to nonstandard default branch `develop` automatically triggered successful run `32257430389`. |
+| Pilot B remote CI | Pass | Final-candidate push to nonstandard default branch `develop` automatically triggered successful run `32314796582`. |
 | `INIT-012` | Pass | Project owner inspected the generated structure, managed instruction block, ignore block, and vendored source layout. |
 
 ## Team Review

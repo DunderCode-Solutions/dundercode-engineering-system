@@ -10,7 +10,7 @@ Final collection date: 2026-08-19
 | Pilot | Pilot A - New Project |
 | Project | `pilot-a-test` |
 | Baseline commit | `18de9e7cd54975ef707d9a6db63c23701dca6ce8` |
-| Final commit | `ac51c943ba9e0be1b5221acc4345d231b73e7143` |
+| Final commit | `1c3d2f1c57e6bc4c22e841625d1b6870080d2124` |
 | Operating system | Pop!_OS 24.04 LTS |
 | Kernel | Linux 7.0.11-76070011-generic |
 | Architecture | x86_64, 64-bit |
@@ -27,18 +27,18 @@ Final collection date: 2026-08-19
 
 | Field | Value |
 | --- | --- |
-| DESys candidate | `d959114699b19a0cb1aa9b4523bceeac6e8fcf0f` |
+| DESys candidate | `75e7d2fb1ec35623df04d1862060589712a440d7` |
 | Package version | `0.1.0a1` |
 | `Requires-Python` | `>=3.12,<3.13` |
 | Runtime dependency | `PyYAML==6.0.3` |
 | Source type | Committed repository-relative wheel |
-| Wheel SHA-256 | `1244266ad11bc3eb8b1853aa844201fbb330b83b12662bcd00202bed26b35810` |
+| Wheel SHA-256 | `671df8c27f2fc6a4e09ee21e878f9dbf933460a5c08e64c57b1405f123c0fee7` |
 | CLI output | `desys-project-init 0.1.0a1` |
 
 `tools/desys-source.txt` contains exactly:
 
 ```text
-tools/vendor/d959114699b19a0cb1aa9b4523bceeac6e8fcf0f/dundercode_engineering_system-0.1.0a1-py3-none-any.whl
+tools/vendor/75e7d2fb1ec35623df04d1862060589712a440d7/dundercode_engineering_system-0.1.0a1-py3-none-any.whl
 ```
 
 The final repository contains only this wheel. Earlier candidate wheels were
@@ -100,9 +100,9 @@ Final pull request:
 `https://github.com/joiltonrsilva/pilot-a-test/pull/4`
 
 Final post-merge run:
-`https://github.com/joiltonrsilva/pilot-a-test/actions/runs/32272787769`
+`https://github.com/joiltonrsilva/pilot-a-test/actions/runs/32314722869`
 
-The final run passed commit `ac51c943ba9e0be1b5221acc4345d231b73e7143`.
+The final run passed commit `1c3d2f1c57e6bc4c22e841625d1b6870080d2124`.
 Workflow permissions are limited to `contents: read`, checkout credentials are
 not persisted, and push handling is independent from consumer branch naming.
 
