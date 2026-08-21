@@ -356,18 +356,18 @@ Any failed criterion results in no-go or a documented additional pilot cycle.
 ## 21. Release Preparation Checklist
 
 - [x] Select the final v0.1 package version.
-- [ ] Align `pyproject.toml`, README, changelog, and Git tag.
-- [ ] Commit and push all candidate changes.
-- [ ] Create an immutable release candidate tag.
+- [x] Align `pyproject.toml`, README, changelog, and Git tag.
+- [x] Commit and push all candidate changes.
+- [x] Create an immutable release candidate tag.
 - [x] Replace placeholder source instructions with the official repository URL.
-- [ ] Verify installation from the release candidate source.
+- [x] Verify installation from the release candidate source.
 - [x] Complete Pilot A report.
 - [x] Complete Pilot B report.
 - [x] Resolve all critical and high defects.
 - [x] Record dispositions for medium defects.
 - [x] Publish supported platforms and known limitations.
 - [x] Approve release notes.
-- [ ] Sign the go/no-go decision.
+- [x] Sign the go/no-go decision.
 
 ## 22. Pilot Report Template
 
@@ -424,15 +424,21 @@ Required follow-up:
 
 | Role | Name | Decision | Date |
 | --- | --- | --- | --- |
-| Pilot A tester | | | |
-| Pilot B tester | | | |
-| DESys maintainer | | | |
-| Engineering owner | | | |
+| Pilot A tester | Independent tester (documented) | PASS | 2026-08-21 |
+| Pilot B tester | Project owner (documented) | PASS | 2026-08-21 |
+| DESys maintainer | DunderCode Solutions | GO | 2026-08-21 |
+| Engineering owner | DunderCode Solutions | GO | 2026-08-21 |
 
-Final decision: GO / NO-GO / ADDITIONAL PILOT REQUIRED
+Final decision: GO
 
-Decision rationale:
+Decision rationale: Both pilots passed, all automated quality gates passed, no
+critical or high defect remains open, and installation from the public GitHub
+source succeeded in a clean environment with credentials disabled.
 
-Residual risks accepted:
+Residual risks accepted: This is an alpha release with the limitations listed in
+`SUPPORTED-PLATFORMS.md`. GitHub currently emits Node.js runtime migration
+warnings for pinned third-party actions, but all workflows pass.
 
-Required post-release actions:
+Required post-release actions: Verify installation through the immutable release
+tag, monitor adoption feedback, and refresh pinned action revisions during
+routine maintenance.
