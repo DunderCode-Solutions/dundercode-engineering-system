@@ -2,7 +2,7 @@
 
 All notable changes to DESys are documented in this file.
 
-## [0.1.0-alpha.1] - Unreleased
+## [0.1.0-alpha.1] - 2026-08-21
 
 ### Added
 
@@ -14,9 +14,12 @@ All notable changes to DESys are documented in this file.
 - Vendor-neutral `AGENTS.md` documentation instructions.
 - Local and GitHub Actions documentation quality gates.
 - Pytest coverage for metadata, indexing, packaging, and project initialization.
+- Branch-independent consumer push workflows.
+- Explicit schema v1 English-prose guidance and generated-artifact ignore notes.
 
 ### Validation
 
 - Pilot A documentation scenarios and AI-agent regression scenarios.
+- Pilot B populated-runtime, lockfile, application-test, and CI scenarios.
 - Isolated wheel execution with cold and warm cache measurements.
 - Governed baseline of 127 legacy warnings and zero metadata errors.

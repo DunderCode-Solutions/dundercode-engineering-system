@@ -13,6 +13,11 @@ dependencies = [
     "PyYAML==6.0.3",
 ]
 
+[project.urls]
+Homepage = "https://github.com/DunderCode-Solutions/dundercode-engineering-system"
+Repository = "https://github.com/DunderCode-Solutions/dundercode-engineering-system.git"
+Issues = "https://github.com/DunderCode-Solutions/dundercode-engineering-system/issues"
+
 [project.scripts]
 desys-build-index = "tools.build_index:main"
 desys-check-indexes = "tools.check_generated_artifacts:main"

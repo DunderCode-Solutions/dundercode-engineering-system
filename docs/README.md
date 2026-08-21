@@ -1,6 +1,6 @@
 # DESys Development Checkpoint
 
-Last updated: 2026-08-10
+Last updated: 2026-08-21
 
 ## Current State
 
@@ -49,8 +49,9 @@ The implemented scope covers:
 
 ## Next Milestone
 
-The next milestone is to run `desys-project-init` in a real pilot project and
-establish a full-SHA Git source or exact package release for consumer installs.
+Pilot A and Pilot B are complete. The next milestone is to merge the release
+candidate, create the immutable `v0.1.0-alpha.1` tag, verify public installation
+from its resolved full SHA, and publish the GitHub release.
 
 The required evidence, scenarios, and go/no-go criteria are defined in
 [`DESYS-V0.1-PILOT-VALIDATION-PLAN.md`](DESYS-V0.1-PILOT-VALIDATION-PLAN.md).
@@ -62,9 +63,13 @@ Pilot defects and their candidate impact are tracked in
 [`pilot/PILOT-DEFECTS.md`](pilot/PILOT-DEFECTS.md).
 Pilot A environment and packaging evidence is in
 [`pilot/PILOT-A-ENVIRONMENT-PACKAGING.md`](pilot/PILOT-A-ENVIRONMENT-PACKAGING.md).
+Pilot B environment and integration evidence is in
+[`pilot/PILOT-B-ENVIRONMENT-INTEGRATION.md`](pilot/PILOT-B-ENVIRONMENT-INTEGRATION.md).
+The final Pilot A report is in [`pilot/PILOT-REPORT.md`](pilot/PILOT-REPORT.md),
+and the final AI scenario archive is in
+[`pilot/AI-VALIDATION-FINAL.md`](pilot/AI-VALIDATION-FINAL.md).
 
 ## Resume Point
 
-Resume by selecting a pilot repository, running the initializer in dry-run
-mode, and executing the pilot validation plan from environment collection
-through final release sign-off.
+Resume by completing the release-preparation checklist in
+[`DESYS-V0.1-PILOT-VALIDATION-PLAN.md`](DESYS-V0.1-PILOT-VALIDATION-PLAN.md).
