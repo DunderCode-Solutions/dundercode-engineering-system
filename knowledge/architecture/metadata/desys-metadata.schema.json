@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dundercode.dev/schemas/desys-metadata-1.0.0.json",
+  "title": "DESys Document Metadata",
+  "description": "Canonical metadata contract for indexable DESys documents.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "metadata_schema",
+    "document_id",
+    "canonical_id",
+    "title",
+    "node_type",
+    "document_class",
+    "version",
+    "status",
+    "language",
+    "owner"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "canonical"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "legacy_status"
+        ]
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "legacy_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": "canonical"
+          }
+        }
+      }
+    }
+  ],
+  "properties": {
+    "metadata_schema": {
+      "const": "1.0.0"
+    },
+    "document_id": {
+      "type": "string",
+      "pattern": "^(ADR|DAR|DCSG|DEA|DEC|DEKG|DEM|DES|DET|DEP|DSB|DSK|DSP|GUIDE|PRD|RFC)-[0-9]{4}$"
+    },
+    "canonical_id": {
+      "$ref": "#/$defs/canonicalId"
+    },
+    "title": {
+      "type": "string",
+      "pattern": ".*\\S.*"
+    },
+    "node_type": {
+      "enum": [
+        "architecture",
+        "assessment",
+        "canon",
+        "decision",
+        "guide",
+        "method",
+        "process",
+        "product-requirement",
+        "proposal",
+        "skill",
+        "specification",
+        "standard",
+        "style-guide",
+        "template"
+      ]
+    },
+    "document_class": {
+      "enum": [
+        "informative",
+        "normative",
+        "operational",
+        "reference"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "status": {
+      "enum": [
+        "approved",
+        "canonical",
+        "deprecated",
+        "draft",
+        "published",
+        "review"
+      ]
+    },
+    "language": {
+      "const": "en"
+    },
+    "owner": {
+      "type": "string",
+      "pattern": ".*\\S.*"
+    },
+    "domain": {
+      "type": "string",
+      "pattern": ".*\\S.*"
+    },
+    "discipline": {
+      "type": "string",
+      "pattern": ".*\\S.*"
+    },
+    "architecture_model": {
+      "type": "string",
+      "pattern": ".*\\S.*"
+    },
+    "authors": {
+      "$ref": "#/$defs/nonEmptyStringList"
+    },
+    "reviewers": {
+      "$ref": "#/$defs/nonEmptyStringList"
+    },
+    "applies_to": {
+      "$ref": "#/$defs/nonEmptyStringList"
+    },
+    "tags": {
+      "$ref": "#/$defs/nonEmptyStringList"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/legacyCanonicalId"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "legacy_status": {
+      "const": true
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relationship"
+      }
+    }
+  },
+  "$defs": {
+    "canonicalId": {
+      "type": "string",
+      "pattern": "^(adr|dar|dcsg|dea|dec|dekg|dem|des|det|dep|dsb|dsk|dsp|guide|prd|rfc)(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*){2,}$"
+    },
+    "legacyCanonicalId": {
+      "type": "string",
+      "pattern": "^(adr|dar|dcsg|dea|dec|dekg|dem|des|det|dep|dsb|dsk|dsp|guide|prd|rfc)(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*){1,}$"
+    },
+    "nonEmptyStringList": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": ".*\\S.*"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "target"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "belongs_to",
+            "child",
+            "consumes",
+            "depends_on",
+            "derives_from",
+            "defines",
+            "explains",
+            "extends",
+            "implements",
+            "owns",
+            "parent",
+            "produces",
+            "realizes",
+            "references",
+            "related",
+            "specializes",
+            "supersedes",
+            "triggers",
+            "validates"
+          ]
+        },
+        "target": {
+          "$ref": "#/$defs/canonicalId"
+        }
+      }
+    }
+  }
+}
