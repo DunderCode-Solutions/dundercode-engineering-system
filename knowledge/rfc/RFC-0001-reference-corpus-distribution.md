@@ -128,6 +128,8 @@ docs/
 |-- rfc/
 |-- desys/
 |   |-- README.md
+|   |-- LICENSE
+|   |-- THIRD_PARTY_NOTICES.md
 |   |-- corpus-manifest.yaml
 |   `-- reference/
 |       |-- delivery/
@@ -154,6 +156,12 @@ Distribution is allowlist-based. A document is eligible only when it:
 - does not require automatic execution or skill activation;
 - has an explicit target path in the corpus inventory.
 
+The repository license and applicable third-party notices are mandatory legal
+assets rather than optional documents. They must be explicitly inventoried,
+packaged, installed under `docs/desys/`, and recorded in the manifest. A release
+with no incorporated third-party material still carries a notice that states
+that scope and defines the policy for future additions.
+
 README files may be distributed as navigation surfaces without becoming DEKG
 nodes. Empty placeholders are excluded until they receive approved content.
 Legacy metadata must be migrated or explicitly excluded from the first bundle.
@@ -164,6 +172,10 @@ The initial implementation should package the curated corpus as immutable
 package resources in the same wheel as the compatible DESys tooling. The build
 must derive the package resources from an explicit inventory rather than include
 entire source directories implicitly.
+
+The same allowlist must include the exact license and notice bytes installed with
+the corpus. Wheel distribution metadata alone is insufficient because copied
+reference files remain in the consumer repository independently of the wheel.
 
 Each published DESys version therefore carries one compatible corpus snapshot.
 Installation remains self-contained and does not require a network request after
@@ -186,6 +198,9 @@ tooling release cadences diverge significantly.
 - classification and distribution status;
 - original content checksum;
 - installed content checksum.
+
+Legal assets use the same source, target, classification, distribution, and
+checksum records as reference documents.
 
 The manifest is authoritative for ownership and reconciliation. The generated
 search and graph artifacts remain derived outputs and are never used as a
@@ -254,6 +269,8 @@ The implementation must:
 - preserve the immutable package source already recorded by the initializer;
 - scan the final bundle, not only the source repository;
 - expose provenance in a human-readable form.
+- install the applicable license and attribution notices with the copied corpus;
+- fail when required legal assets are absent, stale, or not approved.
 
 # 16. Delivery Plan
 
@@ -313,6 +330,7 @@ availability guarantees.
 The RFC implementation is complete when:
 
 - a clean package contains exactly the approved corpus inventory;
+- the installed corpus includes checksum-verified license and attribution notices;
 - install and dry-run work without a DESys checkout;
 - rerunning the same version produces zero changes;
 - safe upgrades preserve provenance and update unchanged files;

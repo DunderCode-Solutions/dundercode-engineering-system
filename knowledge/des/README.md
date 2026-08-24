@@ -1,105 +1,28 @@
-# DunderCode Engineering Standards
+# Engineering Standards Candidates
 
-The DunderCode Engineering Standards (DES) define the official engineering specifications adopted by the DunderCode Engineering System (DESys).
+This collection navigates proposed DunderCode Engineering Standards (DES).
+Standards in the current public-review scope are draft candidates, not approved
+requirements. Their presence, metadata, indexing, or distribution does not
+demonstrate compliance or grant approval.
 
-Each DES establishes mandatory engineering requirements, recommendations, and best practices for a specific engineering discipline or technology.
+## Authority and Lifecycle
 
-Engineering Standards transform the principles defined by the DunderCode Engineering Canon (DEC) and the engineering practices established by the DunderCode Engineering Method (DEM) into concrete, enforceable technical specifications.
+Vendored DES documents are reference-only. A consumer project determines
+applicability, exceptions, evidence, reviewers, and adoption through its own
+governance. Consumer code, runtime evidence, approved decisions, policies, and
+legal obligations take precedence for claims about that project.
 
----
+Each candidate requires its own editorial, technical, security, distribution,
+and lifecycle review. This README does not advance any candidate beyond its
+recorded draft state or imply that review and approval have occurred.
 
-# Purpose
+## Current Navigation
 
-The purpose of the DES collection is to standardize engineering practices across every software project developed under DESys.
+| Candidate family | Scope | Reference |
+| --- | --- | --- |
+| Deployment | Environments, configuration, delivery strategies, recovery, readiness, and governance | [Deployment candidates](deployment/README.md) |
+| Observability | Logging, metrics, tracing, alerting, incident detection, service health, telemetry, and governance | [Observability candidates](observability/README.md) |
 
-By defining reusable engineering standards, DESys promotes consistency, maintainability, automation, security, and long-term software quality.
-
----
-
-# Engineering Standard Model
-
-Every Engineering Standard defines one specific engineering concern.
-
-Standards are organized into technology families, allowing DESys to support multiple programming languages and engineering ecosystems while maintaining a consistent governance model.
-
-Examples include:
-
-- Python
-- JavaScript
-- Go
-- Rust
-- Java
-- Infrastructure
-- Cloud
-- DevOps
-
-Each technology family may contain its own foundation standard and specialized standards.
-
----
-
-# Technology Families
-
-Current engineering standards are organized as follows.
-
-```text
-DES
-│
-├── Python
-│
-├── JavaScript
-│
-├── Go
-│
-├── Rust
-│
-└── ...
-```
-
-Each family evolves independently while remaining aligned with the engineering principles defined by DESys.
-
----
-
-# Document Hierarchy
-
-Within each technology family, standards follow a hierarchical structure.
-
-```text
-Foundation Standard
-        │
-        ├── Layout
-        ├── Dependencies
-        ├── Packaging
-        ├── Environment
-        ├── Configuration
-        ├── Quality
-        ├── Testing
-        ├── Type Checking
-        └── Security
-```
-
-The Foundation Standard establishes the minimum engineering baseline for the entire technology family.
-
-Specialized standards define specific engineering disciplines.
-
----
-
-# Navigation
-
-Continue according to your objective.
-
-| If you want to... | Read |
-|-------------------|------|
-| Learn Python engineering standards | Python |
-| Understand engineering principles | DEC |
-| Learn the engineering method | DEM |
-| Understand documentation standards | DCSG |
-
----
-
-# Final Thought
-
-Engineering Standards transform engineering knowledge into repeatable engineering practice.
-
-By defining clear technical requirements, DESys enables teams to build software that is consistent, maintainable, secure, and scalable across projects and technologies.
-
-> **Standards transform engineering principles into engineering practice.**
+For context, use the [Foundation authority model](../../foundation/README.md)
+and the reviewed [Delivery guidance](../../delivery/README.md). These relative
+paths preserve the source layout when vendored under `docs/desys/reference/`.

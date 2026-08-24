@@ -1,115 +1,48 @@
 # Deployment Standards
 
-Deployment Standards define the engineering principles, practices, and governance for building, packaging, releasing, deploying, operating, and evolving software systems within the DunderCode Engineering System (DESys).
+This collection contains draft, technology-neutral reference guidance for moving
+reviewed changes into controlled environments. It is eligible for opt-in
+reference distribution only after the review and allowlisting required by
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md)
+and
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md).
 
-Software delivery extends beyond writing code. It includes every engineering activity required to transform a validated software artifact into a reliable production service.
+These documents do not become a consumer project's policy when copied or
+indexed. The project owns its architecture, risk acceptance, deployment
+authority, evidence requirements, and applicable legal or contractual duties.
+Adoption requires a project-owned decision. Metadata and links support discovery;
+they do not grant approval authority or demonstrate compliance.
 
-The standards contained in this domain establish technology-independent guidance for deployment architecture, release engineering, environment management, infrastructure automation, operational readiness, and production governance.
+## Coverage
 
-All deployment standards derive their engineering philosophy from the DunderCode Engineering Canon (DEC), the DunderCode Engineering Method (DEM), and the DunderCode Canon Style Guide (DCSG).
+| ID | Topic |
+| --- | --- |
+| [DES-0600](DES-0600-deployment-engineering-principles.md) | Risk-based deployment principles and bounded automation |
+| [DES-0610](DES-0610-environment-management.md) | Purposeful environments and controlled differences |
+| [DES-0620](DES-0620-infrastructure-code.md) | Reviewed infrastructure definitions, state, secrets, and dependencies |
+| [DES-0630](DES-0630-configuration-management.md) | Configuration and secret boundaries |
+| [DES-0640](DES-0640-release-engineering.md) | Artifact provenance, integrity, and promotion evidence |
+| [DES-0650](DES-0650-deployment-strategies.md) | Progressive exposure and health gates |
+| [DES-0660](DES-0660-rollback-recovery.md) | Rollback, roll-forward, restore, and data migration recovery |
+| [DES-0670](DES-0670-operational-readiness.md) | Readiness evidence and accountable decisions |
+| [DES-0680](DES-0680-deployment-governance.md) | Access, approvals, emergencies, audit, and retention |
 
----
+## Use
 
-# Scope
+Start with DES-0600, then select the guidance relevant to the project's change
+and operating model. The documents form a control system, not a mandatory linear
+process. A low-risk configuration correction and an irreversible data migration
+may require different evidence, approvers, rollout limits, and recovery plans.
 
-The Deployment Standards cover the complete software delivery lifecycle, including:
+Automation is appropriate only where scope, credentials, concurrency, stop
+conditions, observability, and human ownership are defined. No document in this
+family guarantees availability, successful recovery, security, or compliance.
 
-- Deployment principles
-- Environment management
-- Infrastructure as Code
-- Configuration management
-- Release engineering
-- Deployment strategies
-- Rollback planning
-- Operational readiness
-- Deployment governance
+## Lifecycle
 
-These standards define engineering principles rather than prescribing specific deployment platforms or cloud providers.
-
----
-
-# Objectives
-
-The Deployment Standards aim to:
-
-- Standardize deployment engineering practices.
-- Improve deployment reliability.
-- Reduce operational risk.
-- Increase deployment repeatability.
-- Enable safe software evolution.
-- Support automation-first delivery.
-- Promote operational excellence.
-
----
-
-# Standards
-
-| ID | Standard |
-|----|----------|
-| DES-0600 | Deployment Engineering Principles |
-| DES-0610 | Environment Management |
-| DES-0620 | Infrastructure as Code |
-| DES-0630 | Configuration Management |
-| DES-0640 | Release Engineering |
-| DES-0650 | Deployment Strategies |
-| DES-0660 | Rollback & Recovery |
-| DES-0670 | Operational Readiness |
-| DES-0680 | Deployment Governance |
-
----
-
-# Engineering Model
-
-The Deployment Standards follow a progressive engineering model.
-
-```text
-Deployment Principles
-          │
-          ▼
-Environment Management
-          │
-          ▼
-Infrastructure as Code
-          │
-          ▼
-Configuration Management
-          │
-          ▼
-Release Engineering
-          │
-          ▼
-Deployment Strategies
-          │
-          ▼
-Rollback & Recovery
-          │
-          ▼
-Operational Readiness
-          │
-          ▼
-Deployment Governance
-```
-
-Each standard builds upon the previous one, forming a complete deployment engineering model.
-
----
-
-# Relationship with Other DES Domains
-
-Deployment Standards integrate with multiple engineering disciplines.
-
-- Architecture Standards define what is deployed.
-- API Standards define service contracts.
-- Data Standards define persistent information.
-- Quality Standards ensure deployment readiness.
-- Delivery Standards govern CI/CD, operations, observability, and production support.
-
-Deployment transforms validated software into operational systems while preserving engineering quality and governance.
-
----
-
-# Compliance
-
-Projects developed under DESys SHOULD comply with the Deployment Standards applicable to their architecture, operational requirements, and deployment model.
-
-Compliance is evaluated through engineering reviews, architecture assessments, deployment reviews, and DunderCode Assessment Reports (DAR).
+Every document in this collection is `draft` and reference-only. The family is
+aligned with and reviewed against the draft
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md);
+that guide does not grant lifecycle approval. RFC-0001 and ADR-0001 define the
+opt-in distribution model and the boundary between DESys references and project
+authority.

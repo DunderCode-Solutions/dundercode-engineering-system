@@ -10,232 +10,112 @@ status: draft
 language: en
 owner: DunderCode Engineering
 applies_to:
-- All deployment recovery processes managed under DESys
+- Consumer deployment-recovery practices that explicitly adopt this draft guidance
+relationships:
+- type: references
+  target: rfc.corpus.reference-distribution
+- type: references
+  target: adr.corpus.layout-and-authority
+- type: references
+  target: dcsg.canon.style-guide
 ---
 
-# DES-0660 — Rollback & Recovery Standard
-
-# 1. Purpose
-
-The Rollback & Recovery Standard defines the engineering requirements for recovering software systems from unsuccessful deployments or operational failures within the DunderCode Engineering System (DESys).
-
-Its purpose is to establish technology-independent engineering principles that ensure software services can safely recover while preserving operational continuity, business integrity, and engineering traceability.
-
-Recovery is considered a fundamental capability of deployment engineering rather than an optional operational activity.
-
----
-
-# 2. Scope
-
-This standard applies to every deployment process managed under DESys.
-
-It defines engineering expectations for rollback planning, recovery procedures, operational resilience, validation, governance, and continuous improvement.
-
-Implementation details related to deployment platforms, orchestration tools, databases, cloud providers, or disaster recovery technologies are intentionally excluded.
-
----
-
-# 3. Audience
-
-This standard is intended for:
-
-- Solution Architects
-- Software Architects
-- Platform Engineers
-- DevOps Engineers
-- Site Reliability Engineers
-- Release Engineers
-- Software Engineers
-- Technical Leaders
-- AI-assisted engineering systems
-
-Every stakeholder responsible for deployment recovery SHALL understand and follow this standard.
-
----
-
-# 4. Relationship with DESys
-
-This standard derives its engineering philosophy from:
-
-- DEC — DunderCode Engineering Canon
-- DEM — DunderCode Engineering Method
-- DCSG — DunderCode Canon Style Guide
-- DES-0600 — Deployment Engineering Principles
-- DES-0640 — Release Engineering Standard
-- DES-0650 — Deployment Strategies Standard
-
-Rollback & Recovery defines how software systems return to a stable operational state following unsuccessful deployment activities or operational failures.
-
----
-
-# 5. Rollback & Recovery Principles
-
-Rollback and recovery SHALL follow the principles defined below.
-
-## Recovery by Design
-
-Recovery capabilities SHALL be considered during system design.
-
-Recovery MUST NOT depend solely on improvisation.
-
----
-
-## Operational Continuity
-
-Recovery procedures SHALL prioritize restoration of business services.
-
-Recovery objectives SHOULD minimize operational disruption.
-
----
-
-## Controlled Rollback
-
-Rollback procedures SHALL return systems to a previously validated operational state whenever practical.
-
-Rollback execution SHOULD remain predictable and repeatable.
-
----
-
-## Recovery Beyond Rollback
-
-When rollback is not feasible, recovery procedures SHALL restore operational capability through controlled engineering processes.
-
-Recovery MAY involve infrastructure restoration, data restoration, configuration changes, or alternative operational procedures.
-
----
-
-## Validation
-
-Recovery SHALL be validated before systems are considered operational.
-
-Operational verification SHOULD confirm restoration objectives.
-
----
-
-## Traceability
-
-Rollback and recovery activities SHALL remain traceable.
-
-Recovery history SHOULD support engineering review and auditing.
-
----
-
-## Automation
-
-Rollback and recovery procedures SHOULD be automated whenever practical.
-
-Manual recovery SHOULD be limited to exceptional situations.
-
----
-
-## Continuous Learning
-
-Recovery events SHALL be analyzed to improve future deployment engineering practices.
-
-Lessons learned SHOULD feed continuous engineering improvement.
-
----
-
-# 6. Standard
-
-Every DESys-compliant deployment process SHALL define:
-
-- Rollback strategy
-- Recovery strategy
-- Validation process
-- Operational responsibilities
-- Governance process
-- Traceability requirements
-
-Projects MAY adopt different recovery approaches provided they remain consistent with the engineering principles established by this standard.
-
----
-
-# 7. Mandatory Requirements
-
-Every deployment process developed under DESys MUST:
-
-- Define rollback capabilities where applicable.
-- Define recovery procedures.
-- Preserve recovery traceability.
-- Validate recovery outcomes.
-- Define operational responsibilities.
-- Support engineering review after recovery.
-- Continuously improve recovery processes.
-
----
-
-# 8. Rollback & Recovery Lifecycle
-
-Rollback and recovery SHALL follow a controlled engineering lifecycle.
-
-```text
-Failure Detection
-        ↓
-Impact Assessment
-        ↓
-Rollback Decision
-        ↓
-Rollback or Recovery
-        ↓
-Operational Validation
-        ↓
-Service Restoration
-        ↓
-Post-Incident Review
-```
-
-Recovery SHALL conclude only after operational objectives have been successfully restored.
-
----
-
-# 9. Compliance
-
-A project complies with this standard when its rollback and recovery practices satisfy the engineering requirements defined herein.
-
-Compliance SHALL be verified during architecture reviews, deployment assessments, operational reviews, engineering audits, and DunderCode Assessment Reports (DAR).
-
----
-
-# 10. Relationship with Other Deployment Standards
-
-Rollback & Recovery defines how software systems recover from deployment failures.
-
-| Standard | Discipline |
-|----------|------------|
-| DES-0600 | Deployment Engineering Principles |
-| DES-0610 | Environment Management |
-| DES-0620 | Infrastructure as Code |
-| DES-0630 | Configuration Management |
-| DES-0640 | Release Engineering |
-| DES-0650 | Deployment Strategies |
-| DES-0660 | Rollback & Recovery |
-| DES-0670 | Operational Readiness |
-| DES-0680 | Deployment Governance |
-
-Together, these standards define the Deployment Engineering Model adopted by DESys.
-
----
-
-# 11. References
-
-- DEC-0001 — DunderCode Engineering Canon
-- DEM-0001 — DunderCode Engineering Method
-- DCSG-0001 — DunderCode Canon Style Guide
-- DES-0600 — Deployment Engineering Principles
-- DES-0640 — Release Engineering Standard
-- DES-0650 — Deployment Strategies Standard
-
----
-
-# 12. Changelog
-
-## Version 1.0.0 (Draft)
-
-### Added
-
-- Initial Rollback & Recovery Standard.
-- Defined engineering principles for deployment recovery.
-- Established mandatory requirements for rollback and recovery planning.
-- Introduced the Rollback & Recovery Lifecycle.
-- Distinguished rollback from broader recovery processes.
+# DES-0660 - Rollback & Recovery Standard
+
+## 1. Status and Authority
+
+This standard is draft, reference-only guidance. Opt-in distribution under
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md)
+and the authority boundaries in
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md)
+do not authorize rollback, restore, failover, or data modification. The consumer
+project owns recovery objectives, decision authority, and acceptance of data
+loss or service impact. This draft is aligned with and reviewed against the draft
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md),
+which does not grant lifecycle approval.
+
+## 2. Purpose and Scope
+
+This document supports recovery from a deployment that is harmful, incomplete,
+or unable to meet its objectives. Recovery may contain impact, shift traffic,
+disable a feature, restore state, roll back code or configuration, or roll
+forward with a corrective change.
+
+Rollback is one option, not a universal guarantee. Data and externally visible
+effects can make returning to an earlier artifact unsafe or impossible.
+
+## 3. Recovery Decision
+
+A project-owned recovery plan should define:
+
+- detection signals and who may declare a recovery event;
+- immediate containment and user or stakeholder communication;
+- dependencies, state, and compatibility assumptions;
+- decision criteria for rollback, restore, failover, or roll-forward;
+- authorized identities, tools, targets, and concurrency bounds;
+- validation criteria, escalation, and stopping conditions;
+- accepted recovery time, data loss, and residual-risk objectives;
+- evidence and post-event review ownership.
+
+During an event, preserve evidence without delaying urgent containment. If the
+documented plan conflicts with observed conditions, the authorized incident role
+should reassess rather than let automation continue from stale assumptions.
+
+## 4. Data and Schema Changes
+
+Data migration planning should address schema and application compatibility,
+ordering, long-running work, retries, duplicate processing, partial completion,
+and concurrent old and new versions. Expand-and-contract and other compatibility
+patterns can reduce coupling but do not make a migration automatically safe.
+
+Before an irreversible or destructive step, identify:
+
+| Concern | Evidence |
+| --- | --- |
+| Backup | Scope, completion, protection, age, and owner |
+| Restore | Tested procedure, target, duration, integrity checks, and dependencies |
+| Rollback | Which code, schema, configuration, and data effects are reversible |
+| Roll-forward | Corrective path, required compatibility, build time, and authority |
+| Partial failure | Resume, compensate, quarantine, or reconcile behavior |
+| Data loss | Maximum accepted loss and who may accept it |
+
+A backup is not evidence of recoverability until restoration is tested at a
+frequency and scale appropriate to project risk. Restore testing should avoid
+exposing protected data and should verify application-level consistency, not
+only file or storage completion.
+
+Down migrations can lose information or fail after new writes. Plans should not
+advertise rollback when the actual recovery path is restore or roll-forward.
+
+## 5. Execution and Validation
+
+Recovery automation should verify the incident, target, artifact or backup
+identity, authorization, and current state before acting. Retries, destructive
+steps, and cross-region or cross-environment actions should be explicitly
+bounded. Automation should stop on conflicting state, unexpected writes, missing
+evidence, or exhausted limits.
+
+Validation should cover service behavior, data integrity, security controls,
+dependencies, queued or duplicated work, and user impact. Recovery closure may
+record partial restoration and follow-up actions; it should not claim success
+solely because an older version is running.
+
+## 6. Evidence and Learning
+
+Record the trigger, decision owner, chosen path, identities, artifacts or backup,
+timestamps, commands or automation references, observed outcomes, data effects,
+exceptions, and validation. Protect secrets and sensitive incident data, and
+retain evidence under project policy. Review material events without treating
+the review as proof that recurrence is impossible.
+
+## 7. Related Guidance
+
+- [Deployment strategies](DES-0650-deployment-strategies.md)
+- [Operational readiness](DES-0670-operational-readiness.md)
+- [Deployment governance](DES-0680-deployment-governance.md)
+
+## 8. Limitations
+
+Recovery plans age as systems and dependencies change. Exercises and restore
+tests reduce uncertainty but cannot guarantee recovery time, completeness, or
+absence of data loss during a real event.

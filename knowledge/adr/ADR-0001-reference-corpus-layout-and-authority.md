@@ -58,9 +58,15 @@ The architecture must provide:
 DESys will distribute an explicitly curated reference corpus as package
 resources in the same wheel as the compatible tooling version.
 
+The curated resources will include the repository license and applicable
+third-party notices. These legal assets must be explicit inventory entries,
+package resources, installed files, and manifest records; they must not be
+inferred from wheel metadata.
+
 Corpus installation will be opt-in through
 `desys-project-init --with-reference-corpus`. The initializer will copy approved
-resources into `docs/desys/reference/` and record provenance and checksums in
+reference resources into `docs/desys/reference/`, place required legal notices
+under `docs/desys/`, and record provenance and checksums in
 `docs/desys/corpus-manifest.yaml`.
 
 The original collection hierarchy below the five source roots will be preserved.
@@ -79,6 +85,8 @@ The following paths are project-owned:
 The following paths are DESys-managed when corpus installation is enabled:
 
 - `docs/desys/reference/`;
+- `docs/desys/LICENSE`;
+- `docs/desys/THIRD_PARTY_NOTICES.md`;
 - `docs/desys/corpus-manifest.yaml`;
 - the existing explicitly marked DESys blocks and generated integration files.
 
@@ -157,6 +165,11 @@ Only content marked for public distribution may enter package resources. Review
 must cover credentials, confidential references, personal data, licensing,
 unsafe instructions, external links, and the complete generated search content.
 
+The packaging gate also requires approved, checksum-matched license and
+third-party notice entries. The initializer must install those notices beside
+the manifest so their obligations remain visible after corpus files are copied
+out of the wheel.
+
 The packaging gate validates inventory coverage and checksums. The initializer
 rejects path traversal and does not preserve executable permissions from corpus
 resources.
@@ -222,6 +235,7 @@ behavior impacts must first be measured through pilots.
 This decision is considered implemented only when automated tests demonstrate:
 
 - exact inventory-to-package coverage;
+- exact legal-notice inventory, package, manifest, and installation coverage;
 - package installation without a source checkout;
 - opt-in and default compatibility behavior;
 - dry-run accuracy;

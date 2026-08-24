@@ -24,10 +24,10 @@ Understand -> Model -> Design -> Specify -> Implement -> Validate -> Learn
      `------------------------------------------------------------'
 ```
 
-DEM-0001 currently defines these activities as an ordered lifecycle in which one
-activity reaches its required outcome before the next begins. Learning may start
-a new iteration of the lifecycle. Changes to that sequencing require a governed
-revision of DEM-0001 rather than interpretation by this navigation file.
+DEM-0001 treats these activities as connected concerns rather than mandatory
+sequential gates. Teams may move backward, combine activities, or work
+concurrently when project risk and evidence support doing so. This navigation
+file does not add sequencing requirements to the method.
 
 ## Navigation
 

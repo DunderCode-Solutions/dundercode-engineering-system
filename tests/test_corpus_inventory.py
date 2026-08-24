@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from pathlib import Path
+import json
+from pathlib import Path, PurePosixPath
 
 import pytest
 import yaml
@@ -13,6 +14,7 @@ from tools.build_corpus_inventory import (
     load_inventory,
     render_inventory,
     validate_inventory,
+    validate_portable_target,
 )
 from tools.desys_indexer.config import IndexerConfig, load_config
 
@@ -63,6 +65,13 @@ def test_tracked_inventory_is_complete_and_current() -> None:
     assert render_inventory(build_inventory(config, inventory, assets)) == Path("corpus/inventory.yaml").read_text(
         encoding="utf-8"
     )
+
+
+def test_inventory_schema_identity_matches_runtime_contract() -> None:
+    schema = json.loads(Path("corpus/inventory.schema.json").read_text(encoding="utf-8"))
+
+    assert schema["$id"] == "urn:uuid:8dfc7e36-1e0a-4b96-9f13-e98f8187a59a"
+    assert schema["properties"]["inventory_schema"]["const"] == "1.1.0"
 
 
 def test_changed_approved_document_returns_to_pending(tmp_path: Path) -> None:
@@ -128,6 +137,8 @@ def test_asset_config_rejects_path_traversal(tmp_path: Path) -> None:
         """version: 1
 assets:
 - source: ../outside.json
+  target: docs/desys/reference/knowledge/outside.json
+  collection: knowledge
   classification: schema
   review_owner: DunderCode Engineering
 """,
@@ -135,4 +146,163 @@ assets:
     )
 
     with pytest.raises(InventoryError):
+        load_asset_config(asset_config, config.repository_root, config.sources)
+
+
+def test_explicit_legal_asset_can_use_managed_target(tmp_path: Path) -> None:
+    config = _config(tmp_path)
+    license_path = tmp_path / "LICENSE"
+    license_path.write_text("License notice\n", encoding="utf-8")
+    notice_path = tmp_path / "THIRD_PARTY_NOTICES.md"
+    notice_path.write_text("Third-party notice\n", encoding="utf-8")
+    asset_config = tmp_path / "assets.yaml"
+    asset_config.write_text(
+        """version: 1
+assets:
+- source: LICENSE
+  target: docs/desys/LICENSE
+  collection: legal
+  classification: legal
+  review_owner: DunderCode Engineering
+- source: THIRD_PARTY_NOTICES.md
+  target: docs/desys/THIRD_PARTY_NOTICES.md
+  collection: legal
+  classification: legal
+  review_owner: DunderCode Engineering
+""",
+        encoding="utf-8",
+    )
+
+    assets = load_asset_config(asset_config, config.repository_root, config.sources)
+    inventory = build_inventory(config, assets=assets)
+    entry = inventory["entries"][0]
+
+    assert entry["source"] == "LICENSE"
+    assert entry["target"] == "docs/desys/LICENSE"
+    assert entry["collection"] == "legal"
+    assert entry["classification"] == "legal"
+
+
+def test_asset_semantics_change_invalidates_approval(tmp_path: Path) -> None:
+    config = _config(tmp_path)
+    schema = config.sources[0] / "metadata.schema.json"
+    schema.write_text('{"type": "object"}\n', encoding="utf-8")
+    first_asset = CorpusAsset(
+        schema,
+        "schema",
+        "DunderCode Engineering",
+        PurePosixPath("docs/desys/reference/knowledge/metadata.schema.json"),
+        "knowledge",
+    )
+    first = build_inventory(config, assets=(first_asset,))
+    first["entries"][0]["distribution"] = "approved"
+    changed_asset = CorpusAsset(
+        schema,
+        "supplemental",
+        "DunderCode Engineering",
+        PurePosixPath("docs/desys/reference/knowledge/renamed.schema.json"),
+        "knowledge",
+    )
+
+    updated = build_inventory(config, previous=first, assets=(changed_asset,))
+
+    assert updated["entries"][0]["distribution"] == "pending"
+    assert updated["entries"][0]["review_fingerprint"] != first["entries"][0]["review_fingerprint"]
+
+
+def test_inventory_rejects_changed_review_owner(tmp_path: Path) -> None:
+    config = _config(tmp_path)
+    readme = config.sources[0] / "README.md"
+    readme.write_text("# Knowledge\n", encoding="utf-8")
+    inventory = build_inventory(config)
+    inventory["entries"][0]["review_owner"] = "Unreviewed Party"
+
+    with pytest.raises(InventoryError, match="Review owner is stale"):
+        validate_inventory(inventory, config)
+
+
+@pytest.mark.parametrize(
+    "target",
+    (
+        "docs/desys/reference/knowledge/CON.md",
+        "docs/desys/reference/knowledge/bad:name.md",
+        "docs/desys/reference/knowledge/bad\nname.md",
+        "docs/desys/reference/knowledge/bad\x7fname.md",
+    ),
+)
+def test_portable_target_rejects_cross_platform_names(target: str) -> None:
+    with pytest.raises(InventoryError):
+        validate_portable_target(PurePosixPath(target))
+
+
+def test_asset_config_rejects_target_traversal(tmp_path: Path) -> None:
+    config = _config(tmp_path)
+    license_path = tmp_path / "LICENSE"
+    license_path.write_text("License notice\n", encoding="utf-8")
+    asset_config = tmp_path / "assets.yaml"
+    asset_config.write_text(
+        """version: 1
+assets:
+- source: LICENSE
+  target: docs/desys/../outside
+  collection: legal
+  classification: legal
+  review_owner: DunderCode Engineering
+""",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(InventoryError):
+        load_asset_config(asset_config, config.repository_root, config.sources)
+
+
+def test_asset_config_rejects_windows_path_aliases(tmp_path: Path) -> None:
+    config = _config(tmp_path)
+    (tmp_path / "LICENSE").write_text("License notice\n", encoding="utf-8")
+    asset_config = tmp_path / "assets.yaml"
+    asset_config.write_text(
+        """version: 1
+assets:
+- source: LICENSE
+  target: docs/desys/..\\outside
+  collection: legal
+  classification: legal
+  review_owner: DunderCode Engineering
+""",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(InventoryError):
+        load_asset_config(asset_config, config.repository_root, config.sources)
+
+
+def test_asset_config_rejects_symlinked_source_ancestor(tmp_path: Path) -> None:
+    config = _config(tmp_path)
+    actual = config.sources[0] / "actual"
+    actual.mkdir()
+    (actual / "schema.json").write_text("{}\n", encoding="utf-8")
+    (config.sources[0] / "linked").symlink_to(actual, target_is_directory=True)
+    asset_config = tmp_path / "assets.yaml"
+    asset_config.write_text(
+        """version: 1
+assets:
+- source: knowledge/linked/schema.json
+  target: docs/desys/reference/knowledge/linked/schema.json
+  collection: knowledge
+  classification: schema
+  review_owner: DunderCode Engineering
+""",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(InventoryError):
+        load_asset_config(asset_config, config.repository_root, config.sources)
+
+
+def test_asset_config_requires_legal_assets(tmp_path: Path) -> None:
+    config = _config(tmp_path)
+    asset_config = tmp_path / "assets.yaml"
+    asset_config.write_text("version: 1\nassets: []\n", encoding="utf-8")
+
+    with pytest.raises(InventoryError, match="Missing required legal asset"):
         load_asset_config(asset_config, config.repository_root, config.sources)

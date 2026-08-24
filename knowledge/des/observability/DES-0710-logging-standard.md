@@ -5,230 +5,108 @@ canonical_id: des.observability.logging
 title: Logging Standard
 node_type: standard
 document_class: normative
-version: 1.0.0
+version: 1.1.0
 status: draft
 language: en
 owner: DunderCode Engineering
 applies_to:
-- All software systems operating under DESys
+- Consumer systems that explicitly adopt this draft through their governance
+relationships:
+- type: references
+  target: rfc.corpus.reference-distribution
+- type: references
+  target: adr.corpus.layout-and-authority
+- type: references
+  target: dcsg.canon.style-guide
 ---
 
-# DES-0710 — Logging Standard
+# DES-0710 - Logging Standard
 
-# 1. Purpose
+## 1. Status and Authority
 
-The Logging Standard defines the engineering requirements for producing, managing, and governing software logs within the DunderCode Engineering System (DESys).
+This is draft, reference-only guidance for voluntary consumer adoption. It is
+not approved policy and does not authorize logging. Its distribution follows
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md),
+and it remains subordinate to the consumer authority boundaries in
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md).
+Its structure and normative language are aligned with
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md).
+The uppercase terms are proposed requirements only after adoption.
 
-Its purpose is to establish technology-independent engineering principles that ensure logs provide reliable operational evidence, support diagnostics, improve traceability, and contribute to continuous engineering improvement.
+## 2. Purpose and Limits
 
-Logging is considered a foundational capability of observability engineering.
+Logs can provide event-level evidence for diagnosis, security investigation,
+audit support, and operational learning. They do not establish complete history,
+causation, user intent, or compliance. Logging MAY be omitted where another
+signal answers the need with less risk or cost.
 
----
+## 3. Event Design
 
-# 2. Scope
+An adopting consumer:
 
-This standard applies to every software system developed, deployed, or operated under DESys.
+- MUST define useful event categories, severity semantics, ownership, and the
+  questions each category supports;
+- SHOULD use stable, documented fields for time, event type, component,
+  environment, outcome, and non-sensitive correlation where relevant;
+- MUST distinguish event time from collection time and disclose uncertain clock
+  ordering where material;
+- SHOULD avoid repetitive success events, unbounded payloads, and debug output
+  without a time-limited purpose;
+- MUST treat log text and fields as untrusted data.
 
-It defines engineering expectations for log generation, consistency, operational usefulness, governance, and lifecycle management.
+Changing field meaning or severity SHOULD follow schema review and preserve a
+version or migration note when consumers depend on it.
 
-Implementation details related to logging libraries, log aggregation platforms, storage systems, or cloud services are intentionally excluded.
+## 4. Privacy and Redaction
 
----
+Logs MUST NOT contain credentials, authentication material, encryption keys, or
+raw secret values. Personal data, customer content, request bodies, headers,
+query values, and stable person or device identifiers MUST be excluded by
+default and included only with documented necessity and approval.
 
-# 3. Audience
+Redaction SHOULD occur before data leaves the producing trust boundary. It MUST
+fail safely: uncertain values are omitted or replaced rather than emitted in
+full. Teams SHOULD test redaction against encoded, nested, multiline, oversized,
+and malformed input and review derived fields that could permit re-identification.
 
-This standard is intended for:
+## 5. Injection and Integrity
 
-- Solution Architects
-- Software Architects
-- Platform Engineers
-- DevOps Engineers
-- Site Reliability Engineers
-- Software Engineers
-- Technical Leaders
-- AI-assisted engineering systems
+Untrusted values MUST be encoded as data rather than allowed to create fields,
+lines, control sequences, or executable markup. Renderers and export paths MUST
+escape content for their destination. Consumers SHOULD limit record size and
+field count and preserve an explicit truncation indicator.
 
-Every stakeholder responsible for producing or consuming operational logs SHALL understand and follow this standard.
+Logs SHOULD carry integrity and provenance appropriate to their use. Operators
+MUST NOT infer authenticity merely from a source label; compromised producers
+and pipeline transformations can create misleading records.
 
----
+## 6. Access and Lifecycle
 
-# 4. Relationship with DESys
+Access MUST be least-privileged, purpose-bound, reviewed, and auditable where
+risk warrants. Search, bulk export, support access, and administrative access
+SHOULD be governed separately. Shared public links and unrestricted production
+log access SHOULD NOT be enabled by default.
 
-This standard derives its engineering philosophy from:
+Retention MUST have an approved duration by data category and storage tier.
+Deletion, legal hold, backup expiry, export, and downstream-copy behavior MUST be
+defined and tested. Longer retention is not automatically safer or more useful.
 
-- DEC — DunderCode Engineering Canon
-- DEM — DunderCode Engineering Method
-- DCSG — DunderCode Canon Style Guide
-- DES-0700 — Observability Engineering Principles
+## 7. Validation Evidence
 
-Logging provides one of the primary sources of operational evidence within the DESys Observability Engineering Model.
+Useful evidence includes sample records with synthetic data, schema tests,
+redaction and injection tests, access reviews, retention/deletion results, volume
+and cost limits, and documented loss or truncation behavior. Passing these tests
+does not establish legal or regulatory compliance.
 
----
+## 8. Family References
 
-# 5. Logging Principles
+- [Observability Engineering Principles](DES-0700-observability-engineering-principles.md)
+- [Operational Telemetry](DES-0770-operational-telemetry-standard.md)
+- [Observability Governance](DES-0780-observability-governance.md)
 
-Logging SHALL follow the principles defined below.
+## 9. Revision History
 
-## Engineering Evidence
+### 1.1.0 - Draft
 
-Logs SHALL provide evidence of software behavior.
-
-Logging MUST support engineering understanding rather than merely producing textual output.
-
----
-
-## Structured Information
-
-Logs SHOULD present information in a structured and consistent manner.
-
-Equivalent events SHOULD generate equivalent log structures.
-
----
-
-## Meaningful Events
-
-Logs SHALL describe meaningful operational events.
-
-Trivial or redundant logging SHOULD be avoided.
-
----
-
-## Operational Value
-
-Every logged event SHOULD contribute to system understanding, diagnostics, auditing, or operational analysis.
-
-Logs without engineering value SHOULD NOT be generated.
-
----
-
-## Traceability
-
-Logs SHALL support operational traceability.
-
-Engineering teams SHOULD be capable of relating log events to software versions, deployments, configurations, requests, and engineering decisions.
-
----
-
-## Consistency
-
-Logging practices SHALL remain consistent across software systems.
-
-Equivalent operational situations SHOULD generate comparable logs.
-
----
-
-## Security
-
-Logs SHALL protect sensitive information.
-
-Confidential or regulated data MUST NOT be exposed unnecessarily.
-
----
-
-## Evolvability
-
-Logging capabilities SHALL evolve together with software systems.
-
-Engineering improvements SHOULD preserve or improve operational visibility.
-
----
-
-# 6. Standard
-
-Every DESys-compliant software system SHALL define:
-
-- Logging objectives
-- Logged event categories
-- Log structure
-- Operational responsibilities
-- Governance process
-- Validation process
-
-Projects MAY adopt different logging technologies provided they remain consistent with the engineering principles established by this standard.
-
----
-
-# 7. Mandatory Requirements
-
-Every software system developed under DESys MUST:
-
-- Produce meaningful operational logs.
-- Preserve operational traceability.
-- Protect sensitive information.
-- Support engineering diagnostics.
-- Define logging responsibilities.
-- Maintain consistent logging practices.
-- Continuously improve logging quality.
-
----
-
-# 8. Logging Lifecycle
-
-Logging SHALL follow a continuous engineering lifecycle.
-
-```text
-Logging Design
-        ↓
-Implementation
-        ↓
-Operational Generation
-        ↓
-Collection
-        ↓
-Analysis
-        ↓
-Engineering Improvement
-```
-
-Logs SHALL continuously support operational understanding throughout the software lifecycle.
-
----
-
-# 9. Compliance
-
-A project complies with this standard when its logging practices satisfy the engineering requirements defined herein.
-
-Compliance SHALL be verified during architecture reviews, observability assessments, operational reviews, engineering audits, and DunderCode Assessment Reports (DAR).
-
----
-
-# 10. Relationship with Other Observability Standards
-
-Logging provides one of the primary sources of operational evidence.
-
-| Standard | Discipline |
-|----------|------------|
-| DES-0700 | Observability Engineering Principles |
-| DES-0710 | Logging |
-| DES-0720 | Metrics |
-| DES-0730 | Distributed Tracing |
-| DES-0740 | Alerting |
-| DES-0750 | Incident Detection |
-| DES-0760 | Service Health |
-| DES-0770 | Operational Telemetry |
-| DES-0780 | Observability Governance |
-
-Together, these standards define the Observability Engineering Model adopted by DESys.
-
----
-
-# 11. References
-
-- DEC-0001 — DunderCode Engineering Canon
-- DEM-0001 — DunderCode Engineering Method
-- DCSG-0001 — DunderCode Canon Style Guide
-- DES-0700 — Observability Engineering Principles
-
----
-
-# 12. Changelog
-
-## Version 1.0.0 (Draft)
-
-### Added
-
-- Initial Logging Standard.
-- Defined engineering principles for software logging.
-- Established mandatory logging requirements.
-- Introduced the Logging Lifecycle.
-- Positioned logging as a foundational source of operational evidence within observability engineering.
+- Added opt-in authority limits, privacy and redaction controls, injection-safe
+  handling, access governance, and tested retention and deletion.

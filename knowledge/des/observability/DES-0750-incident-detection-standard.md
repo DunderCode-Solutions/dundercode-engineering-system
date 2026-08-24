@@ -5,235 +5,93 @@ canonical_id: des.observability.incident-detection
 title: Incident Detection Standard
 node_type: standard
 document_class: normative
-version: 1.0.0
+version: 1.1.0
 status: draft
 language: en
 owner: DunderCode Engineering
 applies_to:
-- All software systems operating under DESys
+- Consumer systems that explicitly adopt this draft through their governance
+relationships:
+- type: references
+  target: rfc.corpus.reference-distribution
+- type: references
+  target: adr.corpus.layout-and-authority
+- type: references
+  target: dcsg.canon.style-guide
 ---
 
-# DES-0750 — Incident Detection Standard
+# DES-0750 - Incident Detection Standard
 
-# 1. Purpose
+## 1. Status and Authority
 
-The Incident Detection Standard defines the engineering requirements for identifying, classifying, and governing operational incidents within the DunderCode Engineering System (DESys).
+This document is draft, reference-only guidance. It does not declare events to
+be incidents, authorize response actions, or replace consumer incident policy.
+Distribution follows
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md),
+and consumer governance controls adoption and authority under
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md).
+This draft is aligned with
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md).
+Uppercase terms are proposals only for an adopting consumer.
 
-Its purpose is to establish technology-independent engineering principles that enable software teams to recognize abnormal operational conditions early, classify them consistently, and initiate appropriate response processes.
+## 2. Purpose and Limits
 
-Incident detection is considered an interpretive capability of observability engineering rather than a notification mechanism.
+Incident detection combines telemetry, user reports, dependency information,
+and operational context to identify conditions that may require coordinated
+response. Detection can be late, wrong, incomplete, or manipulated. Absence of
+an alert is not evidence that no incident exists.
 
----
+## 3. Recognition and Confirmation
 
-# 2. Scope
+Consumers SHOULD define recognition criteria based on observed impact, affected
+scope, duration, safety or security implications, and uncertainty. Severity MUST
+reflect current evidence and be revisable as facts change.
 
-This standard applies to every software system developed, deployed, or operated under DESys.
+Automated classifiers and alerts MAY create a candidate incident. A designated
+human SHOULD confirm the incident, severity, and response context before
+high-impact action. Immediate containment MAY precede confirmation only within a
+separately approved emergency policy with bounded authority and retained
+evidence.
 
-It defines engineering expectations for incident identification, classification, severity assessment, escalation readiness, operational traceability, and lifecycle management.
+Reports from users, support, partners, and dependencies SHOULD remain valid
+detection inputs even when telemetry does not corroborate them.
 
-Implementation details related to incident management tools, paging systems, ticketing platforms, monitoring solutions, or cloud providers are intentionally excluded.
+## 4. Bounded Automation
 
----
+Automated detection or response MUST have:
 
-# 3. Audience
+- a named owner and approved purpose;
+- defined inputs, confidence limits, and fail-safe behavior;
+- least-privileged scope, rate and duration limits, and protected credentials;
+- idempotency or a documented recovery path;
+- human override, stop conditions, and escalation;
+- durable records of input, decision, action, and outcome.
 
-This standard is intended for:
+Automation MUST NOT infer authorization from telemetry context. Destructive,
+irreversible, cross-tenant, or broad production action requires explicit human
+confirmation unless an approved risk decision defines narrower safe conditions.
 
-- Solution Architects
-- Software Architects
-- Platform Engineers
-- DevOps Engineers
-- Site Reliability Engineers
-- Software Engineers
-- Technical Leaders
-- AI-assisted engineering systems
+## 5. Detection Quality
 
-Every stakeholder responsible for identifying or responding to incidents SHALL understand and follow this standard.
+Owners SHOULD review missed incidents, false candidates, delayed confirmation,
+severity changes, correlated failures, and dependence on unavailable pipelines.
+Tests SHOULD include stale and conflicting evidence, notification failure,
+partial outages, clock error, and loss of the detection system itself.
 
----
+Records SHOULD distinguish observations, hypotheses, decisions, and confirmed
+facts. Post-incident learning MUST NOT retroactively present uncertain detection
+as certainty.
 
-# 4. Relationship with DESys
+## 6. Family References
 
-This standard derives its engineering philosophy from:
+- [Alerting](DES-0740-alerting-standard.md)
+- [Service Health](DES-0760-service-health-standard.md)
+- [Operational Telemetry](DES-0770-operational-telemetry-standard.md)
+- [Observability Governance](DES-0780-observability-governance.md)
 
-- DEC — DunderCode Engineering Canon
-- DEM — DunderCode Engineering Method
-- DCSG — DunderCode Canon Style Guide
-- DES-0700 — Observability Engineering Principles
-- DES-0740 — Alerting Standard
+## 7. Revision History
 
-Incident Detection transforms operational signals into recognized incident conditions that require engineering response.
+### 1.1.0 - Draft
 
----
-
-# 5. Incident Detection Principles
-
-Incident detection SHALL follow the principles defined below.
-
-## Recognition
-
-Operational conditions SHALL be recognized as incidents when they meet defined engineering criteria.
-
-Assumptions SHOULD NOT replace evidence-based recognition.
-
----
-
-## Consistency
-
-Equivalent operational conditions SHOULD be classified consistently across systems and teams.
-
-Incident criteria SHALL remain clear and repeatable.
-
----
-
-## Evidence-Based Detection
-
-Incident identification SHOULD rely on observable evidence such as logs, metrics, traces, alerts, and operational context.
-
-Detection SHOULD NOT depend solely on intuition.
-
----
-
-## Severity Awareness
-
-Detected incidents SHALL be classified according to their operational impact.
-
-Severity levels SHOULD reflect business, technical, and user impact.
-
----
-
-## Traceability
-
-Incident detection SHALL remain traceable to the operational evidence that triggered recognition.
-
-Detection history SHOULD support engineering review and analysis.
-
----
-
-## Timeliness
-
-Incidents SHOULD be recognized early enough to support effective engineering response.
-
-Late detection SHOULD be minimized.
-
----
-
-## Escalation Readiness
-
-Incident detection SHALL support escalation to the appropriate operational response process.
-
-Detected incidents SHOULD be actionable.
-
----
-
-## Continuous Improvement
-
-Incident detection criteria SHALL evolve through operational learning and engineering review.
-
-False positives, false negatives, and ambiguous classifications SHOULD be periodically reviewed.
-
----
-
-# 6. Standard
-
-Every DESys-compliant software system SHALL define:
-
-- Incident criteria
-- Classification model
-- Severity model
-- Escalation readiness
-- Operational responsibilities
-- Validation process
-- Governance process
-
-Projects MAY define additional incident categories provided they remain consistent with the engineering principles established by this standard.
-
----
-
-# 7. Mandatory Requirements
-
-Every software system developed under DESys MUST:
-
-- Define incident recognition criteria.
-- Classify incidents consistently.
-- Preserve incident traceability.
-- Support engineering response.
-- Define ownership for incident handling.
-- Periodically review detection quality.
-- Continuously improve detection effectiveness.
-
----
-
-# 8. Incident Detection Lifecycle
-
-Incident detection SHALL follow a continuous engineering lifecycle.
-
-```text
-Operational Signal
-        ↓
-Condition Analysis
-        ↓
-Incident Recognition
-        ↓
-Classification
-        ↓
-Escalation Readiness
-        ↓
-Engineering Response
-        ↓
-Continuous Improvement
-```
-
-Incident detection SHALL continuously evolve together with operational knowledge.
-
----
-
-# 9. Compliance
-
-A project complies with this standard when its incident detection practices satisfy the engineering requirements defined herein.
-
-Compliance SHALL be verified during architecture reviews, observability assessments, operational reviews, engineering audits, and DunderCode Assessment Reports (DAR).
-
----
-
-# 10. Relationship with Other Observability Standards
-
-Incident Detection transforms operational signals into recognized incident conditions.
-
-| Standard | Discipline |
-|----------|------------|
-| DES-0700 | Observability Engineering Principles |
-| DES-0710 | Logging |
-| DES-0720 | Metrics |
-| DES-0730 | Distributed Tracing |
-| DES-0740 | Alerting |
-| DES-0750 | Incident Detection |
-| DES-0760 | Service Health |
-| DES-0770 | Operational Telemetry |
-| DES-0780 | Observability Governance |
-
-Together, these standards define the Observability Engineering Model adopted by DESys.
-
----
-
-# 11. References
-
-- DEC-0001 — DunderCode Engineering Canon
-- DEM-0001 — DunderCode Engineering Method
-- DCSG-0001 — DunderCode Canon Style Guide
-- DES-0700 — Observability Engineering Principles
-- DES-0740 — Alerting Standard
-
----
-
-# 12. Changelog
-
-## Version 1.0.0 (Draft)
-
-### Added
-
-- Initial Incident Detection Standard.
-- Defined engineering principles for recognizing operational incidents.
-- Established mandatory incident detection requirements.
-- Introduced the Incident Detection Lifecycle.
-- Positioned incident detection as the interpretive layer between alerting and service health.
+- Added candidate-versus-confirmed incident handling, non-telemetry inputs,
+  uncertainty, and strict boundaries for automated response.

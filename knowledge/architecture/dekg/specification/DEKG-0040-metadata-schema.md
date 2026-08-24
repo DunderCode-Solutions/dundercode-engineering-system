@@ -10,26 +10,42 @@ status: draft
 language: en
 owner: DunderCode Engineering
 applies_to:
-- All indexable DESys documents
+- Identifier-bearing DESys documents that adopt metadata schema 1.0.0
 ---
 
 # DEKG-0040 - Metadata Schema
 
-# 1. Purpose
+## 1. Status and Authority
 
-This specification defines the canonical metadata contract for documents represented as nodes in the DunderCode Engineering Knowledge Graph (DEKG).
+This document is a draft normative specification for DESys metadata schema
+version `1.0.0`. It describes the accompanying machine-readable validation
+artifact but is not an approved policy merely because its metadata class is
+`normative` or because the schema validates an instance.
 
-The contract provides one machine-readable representation for identity, classification, lifecycle, governance, scope, and semantic relationships.
+When installed through the opt-in reference corpus, this specification and its
+schema are reference material. They do not govern consumer-owned documents or
+override consumer code, runtime evidence, approved decisions, or local policy.
+A consumer project may adopt the contract through its own governance.
 
-# 2. Scope
+## 2. Purpose and Scope
 
-This specification applies to every non-empty, identifier-bearing DESys Markdown document.
+The proposed contract represents identity, classification, lifecycle, scope,
+and semantic relationships for documents represented as DEKG nodes. Within
+DESys, it is intended for non-empty Markdown files whose filenames begin with a
+supported document identifier.
 
-README files are navigation surfaces and are not DEKG nodes. Empty placeholders are not nodes, do not reserve identifiers, and are ignored with a validation warning until content is added.
+README files are navigation surfaces rather than DEKG nodes. Empty placeholders
+are not nodes and do not reserve identifiers. The repository validator reports
+them as warnings by default or errors in strict-placeholder mode.
 
-# 3. Serialization
+The JSON Schema validates one metadata mapping. It cannot by itself inspect a
+Markdown filename, prove repository-wide uniqueness, resolve a relationship,
+or establish that a lifecycle transition was authorized.
 
-Metadata MUST be serialized as YAML front matter at the beginning of the Markdown file.
+## 3. Serialization
+
+For documents using this contract, metadata is serialized as YAML front matter
+at the beginning of the Markdown file.
 
 ```yaml
 ---
@@ -48,78 +64,200 @@ applies_to:
 ---
 ```
 
-The opening delimiter MUST be the first line of the file. Metadata sections embedded in the Markdown body are not canonical metadata.
+The opening delimiter is the first line of a managed document. Metadata sections
+embedded in the Markdown body are not parsed as canonical front matter.
 
-# 4. Required Fields
+## 4. Machine-Readable Contract
 
-| Field | Purpose |
+The [DESys metadata JSON Schema](../../metadata/desys-metadata.schema.json) uses
+JSON Schema Draft 2020-12 and rejects unknown properties.
+
+### 4.1 Required Fields
+
+| Field | Actual schema constraint |
 | --- | --- |
-| `metadata_schema` | Selects the metadata contract version. |
-| `document_id` | Provides the stable human-readable identifier. |
-| `canonical_id` | Provides the stable semantic identifier used by DEKG. |
-| `title` | Names the asset without its document identifier. |
-| `node_type` | Defines the role of the asset in DEKG. |
-| `document_class` | Defines whether the asset is normative, informative, operational, or reference material. |
-| `version` | Records a SemVer value without lifecycle qualifiers. |
-| `status` | Records the document lifecycle state. |
-| `language` | Records the canonical language; schema v1 accepts `en`. |
-| `owner` | Identifies the accountable team or role. |
+| `metadata_schema` | The string constant `1.0.0`. |
+| `document_id` | A supported uppercase library, a hyphen, and four digits. |
+| `canonical_id` | A supported lowercase library plus at least two dot-separated, lowercase alphanumeric or hyphenated segments. |
+| `title` | A string containing at least one non-whitespace character. |
+| `node_type` | One value from the node-type enum below. |
+| `document_class` | `informative`, `normative`, `operational`, or `reference`. |
+| `version` | Three dot-separated non-negative integers without leading zeroes except `0`. |
+| `status` | `approved`, `canonical`, `deprecated`, `draft`, `published`, or `review`. |
+| `language` | The string constant `en`. |
+| `owner` | A string containing at least one non-whitespace character. |
 
-# 5. Optional Fields
+Supported document libraries are `ADR`, `DAR`, `DCSG`, `DEA`, `DEC`, `DEKG`,
+`DEM`, `DES`, `DET`, `DEP`, `DSB`, `DSK`, `DSP`, `GUIDE`, `PRD`, and `RFC`.
 
-The schema supports `domain`, `discipline`, `architecture_model`, `authors`, `reviewers`, `applies_to`, `tags`, `aliases`, `legacy_status`, and `relationships`.
+Supported node types are `architecture`, `assessment`, `canon`, `decision`,
+`guide`, `method`, `process`, `product-requirement`, `proposal`, `skill`,
+`specification`, `standard`, `style-guide`, and `template`.
 
-Unknown fields MUST be rejected. Schema evolution MUST occur through a new `metadata_schema` version rather than ungoverned field additions.
+### 4.2 Optional Fields
 
-# 6. Identity Rules
+| Field | Actual schema constraint |
+| --- | --- |
+| `domain`, `discipline`, `architecture_model` | A string containing at least one non-whitespace character. |
+| `authors`, `reviewers`, `applies_to`, `tags` | A non-empty array of unique, non-empty strings. |
+| `aliases` | A non-empty array of unique legacy canonical IDs; two-segment IDs are accepted. |
+| `legacy_status` | The constant `true`; valid only with `status: canonical`, which also requires it. |
+| `relationships` | An array of strict relationship objects; the array may be empty. |
 
-`document_id` MUST match the identifier at the start of the filename. Both `document_id` and `canonical_id` MUST be globally unique.
+Unknown fields fail schema validation because `additionalProperties` is `false`.
 
-Canonical identifiers MUST:
+JSON Schema applies `pattern` as a search. The identifier and version patterns
+therefore use the ECMAScript-compatible terminal assertion `(?![\s\S])` rather
+than `$`, which can match before a final line terminator. This rejects
+newline-terminated values and aligns the machine-readable artifact with the
+repository validator's already-stricter full-match behavior.
 
-- contain at least a library, domain, and slug segment;
-- use lowercase ASCII letters, digits, hyphens, and periods;
-- start with the lowercase library represented by `document_id`;
-- remain stable when a title, file, or directory changes.
+### 4.3 Relationship Objects
 
-When a canonical identifier changes, the previous identifier MUST be retained in `aliases`. Aliases MAY retain a legacy two-segment identifier that would not be valid for a new `canonical_id`.
+Each relationship contains only `type` and `target`. Both fields are required.
+The target uses the canonical-ID syntax, including at least three total
+segments. Supported types are:
 
-# 7. Lifecycle Rules
+`belongs_to`, `child`, `consumes`, `depends_on`, `derives_from`, `defines`,
+`explains`, `extends`, `implements`, `owns`, `parent`, `produces`, `realizes`,
+`references`, `related`, `specializes`, `supersedes`, `triggers`, and
+`validates`.
 
-`version` MUST contain only a SemVer value. Lifecycle labels such as `(Draft)` MUST NOT be appended to it.
+## 5. Document Identity Rules
 
-The normal lifecycle is `draft`, `review`, `approved`, `published`, and `deprecated`.
+The repository validator, rather than JSON Schema alone, checks that
+`document_id` matches the identifier at the start of the filename, that the
+lowercase library in `canonical_id` matches `document_id`, and that document
+IDs, canonical IDs, and aliases are unique across the validated sources.
 
-`canonical` is accepted temporarily as a legacy status only when `legacy_status: true` records an explicit migration exception. New or updated documents MUST NOT introduce this status. Migration from `canonical` requires governance evidence and MUST NOT be inferred automatically.
+Each canonical-ID segment contains lowercase ASCII letters or digits, optionally
+separated by single hyphens. Canonical IDs remain stable across title or path
+changes. A reviewed identifier migration may retain the prior value in
+`aliases`; metadata alone does not authorize that migration. The repository
+validator also rejects an alias equal to its document's canonical ID.
 
-# 8. Relationship Rules
+## 6. Schema Resource Identity and Loading
 
-Relationships MUST use a supported relationship type and a canonical ID as their target. Relationship targets MUST resolve to a canonical ID or alias in the repository.
+The schema resource identifier is exactly:
 
-Narrative references in document bodies remain informative until they are deliberately represented in `relationships`.
-
-# 9. Validation
-
-The normative machine-readable contract is `knowledge/architecture/metadata/desys-metadata.schema.json`.
-
-Repository validation additionally enforces:
-
-- document and canonical ID uniqueness;
-- agreement between filename, document ID, and canonical ID library;
-- alias uniqueness;
-- relationship target resolution;
-- explicit warnings for legacy statuses and empty placeholders.
-
-Run validation with:
-
-```bash
-python3 tools/validate_metadata.py
+```text
+urn:uuid:22eb6a5c-efb9-5581-9ee5-e52435153086
 ```
 
-Use `--show-warnings` to list legacy statuses and empty placeholders. Use `--strict-placeholders` when identifier-bearing placeholders must fail validation.
+This `$id` identifies the JSON Schema resource and supplies the base URI for its
+internal references. It is not a retrieval URL, a DEKG canonical ID, evidence
+of document approval, or release provenance. The `metadata_schema: 1.0.0`
+instance value identifies the metadata contract version separately.
 
-# 10. Governance
+For alpha artifacts, this UUID URN replaces
+`https://dundercode.dev/schemas/desys-metadata-1.0.0.json` as the schema resource
+identifier. The earlier identifier used an NXDOMAIN host and was not a reliable
+retrieval location. Consumers of the alpha schema should update cached or
+configured identifiers to the UUID URN; the earlier value is not an alternate
+identity for this resource.
 
-Changes to required fields, meanings, enums, or validation behavior require a new metadata schema version and a documented migration path.
+Load the schema from the local artifact, not by dereferencing `$id` or using the
+network. Its source-repository path is:
 
-The JSON Schema, this specification, the validator, and migration tooling MUST evolve together.
+```text
+knowledge/architecture/metadata/desys-metadata.schema.json
+```
+
+The approved distribution design requires a future packaged corpus to install
+the schema at:
+
+```text
+docs/desys/reference/knowledge/architecture/metadata/desys-metadata.schema.json
+```
+
+A future packaged implementation must include that local artifact and must not
+depend on network retrieval. A validator that uses a schema registry should
+associate the exact UUID URN with the locally loaded resource. All current
+`$ref` values are fragments within that resource.
+
+## 7. Lifecycle Rules
+
+`version` contains only the SemVer-shaped value accepted by the schema; a label
+such as `(Draft)` is not accepted. The normal lifecycle is `draft`, `review`,
+`approved`, `published`, and `deprecated`.
+
+`canonical` is a legacy status accepted only with `legacy_status: true`. The
+repository validator warns on that combination. New lifecycle transitions and
+migrations require governance evidence; a valid metadata value is not proof of
+an authorized transition.
+
+## 8. Relationship Resolution
+
+JSON Schema validates relationship shape, type, and target syntax. Repository
+validation additionally requires each target to resolve to a canonical ID or a
+syntactically compatible alias in the validated sources, rejects a relationship
+to the same document, and rejects identifier collisions.
+
+A Markdown link supports navigation and a metadata relationship supports graph
+semantics. Neither one grants approval authority.
+
+## 9. Validation
+
+`tools/validate_metadata.py` parses YAML front matter and applies the repository
+validator's implementation of the metadata contract. It does not fetch the JSON
+Schema by `$id`. Direct JSON Schema consumers should load the local artifact as
+described in Section 6.
+
+Repository validation checks:
+
+- required and supported fields and values;
+- agreement between filename, document ID, and canonical ID library;
+- document ID, canonical ID, and alias uniqueness;
+- relationship shape, target resolution, and self-reference;
+- legacy-status and empty-placeholder warnings.
+
+Run the packaged validator from a DESys source checkout or installed tooling:
+
+```bash
+desys-metadata-validate
+```
+
+When using the repository's locked development environment, use:
+
+```bash
+uv run desys-metadata-validate
+```
+
+Use `--show-warnings` to list legacy statuses and empty placeholders. Use
+`--strict-placeholders` when identifier-bearing placeholders must fail
+validation.
+
+## 10. Release Provenance
+
+The approved design for future opt-in distribution under the
+[reference corpus RFC](../../../rfc/RFC-0001-reference-corpus-distribution.md)
+and [authority ADR](../../../adr/ADR-0001-reference-corpus-layout-and-authority.md)
+requires the schema to be an explicitly inventoried package resource. Before
+such a package is released, release evidence must record the manifest schema
+version, DESys package version, immutable release tag, source commit, corpus
+version, and installation timestamp. The schema entry must record its exact
+source and installed paths, classification and distribution status, and original
+and installed content checksums. These values must align with the immutable
+package resource and approved inventory.
+
+A conforming future corpus manifest must supply that provenance. The schema
+`$id`, file path, lifecycle metadata, or successful validation cannot replace
+it. A schema content change produces a new checksum and requires the applicable
+editorial, security, licensing, dependency-closure, and release review before
+public distribution.
+
+## 11. Governance and Compatibility
+
+A change to the intended accepted fields, meanings, enums, or validation
+behavior requires a new `metadata_schema` version and a documented migration
+path. Version `1.0.0` is retained for two alpha corrections: Section 6 replaces
+an unusable schema resource identifier, and Section 4 rejects final line
+terminators that the shipped repository validator already rejected. These
+changes align the machine artifact with the existing intended contract; they do
+not change the repository validator's accepted metadata.
+
+The JSON Schema, this specification, repository validator, tests, and migration
+tooling should remain aligned. Passing automated validation does not establish
+editorial approval or consumer-project authority. Editorial conventions and the
+draft authority model are described by the
+[Canon Style Guide](../../../../foundation/documentation/DCSG-0001-canon-style-guide.md).

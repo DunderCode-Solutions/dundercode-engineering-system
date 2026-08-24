@@ -1,143 +1,37 @@
 # Metadata
 
-The Metadata Domain defines the common metadata model shared by every engineering asset within the DunderCode Engineering System (DESys).
+This directory contains the draft DESys metadata contract and its
+machine-readable validation artifact:
 
-It establishes the structural information that enables engineering assets to be uniquely identified, versioned, classified, traced, reviewed, and semantically connected across the platform.
+- [DEKG-0040 - Metadata Schema](../dekg/specification/DEKG-0040-metadata-schema.md)
+- [DESys metadata JSON Schema](desys-metadata.schema.json)
 
-Rather than describing engineering content, metadata describes the engineering assets themselves.
+DEKG-0040 defines scope, authority, fields, identity rules, local loading, and
+release provenance. The JSON Schema defines the metadata mapping accepted by
+schema version `1.0.0`.
 
-This shared model provides the foundation for consistency, discoverability, governance, and semantic interoperability.
-
----
-
-# Purpose
-
-The purpose of the Metadata Domain is to establish a unified metadata model for the engineering platform.
-
-Every engineering asset published within DESys follows the same metadata structure, enabling predictable organization, navigation, traceability, lifecycle management, and AI-assisted discovery.
-
-A standardized metadata model ensures that engineering knowledge remains consistent as the platform evolves.
-
----
-
-# Engineering Metadata Model
-
-Metadata represents structured information about an engineering asset.
-
-Rather than describing technical implementation, metadata defines the identity and lifecycle of engineering knowledge.
-
-Typical metadata includes information such as:
-
-- Identification
-- Classification
-- Versioning
-- Review status
-- Ownership
-- Scope
-- Traceability
-
-Every engineering asset is expected to expose a consistent metadata structure.
-
----
-
-# Metadata Principles
-
-The metadata model follows a common set of principles.
-
-## Consistency
-
-Equivalent engineering assets should expose equivalent metadata.
-
-## Traceability
-
-Metadata should enable relationships between engineering assets to be explicitly established.
-
-## Reusability
-
-The same metadata model should be reusable across all engineering domains.
-
-## Version Awareness
-
-Metadata should capture the evolution of engineering assets over time.
-
-## Machine Readability
-
-Metadata should support reliable interpretation by automation tools and AI agents.
-
-## Extensibility
-
-The metadata model should evolve without breaking existing engineering assets.
-
----
-
-# Metadata Fields
-
-The complete metadata contract is defined by DEKG-0040 and serialized as YAML front matter.
-
-Typical metadata categories include:
-
-| Category | Purpose |
-|----------|---------|
-| Identification | Uniquely identifies engineering assets. |
-| Classification | Categorizes engineering knowledge. |
-| Lifecycle | Tracks publication and review status. |
-| Governance | Records ownership and responsibility. |
-| Traceability | Connects related engineering assets. |
-
-The normative machine-readable schema is available at `knowledge/architecture/metadata/desys-metadata.schema.json`.
-
-Every non-empty, identifier-bearing DESys document must conform to that schema. README files remain navigation surfaces outside the DEKG, and empty placeholders are not indexed as nodes.
-
-Validate the repository with:
-
-```bash
-python3 tools/validate_metadata.py
-```
-
----
-
-# Relationship with the DEKG
-
-Metadata provides the descriptive layer that enriches the DunderCode Engineering Knowledge Graph (DEKG).
+When these files are installed through a future opt-in reference corpus, they
+remain reference material unless a consumer adopts them through local
+governance. The approved distribution design requires the schema to be packaged
+at:
 
 ```text
-Engineering Asset
-        │
-        ▼
-Metadata
-        │
-        ▼
-Semantic Relationships
-        │
-        ▼
-DEKG
+docs/desys/reference/knowledge/architecture/metadata/desys-metadata.schema.json
 ```
 
-While the DEKG defines how engineering assets are connected, metadata defines the descriptive information that enables those connections to be understood, validated, and queried.
+The schema `$id` is
+`urn:uuid:22eb6a5c-efb9-5581-9ee5-e52435153086`. Load the schema from the local
+file and associate that exact URN with the resource; do not treat the URN as a
+network location.
 
-Together they establish the semantic foundation of the engineering platform.
+Run metadata validation from the repository or an installed environment:
 
----
+```bash
+desys-metadata-validate
+```
 
-# Navigation
+The repository's locked development environment can invoke the same command with:
 
-Continue according to your objective.
-
-| If you want to... | Read |
-|-------------------|------|
-| Understand the semantic graph | DEKG |
-| Apply the metadata contract | DEKG-0040 Metadata Schema |
-| Learn node classifications | Node Types |
-| Explore semantic connections | Relationships |
-| Navigate the platform | Knowledge Map |
-| Understand the platform architecture | DESys Architecture |
-
----
-
-# Final Thought
-
-Engineering knowledge becomes significantly more valuable when every asset is consistently described.
-
-The Metadata Domain exists to establish a shared descriptive model that enables engineering assets to remain identifiable, traceable, interoperable, and semantically connected throughout the evolution of the DunderCode Engineering System.
-
-> **Consistent metadata transforms engineering assets into connected engineering knowledge.**
+```bash
+uv run desys-metadata-validate
+```

@@ -10,233 +10,107 @@ status: draft
 language: en
 owner: DunderCode Engineering
 applies_to:
-- All deployment processes developed under DESys
+- Consumer deployment practices that explicitly adopt this draft guidance
+relationships:
+- type: references
+  target: rfc.corpus.reference-distribution
+- type: references
+  target: adr.corpus.layout-and-authority
+- type: references
+  target: dcsg.canon.style-guide
 ---
 
-# DES-0600 — Deployment Engineering Principles
-
-# 1. Purpose
-
-The Deployment Engineering Principles Standard defines the foundational engineering principles governing software deployment within the DunderCode Engineering System (DESys).
-
-Its purpose is to establish technology-independent engineering principles that ensure software deployments are reliable, repeatable, observable, secure, and capable of evolving without compromising operational stability.
-
-Deployment is considered an engineering discipline rather than an operational activity.
-
----
-
-# 2. Scope
-
-This standard applies to every deployment process developed under DESys.
-
-It defines engineering expectations for deployment design, automation, operational safety, repeatability, observability, and governance.
-
-Implementation details related to deployment tools, orchestration platforms, cloud providers, operating systems, or infrastructure technologies are intentionally excluded.
-
----
-
-# 3. Audience
-
-This standard is intended for:
-
-- Solution Architects
-- Software Architects
-- Platform Engineers
-- DevOps Engineers
-- Site Reliability Engineers
-- Release Engineers
-- Software Engineers
-- Technical Leaders
-- AI-assisted engineering systems
-
-Every stakeholder responsible for delivering software into operational environments SHALL understand and follow this standard.
-
----
-
-# 4. Relationship with DESys
-
-This standard derives its engineering philosophy from:
-
-- DEC — DunderCode Engineering Canon
-- DEM — DunderCode Engineering Method
-- DCSG — DunderCode Canon Style Guide
-
-Deployment Engineering Principles establish the foundation for all deployment-related standards within DESys.
-
----
-
-# 5. Deployment Engineering Principles
-
-Deployment engineering SHALL follow the principles defined below.
-
-## Repeatability
-
-Deployment processes SHALL produce consistent and predictable results.
-
-Equivalent deployment inputs SHOULD generate equivalent operational outcomes.
-
----
-
-## Automation First
-
-Deployment activities SHOULD be automated whenever practical.
-
-Manual deployment steps SHOULD be minimized and explicitly justified.
-
----
-
-## Reliability
-
-Deployment processes SHALL prioritize operational stability.
-
-Deployments MUST NOT intentionally compromise service reliability.
-
----
-
-## Reproducibility
-
-Software artifacts SHALL be deployable multiple times without unintended variation.
-
-Deployment environments SHOULD be reproducible.
-
----
-
-## Observability
-
-Deployment processes SHALL generate sufficient operational information to support monitoring, diagnostics, and auditing.
-
-Deployment activities SHOULD remain observable throughout execution.
-
----
-
-## Safety
-
-Deployment processes SHALL minimize operational risk.
-
-Potential failure scenarios SHOULD be identified before deployment execution.
-
----
-
-## Controlled Change
-
-Every deployment SHALL represent an intentional engineering change.
-
-Deployment activities SHOULD follow defined approval and governance processes where applicable.
-
----
-
-## Traceability
-
-Deployment events SHALL remain traceable.
-
-Software versions, deployment artifacts, environments, and execution history SHOULD be identifiable.
-
----
-
-## Evolvability
-
-Deployment processes SHALL evolve continuously through engineering improvements.
-
-Process evolution SHOULD preserve reliability and repeatability.
-
----
-
-# 6. Standard
-
-Every DESys-compliant deployment process SHALL define:
-
-- Deployment objectives
-- Deployment workflow
-- Automation strategy
-- Operational safeguards
-- Traceability strategy
-- Observability approach
-- Governance responsibilities
-
-Projects MAY adopt different deployment technologies provided they remain consistent with the engineering principles established by this standard.
-
----
-
-# 7. Mandatory Requirements
-
-Every deployment process developed under DESys MUST:
-
-- Be repeatable.
-- Support automation.
-- Preserve operational reliability.
-- Maintain deployment traceability.
-- Generate observable operational events.
-- Define deployment responsibilities.
-- Support continuous engineering improvement.
-
----
-
-# 8. Deployment Engineering Lifecycle
-
-Deployment engineering SHALL follow a controlled lifecycle.
-
-```text
-Artifact Preparation
-        ↓
-Validation
-        ↓
-Deployment
-        ↓
-Verification
-        ↓
-Operational Monitoring
-        ↓
-Continuous Improvement
-```
-
-Each deployment SHALL conclude with verification that operational objectives have been achieved.
-
----
-
-# 9. Compliance
-
-A project complies with this standard when its deployment engineering practices satisfy the engineering requirements defined herein.
-
-Compliance SHALL be verified during architecture reviews, deployment assessments, engineering audits, operational reviews, and DunderCode Assessment Reports (DAR).
-
----
-
-# 10. Relationship with Other Deployment Standards
-
-Deployment Engineering Principles provide the foundation for the complete Deployment Engineering Model.
-
-| Standard | Discipline |
-|----------|------------|
-| DES-0600 | Deployment Engineering Principles |
-| DES-0610 | Environment Management |
-| DES-0620 | Infrastructure as Code |
-| DES-0630 | Configuration Management |
-| DES-0640 | Release Engineering |
-| DES-0650 | Deployment Strategies |
-| DES-0660 | Rollback & Recovery |
-| DES-0670 | Operational Readiness |
-| DES-0680 | Deployment Governance |
-
-Together, these standards define the Deployment Engineering Model adopted by DESys.
-
----
-
-# 11. References
-
-- DEC-0001 — DunderCode Engineering Canon
-- DEM-0001 — DunderCode Engineering Method
-- DCSG-0001 — DunderCode Canon Style Guide
-
----
-
-# 12. Changelog
-
-## Version 1.0.0 (Draft)
-
-### Added
-
-- Initial Deployment Engineering Principles Standard.
-- Defined foundational engineering principles for software deployment.
-- Established mandatory deployment engineering requirements.
-- Introduced the Deployment Engineering Lifecycle.
-- Defined the relationship between Deployment Engineering Principles and the remaining Deployment Standards.
+# DES-0600 - Deployment Engineering Principles
+
+## 1. Status and Authority
+
+This standard is a draft and reference-only. Under
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md)
+and
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md),
+distribution is opt-in and does not make this document project policy. A consumer
+project decides whether to adopt or adapt it, assigns decision authority, and
+defines evidence proportionate to its own risk. This draft is aligned with and
+reviewed against the draft
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md);
+that guide does not make this standard approved or binding.
+
+## 2. Purpose and Scope
+
+This document proposes principles for changing software, infrastructure,
+configuration, and data in controlled execution environments. It is independent
+of provider, operating model, deployment topology, and automation product.
+
+It does not define a universal workflow, authorize access, certify readiness, or
+promise availability, recovery, security, or compliance.
+
+## 3. Principles
+
+- **Intentional change:** identify the requested outcome, affected systems,
+  accountable owner, scope, and material assumptions before execution.
+- **Risk-proportionate control:** choose review, evidence, exposure, and approval
+  according to impact, uncertainty, reversibility, and project obligations.
+- **Known inputs:** identify the artifact, configuration, infrastructure
+  definition, data change, target, and approved dependencies used in a deployment.
+- **Controlled differences:** make relevant environment differences visible and
+  validate assumptions instead of claiming all environments are identical.
+- **Bounded automation:** constrain credentials, targets, concurrency, duration,
+  retries, and stop conditions. Automation does not own risk acceptance.
+- **Progressive evidence:** when feasible, limit initial exposure and evaluate
+  predefined health signals before proceeding.
+- **Recovery by design:** consider containment, rollback, restore, traffic shift,
+  and roll-forward before change execution; not every change is reversible.
+- **Least privilege:** grant deployment access only for an approved purpose,
+  scope, and duration, with separation of duties where risk warrants it.
+- **Traceability:** connect the decision, reviewed inputs, identities, timestamps,
+  results, exceptions, and recovery actions without placing secrets in records.
+- **Learning:** review outcomes and update project-owned controls when evidence
+  shows that assumptions or safeguards were inadequate.
+
+## 4. Change Contract
+
+For a material deployment, a project-owned plan should identify:
+
+| Concern | Evidence to define |
+| --- | --- |
+| Change | Intended result, scope, dependencies, and excluded work |
+| Inputs | Immutable or uniquely identified artifact and reviewed definitions |
+| Authority | Requester, reviewers, approver, executor, and incident decision owner |
+| Preconditions | Environment, access, capacity, compatibility, and backup checks |
+| Gates | Health signals, thresholds, observation periods, and decision ownership |
+| Bounds | Targets, exposure, concurrency, time limits, and automation stop rules |
+| Recovery | Containment, rollback or roll-forward, restore, and validation options |
+| Record | Outcomes, exceptions, evidence locations, and project retention class |
+
+The project may combine or omit evidence where it records why the residual risk
+is acceptable. A successful command or pipeline run is not by itself evidence
+that the service, users, or data are healthy.
+
+## 5. Automation Boundaries
+
+Automated execution should fail safely on ambiguous targets, missing approvals,
+unverified inputs, expired credentials, failed preconditions, or breached gates.
+Retries should be limited and should not repeat non-idempotent or destructive
+steps without an explicit safety decision. A named person or project-owned role
+retains authority to pause, abort, contain, or escalate.
+
+Manual steps remain valid when automation would increase risk or cost. They
+should have the same target checks, peer review where appropriate, evidence
+capture, and recovery boundaries as automated steps.
+
+## 6. Related Guidance
+
+- [Environment management](DES-0610-environment-management.md)
+- [Infrastructure as code](DES-0620-infrastructure-code.md)
+- [Configuration management](DES-0630-configuration-management.md)
+- [Release engineering](DES-0640-release-engineering.md)
+- [Deployment strategies](DES-0650-deployment-strategies.md)
+- [Rollback and recovery](DES-0660-rollback-recovery.md)
+- [Operational readiness](DES-0670-operational-readiness.md)
+- [Deployment governance](DES-0680-deployment-governance.md)
+
+## 7. Limitations
+
+These principles require project context and qualified review. They are not a
+substitute for testing, runtime observation, incident management, security
+assessment, or legal and regulatory analysis.

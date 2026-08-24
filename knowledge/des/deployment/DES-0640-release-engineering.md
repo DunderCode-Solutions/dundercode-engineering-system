@@ -10,241 +10,109 @@ status: draft
 language: en
 owner: DunderCode Engineering
 applies_to:
-- All software releases managed under DESys
+- Consumer release-engineering practices that explicitly adopt this draft guidance
+relationships:
+- type: references
+  target: rfc.corpus.reference-distribution
+- type: references
+  target: adr.corpus.layout-and-authority
+- type: references
+  target: dcsg.canon.style-guide
 ---
 
-# DES-0640 — Release Engineering Standard
-
-# 1. Purpose
-
-The Release Engineering Standard defines the engineering requirements for planning, preparing, validating, publishing, and governing software releases within the DunderCode Engineering System (DESys).
-
-Its purpose is to establish technology-independent engineering principles that ensure releases remain predictable, traceable, reproducible, and operationally safe.
-
-Release Engineering coordinates the controlled transition of validated software artifacts into business-ready deliverables.
-
----
-
-# 2. Scope
-
-This standard applies to every software release produced under DESys.
-
-It defines engineering expectations for release planning, artifact preparation, versioning, validation, publication, traceability, and governance.
-
-Implementation details related to CI/CD platforms, package repositories, container registries, release automation tools, or cloud providers are intentionally excluded.
-
----
-
-# 3. Audience
-
-This standard is intended for:
-
-- Solution Architects
-- Software Architects
-- Release Engineers
-- Platform Engineers
-- DevOps Engineers
-- Site Reliability Engineers
-- Software Engineers
-- Technical Leaders
-- AI-assisted engineering systems
-
-Every stakeholder responsible for publishing software SHALL understand and follow this standard.
-
----
-
-# 4. Relationship with DESys
-
-This standard derives its engineering philosophy from:
-
-- DEC — DunderCode Engineering Canon
-- DEM — DunderCode Engineering Method
-- DCSG — DunderCode Canon Style Guide
-- DES-0600 — Deployment Engineering Principles
-- DES-0610 — Environment Management Standard
-- DES-0620 — Infrastructure as Code Standard
-- DES-0630 — Configuration Management Standard
-
-Release Engineering governs the controlled publication of software artifacts independently from deployment execution.
-
----
-
-# 5. Release Engineering Principles
-
-Release engineering SHALL follow the principles defined below.
-
-## Planned Releases
-
-Every release SHALL be intentionally planned.
-
-Uncontrolled software publication MUST NOT occur.
-
----
-
-## Artifact Integrity
-
-Every released artifact SHALL be complete, validated, and uniquely identifiable.
-
-Released artifacts MUST remain immutable.
-
----
-
-## Version Identification
-
-Every release SHALL possess a unique version identifier.
-
-Version history SHALL remain traceable.
-
----
-
-## Repeatability
-
-Equivalent release inputs SHOULD produce equivalent release artifacts.
-
-Release generation SHALL be reproducible.
-
----
-
-## Validation
-
-Every release SHALL be validated before publication.
-
-Validation SHOULD verify functional, operational, and engineering readiness.
-
----
-
-## Traceability
-
-Release history SHALL remain fully traceable.
-
-Artifacts, versions, approvals, and release decisions SHOULD be identifiable.
-
----
-
-## Controlled Publication
-
-Release publication SHALL follow defined engineering procedures.
-
-Approval requirements SHOULD be appropriate to business risk.
-
----
-
-## Automation
-
-Release preparation SHOULD be automated whenever practical.
-
-Manual release activities SHOULD be minimized.
-
----
-
-## Continuous Improvement
-
-Release engineering processes SHALL evolve through continuous engineering review.
-
----
-
-# 6. Standard
-
-Every DESys-compliant release SHALL define:
-
-- Release objective
-- Release version
-- Artifact identification
-- Validation process
-- Publication process
-- Traceability strategy
-- Governance responsibilities
-
-Projects MAY adopt different release processes provided they remain consistent with the engineering principles established by this standard.
-
----
-
-# 7. Mandatory Requirements
-
-Every software release produced under DESys MUST:
-
-- Have a unique version.
-- Contain validated artifacts.
-- Preserve release traceability.
-- Follow controlled publication procedures.
-- Define responsible stakeholders.
-- Support engineering review.
-- Preserve artifact immutability after publication.
-
----
-
-# 8. Release Engineering Lifecycle
-
-Software releases SHALL follow a controlled engineering lifecycle.
-
-```text
-Release Planning
-        ↓
-Artifact Preparation
-        ↓
-Validation
-        ↓
-Approval
-        ↓
-Publication
-        ↓
-Verification
-        ↓
-Continuous Improvement
-```
-
-Release publication SHALL occur only after engineering validation.
-
----
-
-# 9. Compliance
-
-A project complies with this standard when its release engineering practices satisfy the engineering requirements defined herein.
-
-Compliance SHALL be verified during release reviews, engineering audits, deployment assessments, architecture reviews, and DunderCode Assessment Reports (DAR).
-
----
-
-# 10. Relationship with Other Deployment Standards
-
-Release Engineering governs the controlled publication of software.
-
-| Standard | Discipline |
-|----------|------------|
-| DES-0600 | Deployment Engineering Principles |
-| DES-0610 | Environment Management |
-| DES-0620 | Infrastructure as Code |
-| DES-0630 | Configuration Management |
-| DES-0640 | Release Engineering |
-| DES-0650 | Deployment Strategies |
-| DES-0660 | Rollback & Recovery |
-| DES-0670 | Operational Readiness |
-| DES-0680 | Deployment Governance |
-
-Together, these standards define the Deployment Engineering Model adopted by DESys.
-
----
-
-# 11. References
-
-- DEC-0001 — DunderCode Engineering Canon
-- DEM-0001 — DunderCode Engineering Method
-- DCSG-0001 — DunderCode Canon Style Guide
-- DES-0600 — Deployment Engineering Principles
-- DES-0610 — Environment Management Standard
-- DES-0620 — Infrastructure as Code Standard
-- DES-0630 — Configuration Management Standard
-
----
-
-# 12. Changelog
-
-## Version 1.0.0 (Draft)
-
-### Added
-
-- Initial Release Engineering Standard.
-- Defined engineering principles for software release management.
-- Established mandatory release engineering requirements.
-- Introduced the Release Engineering Lifecycle.
-- Defined the relationship between Release Engineering and the remaining Deployment Standards.
+# DES-0640 - Release Engineering Standard
+
+## 1. Status and Authority
+
+This standard is draft, reference-only guidance. Distribution under
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md)
+and the authority boundaries in
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md)
+are opt-in and do not approve a release or make its evidence authoritative for a
+consumer project. The project owns release criteria, repositories, signing
+authority, and acceptance. This draft is aligned with and reviewed against the
+draft
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md),
+which does not grant lifecycle approval.
+
+## 2. Purpose and Scope
+
+This document describes technology-neutral controls for creating, identifying,
+verifying, publishing, and promoting release artifacts. An artifact may be a
+package, image, archive, firmware bundle, migration bundle, infrastructure
+module, or another immutable deployment input.
+
+Publishing an artifact and deploying it are distinct decisions. A release record
+does not prove operational readiness.
+
+## 3. Artifact Identity and Provenance
+
+A releasable artifact should have a unique identity and a cryptographic digest
+or equivalent integrity value supported by its medium. Its provenance should
+connect, as applicable:
+
+- source revision and reviewed change;
+- build definition, parameters, and approved dependency resolution;
+- build service and identity;
+- test and analysis evidence;
+- artifact digest, format, and target compatibility;
+- publication repository and timestamp;
+- approvals, exceptions, and release owner.
+
+Provenance is evidence about origin; it is not proof that source, dependencies,
+builder, or artifact are safe. Signatures and attestations are useful only when
+the verifier establishes trusted identities, protected keys, expected claims,
+and revocation or expiry behavior.
+
+## 4. Build and Publication Controls
+
+Builds should use reviewed definitions, isolated or appropriately controlled
+workers, explicit inputs, and bounded credentials. Dependencies should be
+constrained and integrity-checked where practical. Build logs and metadata should
+exclude secrets and unnecessary personal or environment data.
+
+Before publication, verify the expected source, artifact digest, validation
+results, known limitations, license or distribution constraints, and required
+approval. Publication credentials should be scoped to the intended repository
+and operation. A partial or failed publication should leave a detectable state
+and a defined quarantine or cleanup decision.
+
+Published artifact content should not be silently replaced under the same
+identity. Corrections should receive a new identity or an explicit project-owned
+exception that preserves the old and new evidence.
+
+## 5. Promotion and Verification
+
+Promotion should reference the same verified artifact digest across environments
+rather than rebuild from source, unless target-specific artifacts are an
+intentional part of the release model. In that case, each output needs its own
+identity, provenance, validation, and compatibility record.
+
+Consumers should verify artifact integrity and expected provenance before use,
+not merely trust a human-readable version label. Repository replication, caching,
+and retention should preserve identity or expose any transformation.
+
+Reproducible builds can provide additional evidence by comparing independent
+outputs, but byte-for-byte reproducibility may be impractical and is not a
+universal requirement. The project should state which properties it verifies.
+
+## 6. Release Record
+
+A concise release record should identify the artifact and digest, source,
+provenance evidence, validation scope, compatibility, known risks, approver,
+publication location, retention class, and withdrawal or deprecation status.
+Evidence access should be least-privileged and retained according to project
+policy rather than indefinitely by default.
+
+## 7. Related Guidance
+
+- [Configuration management](DES-0630-configuration-management.md)
+- [Deployment strategies](DES-0650-deployment-strategies.md)
+- [Operational readiness](DES-0670-operational-readiness.md)
+- [Deployment governance](DES-0680-deployment-governance.md)
+
+## 8. Limitations
+
+Integrity and provenance controls make substitution and origin easier to assess;
+they do not guarantee correctness, absence of vulnerabilities, or suitability
+for a target environment.

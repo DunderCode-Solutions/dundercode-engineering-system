@@ -10,235 +10,108 @@ status: draft
 language: en
 owner: DunderCode Engineering
 applies_to:
-- All software environments managed under DESys
+- Consumer environment-management practices that explicitly adopt this draft guidance
+relationships:
+- type: references
+  target: rfc.corpus.reference-distribution
+- type: references
+  target: adr.corpus.layout-and-authority
+- type: references
+  target: dcsg.canon.style-guide
 ---
 
-# DES-0610 — Environment Management Standard
-
-# 1. Purpose
-
-The Environment Management Standard defines the engineering requirements for designing, managing, and governing software execution environments within the DunderCode Engineering System (DESys).
-
-Its purpose is to establish technology-independent engineering principles that ensure environments remain consistent, reproducible, isolated, secure, and appropriate for their intended operational responsibilities.
-
-An environment is considered an engineering asset rather than merely an infrastructure resource.
-
----
-
-# 2. Scope
-
-This standard applies to every environment used during software development, validation, testing, deployment, and operation.
-
-It defines engineering expectations for environment lifecycle, isolation, consistency, configuration boundaries, governance, and operational responsibilities.
-
-Implementation details related to virtualization platforms, cloud providers, operating systems, containers, or orchestration technologies are intentionally excluded.
-
----
-
-# 3. Audience
-
-This standard is intended for:
-
-- Solution Architects
-- Software Architects
-- Platform Engineers
-- DevOps Engineers
-- Site Reliability Engineers
-- Release Engineers
-- Software Engineers
-- Technical Leaders
-- AI-assisted engineering systems
-
-Every stakeholder responsible for creating, maintaining, or governing execution environments SHALL understand and follow this standard.
-
----
-
-# 4. Relationship with DESys
-
-This standard derives its engineering philosophy from:
-
-- DEC — DunderCode Engineering Canon
-- DEM — DunderCode Engineering Method
-- DCSG — DunderCode Canon Style Guide
-- DES-0600 — Deployment Engineering Principles
-
-Environment Management establishes the engineering requirements for every software execution environment managed under DESys.
-
----
-
-# 5. Environment Management Principles
-
-Environment management SHALL follow the principles defined below.
-
-## Purpose-Driven Environments
-
-Every environment SHALL have a clearly defined engineering purpose.
-
-An environment MUST NOT perform multiple conflicting operational responsibilities.
-
----
-
-## Isolation
-
-Environments SHALL remain logically isolated according to their operational role.
-
-Activities performed in one environment SHOULD NOT unintentionally affect another.
-
----
-
-## Consistency
-
-Equivalent environments SHALL behave consistently.
-
-Configuration differences SHOULD be intentional, documented, and minimal.
-
----
-
-## Reproducibility
-
-Environments SHALL be reproducible.
-
-Environment creation SHOULD follow automated and deterministic engineering processes.
-
----
-
-## Controlled Configuration
-
-Environment-specific configuration SHALL remain external to application code.
-
-Configuration changes SHOULD be governed independently from software releases.
-
----
-
-## Traceability
-
-Environment definitions, modifications, and responsibilities SHALL remain traceable.
-
-Significant environment changes SHOULD be documented.
-
----
-
-## Security
-
-Environment management SHALL support organizational security requirements.
-
-Sensitive information MUST be appropriately protected.
-
----
-
-## Evolvability
-
-Environments SHALL evolve through controlled engineering processes.
-
-Changes SHOULD preserve operational stability.
-
----
-
-## Operational Readiness
-
-Every operational environment SHOULD satisfy the requirements necessary to execute its intended responsibilities safely.
-
----
-
-# 6. Standard
-
-Every DESys-compliant environment SHALL define:
-
-- Environment purpose
-- Operational responsibilities
-- Lifecycle
-- Configuration boundaries
-- Access responsibilities
-- Governance process
-- Traceability requirements
-
-Projects MAY implement different environment architectures provided they remain consistent with the engineering principles established by this standard.
-
----
-
-# 7. Mandatory Requirements
-
-Every managed environment developed under DESys MUST:
-
-- Have a clearly defined purpose.
-- Preserve isolation from unrelated environments.
-- Be reproducible.
-- Support controlled configuration.
-- Maintain operational traceability.
-- Define governance responsibilities.
-- Support continuous engineering improvement.
-
----
-
-# 8. Environment Lifecycle
-
-Software environments SHALL follow a controlled engineering lifecycle.
-
-```text
-Environment Definition
-          ↓
-Provisioning
-          ↓
-Configuration
-          ↓
-Validation
-          ↓
-Operational Use
-          ↓
-Maintenance
-          ↓
-Retirement
-```
-
-Every environment SHALL preserve consistency throughout its lifecycle.
-
----
-
-# 9. Compliance
-
-A project complies with this standard when its environment management practices satisfy the engineering requirements defined herein.
-
-Compliance SHALL be verified during architecture reviews, deployment assessments, operational reviews, engineering audits, and DunderCode Assessment Reports (DAR).
-
----
-
-# 10. Relationship with Other Deployment Standards
-
-Environment Management defines how software execution environments are engineered and governed.
-
-| Standard | Discipline |
-|----------|------------|
-| DES-0600 | Deployment Engineering Principles |
-| DES-0610 | Environment Management |
-| DES-0620 | Infrastructure as Code |
-| DES-0630 | Configuration Management |
-| DES-0640 | Release Engineering |
-| DES-0650 | Deployment Strategies |
-| DES-0660 | Rollback & Recovery |
-| DES-0670 | Operational Readiness |
-| DES-0680 | Deployment Governance |
-
-Together, these standards define the Deployment Engineering Model adopted by DESys.
-
----
-
-# 11. References
-
-- DEC-0001 — DunderCode Engineering Canon
-- DEM-0001 — DunderCode Engineering Method
-- DCSG-0001 — DunderCode Canon Style Guide
-- DES-0600 — Deployment Engineering Principles
-
----
-
-# 12. Changelog
-
-## Version 1.0.0 (Draft)
-
-### Added
-
-- Initial Environment Management Standard.
-- Defined engineering principles for software execution environments.
-- Established mandatory requirements for environment management.
-- Introduced the Environment Lifecycle.
-- Defined the relationship between Environment Management and the remaining Deployment Standards.
+# DES-0610 - Environment Management Standard
+
+## 1. Status and Authority
+
+This standard is a draft, reference-only proposal. Opt-in distribution under
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md)
+and the authority boundaries in
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md)
+do not authorize work in a consumer environment. The consumer project owns
+environment classifications, access, risk acceptance, and adoption. This draft
+is aligned with and reviewed against the draft
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md),
+which does not grant lifecycle approval.
+
+## 2. Purpose and Scope
+
+This document describes how a project can make execution environments purposeful,
+understood, and sufficiently comparable for deployment decisions. An environment
+includes the infrastructure, identities, configuration, data characteristics,
+dependencies, network boundaries, and operational controls relevant to a change.
+
+The guidance is technology-neutral and does not require a fixed sequence of
+development, test, staging, and production environments.
+
+## 3. Environment Record
+
+Each material environment should have a project-owned record covering:
+
+- purpose, owner, lifecycle state, criticality, and permitted uses;
+- infrastructure and configuration sources of truth;
+- data classification and rules for production-derived data;
+- trust, network, tenant, and dependency boundaries;
+- deployment and emergency access paths;
+- observability, support, backup, restore, and retention expectations;
+- approved exceptions and retirement responsibilities.
+
+Names such as "staging" are not evidence of equivalence or readiness. Deployment
+plans should resolve the environment by an unambiguous project identifier and
+verify the target before changing it.
+
+## 4. Controlled Differences
+
+Environments need not be identical. Differences may be necessary for scale,
+cost, regional constraints, privacy, external integrations, safety, or testing.
+Relevant differences should be intentional, reviewable, and considered in the
+deployment risk assessment.
+
+| Difference | Question before promotion |
+| --- | --- |
+| Capacity or topology | Could scale, placement, or failover alter behavior? |
+| Identity and policy | Are permissions and trust boundaries representative? |
+| Data | Are volume, sensitivity, shape, and migration behavior understood? |
+| Dependencies | Are versions, limits, failure modes, and test substitutes known? |
+| Configuration | Is the target value set reviewed and compatible with the artifact? |
+| Observability | Can the target produce and route the signals used by health gates? |
+
+Parity claims should name the dimensions compared and the evidence date. Unknown
+or stale differences are risk inputs, not reasons to assume equivalence.
+
+## 5. Lifecycle and Isolation
+
+Creation, material modification, and retirement should use reviewed definitions
+where practical. Changes outside the source of truth should be time-bounded,
+recorded, reconciled, or removed after the event. Drift detection may inform a
+decision but should not automatically repair resources without scope and impact
+bounds.
+
+Isolation should match the consequence of cross-environment effects. Projects
+should consider separate identities, credentials, state stores, data sets,
+network controls, budgets, and quotas. Shared components should be documented
+with their blast radius and failure ownership.
+
+Production-derived data used elsewhere should be minimized and protected under
+project policy. Masking or synthetic data can reduce exposure but does not by
+itself establish that re-identification or misuse is impossible.
+
+## 6. Preflight Evidence
+
+Before a material change, verify the target identity, lifecycle state, approved
+window, current health, capacity, dependency status, access scope, configuration
+revision, and recovery prerequisites. Record unresolved differences and the
+person or role accepting them.
+
+## 7. Related Guidance
+
+- [Deployment principles](DES-0600-deployment-engineering-principles.md)
+- [Infrastructure as code](DES-0620-infrastructure-code.md)
+- [Configuration management](DES-0630-configuration-management.md)
+- [Operational readiness](DES-0670-operational-readiness.md)
+
+## 8. Limitations
+
+Reproducible definitions reduce uncontrolled variation but cannot guarantee
+equivalent runtime behavior. Environment evidence requires periodic review and
+does not replace project security, privacy, resilience, or cost controls.

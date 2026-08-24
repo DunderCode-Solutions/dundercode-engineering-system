@@ -72,7 +72,9 @@ The applicable project defines exact gates and human decision ownership.
 | --- | --- |
 | Understand deployment principles | [DES-0600](../../knowledge/des/deployment/DES-0600-deployment-engineering-principles.md) |
 | Manage environment differences | [DES-0610](../../knowledge/des/deployment/DES-0610-environment-management.md) |
+| Manage infrastructure as code | [DES-0620](../../knowledge/des/deployment/DES-0620-infrastructure-code.md) |
 | Manage configuration | [DES-0630](../../knowledge/des/deployment/DES-0630-configuration-management.md) |
+| Verify release artifacts and provenance | [DES-0640](../../knowledge/des/deployment/DES-0640-release-engineering.md) |
 | Select a deployment strategy | [DES-0650](../../knowledge/des/deployment/DES-0650-deployment-strategies.md) |
 | Plan rollback and recovery | [DES-0660](../../knowledge/des/deployment/DES-0660-rollback-recovery.md) |
 | Assess operational readiness | [DES-0670](../../knowledge/des/deployment/DES-0670-operational-readiness.md) |

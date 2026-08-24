@@ -1,114 +1,65 @@
-# Observability Standards
+# Observability Reference Standards
 
-Observability Standards define the engineering principles, practices, and governance for understanding the behavior of software systems operating within the DunderCode Engineering System (DESys).
+This collection contains technology-neutral draft guidance for designing and
+governing operational telemetry. It is eligible only for explicit, opt-in
+reference distribution after the applicable corpus review. Installing or
+reading it does not adopt it as consumer policy.
 
-Observability enables engineering teams to determine the internal state of software systems through externally available information, supporting reliable operation, faster incident resolution, and continuous engineering improvement.
+Consumer code, runtime evidence, law, contracts, approved decisions, security
+and privacy policy, and local operating procedures take precedence. The
+documents do not grant production access, authorize data collection or
+automated action, prove compliance, or guarantee detection, availability, or
+incident prevention.
 
-Rather than focusing solely on monitoring predefined conditions, observability provides the engineering capability to investigate, diagnose, and explain unexpected system behavior.
+## Use
 
-All standards contained in this domain derive their engineering philosophy from the DunderCode Engineering Canon (DEC), the DunderCode Engineering Method (DEM), and the DunderCode Canon Style Guide (DCSG).
+Consumers should select only practices justified by an explicit operational
+purpose and risk assessment. They should record ownership, data boundaries,
+approvals, costs, failure modes, retention, and evidence before adoption.
+Requirements written in uppercase are proposals for an adopting consumer; they
+are not binding merely because this reference was distributed.
 
----
+## Family
 
-# Scope
+| ID | Draft reference |
+| --- | --- |
+| DES-0700 | [Observability Engineering Principles](DES-0700-observability-engineering-principles.md) |
+| DES-0710 | [Logging](DES-0710-logging-standard.md) |
+| DES-0720 | [Metrics](DES-0720-metrics-standard.md) |
+| DES-0730 | [Distributed Tracing](DES-0730-distributed-tracing-standard.md) |
+| DES-0740 | [Alerting](DES-0740-alerting-standard.md) |
+| DES-0750 | [Incident Detection](DES-0750-incident-detection-standard.md) |
+| DES-0760 | [Service Health](DES-0760-service-health-standard.md) |
+| DES-0770 | [Operational Telemetry](DES-0770-operational-telemetry-standard.md) |
+| DES-0780 | [Observability Governance](DES-0780-observability-governance.md) |
 
-The Observability Standards cover the complete engineering model for software observability, including:
+## Coverage
 
-- Observability engineering principles
-- Logging
-- Metrics
-- Distributed tracing
-- Alerting
-- Incident detection
-- Service health
-- Observability governance
+The family separates signal design from decisions made with those signals:
 
-These standards define engineering principles independently of monitoring platforms, logging systems, telemetry protocols, cloud providers, or observability vendors.
+- logs address useful events, injection-safe encoding, privacy, access, and
+  lifecycle controls;
+- metrics address definitions, dimensions, cardinality, privacy, and cost;
+- traces address sampling, propagation, and trust boundaries;
+- alerts and incident detection address actionability, human confirmation, and
+  bounded automation;
+- service health addresses objectives, indicators, and dependencies;
+- telemetry pipelines address schemas, backpressure, loss disclosure, and
+  evidence quality;
+- governance addresses ownership, approval, audit, retention, deletion, and
+  emergency access.
 
----
+No signal is complete or inherently trustworthy. Consumers should corroborate
+material decisions and disclose missing, sampled, delayed, transformed, or
+dropped evidence.
 
-# Objectives
+## Governing Context
 
-The Observability Standards aim to:
-
-- Standardize observability engineering practices.
-- Improve system visibility.
-- Accelerate incident diagnosis.
-- Support evidence-based operational decisions.
-- Increase operational reliability.
-- Enable continuous engineering improvement.
-- Promote measurable operational excellence.
-
----
-
-# Standards
-
-| ID | Standard |
-|----|----------|
-| DES-0700 | Observability Engineering Principles |
-| DES-0710 | Logging Standard |
-| DES-0720 | Metrics Standard |
-| DES-0730 | Distributed Tracing Standard |
-| DES-0740 | Alerting Standard |
-| DES-0750 | Incident Detection Standard |
-| DES-0760 | Service Health Standard |
-| DES-0770 | Operational Telemetry Standard |
-| DES-0780 | Observability Governance |
-
----
-
-# Engineering Model
-
-The Observability Standards follow a progressive engineering model.
-
-```text
-Observability Engineering Principles
-                │
-                ▼
-Logging
-                │
-                ▼
-Metrics
-                │
-                ▼
-Distributed Tracing
-                │
-                ▼
-Alerting
-                │
-                ▼
-Incident Detection
-                │
-                ▼
-Service Health
-                │
-                ▼
-Operational Telemetry
-                │
-                ▼
-Observability Governance
-```
-
-Each standard builds upon the previous one, forming a complete observability engineering model.
-
----
-
-# Relationship with Other DES Domains
-
-Observability Standards integrate with multiple engineering disciplines.
-
-- Architecture Standards define the systems being observed.
-- API Standards define externally visible service behavior.
-- Data Standards define the persistence layer supporting operational information.
-- Deployment Standards define how software reaches production.
-- Delivery Standards define operational processes for monitoring, incident response, and production support.
-
-Observability transforms running software into measurable engineering systems whose behavior can be understood, analyzed, and continuously improved.
-
----
-
-# Compliance
-
-Projects developed under DESys SHOULD comply with the Observability Standards applicable to their architecture, operational requirements, and production environments.
-
-Compliance is evaluated through engineering reviews, observability assessments, operational audits, architecture reviews, and DunderCode Assessment Reports (DAR).
+This family is drafted for the opt-in, non-authoritative distribution model in
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md)
+and the consumer authority hierarchy in
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md).
+Its structure and normative language are aligned with
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md).
+These documents provide governing context; lifecycle metadata alone is not
+evidence of approval.

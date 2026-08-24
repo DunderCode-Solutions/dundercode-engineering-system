@@ -10,237 +10,105 @@ status: draft
 language: en
 owner: DunderCode Engineering
 applies_to:
-- All software configuration managed under DESys
+- Consumer configuration-management practices that explicitly adopt this draft guidance
+relationships:
+- type: references
+  target: rfc.corpus.reference-distribution
+- type: references
+  target: adr.corpus.layout-and-authority
+- type: references
+  target: dcsg.canon.style-guide
 ---
 
-# DES-0630 — Configuration Management Standard
+# DES-0630 - Configuration Management Standard
 
-# 1. Purpose
+## 1. Status and Authority
 
-The Configuration Management Standard defines the engineering requirements for managing software configuration within the DunderCode Engineering System (DESys).
+This standard is draft, reference-only guidance. Opt-in distribution under
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md)
+and the authority boundaries in
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md)
+do not establish a consumer project's configuration or secret policy. The
+project owns adoption, classification, access, and approval. This draft is
+aligned with and reviewed against the draft
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md),
+which does not grant lifecycle approval.
 
-Its purpose is to establish technology-independent engineering principles that ensure application configuration remains externalized, secure, consistent, traceable, and independently managed throughout the software lifecycle.
+## 2. Purpose and Scope
 
-Configuration is considered an operational concern rather than application logic.
+This document covers runtime settings, feature controls, connection references,
+policy inputs, and secrets that can alter system behavior. It is independent of
+storage format, injection method, secret service, and deployment platform.
 
----
+Configuration should be separated from code where independent variation is
+needed, but externalization is not an end in itself. Compile-time values and safe
+defaults can remain in code when ownership and change behavior are clear.
 
-# 2. Scope
+## 3. Configuration and Secret Boundary
 
-This standard applies to every configuration artifact used by software systems managed under DESys.
+A secret is a value whose disclosure can grant access or expose protected data.
+Secrets require controls beyond ordinary configuration.
 
-It defines engineering expectations for configuration definition, storage, security, versioning, governance, and operational lifecycle.
+| Concern | Configuration | Secret |
+| --- | --- | --- |
+| Source | Reviewable project-owned source of truth | Approved protected system |
+| Repository | May be stored if not sensitive | Value should not be committed |
+| Logs and evidence | Record identifiers and redacted changes | Never rely on redaction alone; minimize exposure |
+| Access | Based on operational responsibility | Least privilege, purpose, and duration |
+| Lifecycle | Version, validate, promote, retire | Issue, distribute, rotate, revoke, audit |
 
-Implementation details related to environment variables, configuration files, secret management systems, service discovery platforms, or cloud providers are intentionally excluded.
+Secret references or identifiers may be configuration, but they should not reveal
+the value. Encryption does not remove the need to control keys, access, copies,
+logs, backups, and retention.
 
----
+## 4. Definition and Change Control
 
-# 3. Audience
+Each material setting should have an owner, type or format, allowed range,
+default behavior, sensitivity, target scope, compatibility assumptions, and
+failure behavior. Unknown keys and malformed or missing required values should
+produce a defined outcome rather than silent ambiguity.
 
-This standard is intended for:
+Changes should identify the before and after meaning, affected environments,
+artifact compatibility, reviewer, approval, rollout bounds, validation, and
+recovery option. High-impact dynamic settings deserve controls comparable to a
+software deployment even when no artifact changes.
 
-- Solution Architects
-- Software Architects
-- Platform Engineers
-- DevOps Engineers
-- Site Reliability Engineers
-- Software Engineers
-- Technical Leaders
-- AI-assisted engineering systems
+The same artifact may be promoted with environment-specific configuration where
+the architecture supports it. Projects should avoid rebuilding only to inject a
+secret or environment label because doing so weakens artifact identity.
 
-Every stakeholder responsible for defining or managing software configuration SHALL understand and follow this standard.
+## 5. Delivery and Runtime Safety
 
----
+Configuration delivery should authenticate its source, protect integrity, and
+define behavior for stale, unavailable, or partially applied values. Cached
+configuration should have explicit freshness and invalidation semantics.
 
-# 4. Relationship with DESys
+Secret values should be acquired as late as practical, held for no longer than
+needed, and excluded from command history, process diagnostics, telemetry, error
+messages, and deployment evidence. Rotation plans should account for overlap,
+revocation, dependency order, and rollback without assuming immediate global
+propagation.
 
-This standard derives its engineering philosophy from:
+Automation should be bounded by approved targets, schemas, allowed value ranges,
+concurrency, and stop conditions. It should not expand a configuration change to
+new environments merely because names or selectors match.
 
-- DEC — DunderCode Engineering Canon
-- DEM — DunderCode Engineering Method
-- DCSG — DunderCode Canon Style Guide
-- DES-0600 — Deployment Engineering Principles
-- DES-0610 — Environment Management Standard
-- DES-0620 — Infrastructure as Code Standard
+## 6. Evidence and Review
 
-Configuration Management governs how software behavior is customized across execution environments.
+Evidence should record the configuration revision or redacted diff, target,
+requester, reviewers, approval, executor identity, time, validation result, and
+recovery action. Evidence should contain references to protected secrets, not
+their values. Access and change records should follow project retention policy.
 
----
+## 7. Related Guidance
 
-# 5. Configuration Management Principles
+- [Environment management](DES-0610-environment-management.md)
+- [Infrastructure as code](DES-0620-infrastructure-code.md)
+- [Release engineering](DES-0640-release-engineering.md)
+- [Deployment governance](DES-0680-deployment-governance.md)
 
-Configuration management SHALL follow the principles defined below.
+## 8. Limitations
 
-## Externalized Configuration
-
-Application configuration SHALL remain external to application code.
-
-Business logic MUST NOT depend on hardcoded operational values.
-
----
-
-## Separation of Concerns
-
-Configuration SHALL remain independent from software implementation.
-
-Application releases SHOULD NOT require recompilation or code modification to change operational behavior.
-
----
-
-## Environment Independence
-
-The same software artifact SHOULD execute across multiple environments using different configurations.
-
-Configuration SHALL define environment-specific behavior.
-
----
-
-## Security
-
-Sensitive configuration SHALL be protected appropriately.
-
-Secrets MUST NOT be embedded within source code.
-
----
-
-## Consistency
-
-Equivalent environments SHOULD use consistent configuration structures.
-
-Configuration differences SHALL be intentional and documented.
-
----
-
-## Traceability
-
-Configuration changes SHALL remain traceable.
-
-Operational configuration SHOULD support engineering review and auditing.
-
----
-
-## Version Awareness
-
-Configuration evolution SHOULD be managed through controlled engineering processes.
-
-Changes SHALL preserve operational stability.
-
----
-
-## Minimal Configuration
-
-Applications SHOULD expose only the configuration necessary to support operational variability.
-
-Unnecessary configuration SHOULD be avoided.
-
----
-
-## Evolvability
-
-Configuration SHALL evolve independently from application releases whenever practical.
-
----
-
-# 6. Standard
-
-Every DESys-compliant software system SHALL define:
-
-- Configuration responsibilities
-- Configuration boundaries
-- Security requirements
-- Configuration lifecycle
-- Governance process
-- Traceability strategy
-
-Projects MAY adopt different configuration technologies provided they remain consistent with the engineering principles established by this standard.
-
----
-
-# 7. Mandatory Requirements
-
-Every software system developed under DESys MUST:
-
-- Externalize operational configuration.
-- Protect sensitive configuration.
-- Preserve configuration traceability.
-- Separate configuration from application logic.
-- Support controlled configuration evolution.
-- Define governance responsibilities.
-- Support engineering review of configuration changes.
-
----
-
-# 8. Configuration Lifecycle
-
-Configuration SHALL follow a controlled engineering lifecycle.
-
-```text
-Configuration Design
-          ↓
-Definition
-          ↓
-Validation
-          ↓
-Deployment
-          ↓
-Operational Use
-          ↓
-Review
-          ↓
-Continuous Evolution
-```
-
-Configuration SHALL remain independently manageable throughout its lifecycle.
-
----
-
-# 9. Compliance
-
-A project complies with this standard when its configuration management practices satisfy the engineering requirements defined herein.
-
-Compliance SHALL be verified during architecture reviews, deployment assessments, engineering audits, operational reviews, and DunderCode Assessment Reports (DAR).
-
----
-
-# 10. Relationship with Other Deployment Standards
-
-Configuration Management governs how application behavior is customized independently from infrastructure provisioning.
-
-| Standard | Discipline |
-|----------|------------|
-| DES-0600 | Deployment Engineering Principles |
-| DES-0610 | Environment Management |
-| DES-0620 | Infrastructure as Code |
-| DES-0630 | Configuration Management |
-| DES-0640 | Release Engineering |
-| DES-0650 | Deployment Strategies |
-| DES-0660 | Rollback & Recovery |
-| DES-0670 | Operational Readiness |
-| DES-0680 | Deployment Governance |
-
-Together, these standards define the Deployment Engineering Model adopted by DESys.
-
----
-
-# 11. References
-
-- DEC-0001 — DunderCode Engineering Canon
-- DEM-0001 — DunderCode Engineering Method
-- DCSG-0001 — DunderCode Canon Style Guide
-- DES-0600 — Deployment Engineering Principles
-- DES-0610 — Environment Management Standard
-- DES-0620 — Infrastructure as Code Standard
-
----
-
-# 12. Changelog
-
-## Version 1.0.0 (Draft)
-
-### Added
-
-- Initial Configuration Management Standard.
-- Defined engineering principles for software configuration.
-- Established mandatory requirements for configuration management.
-- Introduced the Configuration Lifecycle.
-- Defined the relationship between Configuration Management and the remaining Deployment Standards.
+Separating configuration and secrets reduces coupling and exposure but cannot
+guarantee confidentiality or correct behavior. Runtime validation, credential
+hygiene, and project-owned incident procedures remain necessary.

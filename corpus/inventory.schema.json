@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dundercode.dev/schemas/desys-corpus-inventory-1.0.0.json",
+  "$id": "urn:uuid:8dfc7e36-1e0a-4b96-9f13-e98f8187a59a",
   "title": "DESys Reference Corpus Inventory",
   "type": "object",
   "additionalProperties": false,
@@ -12,7 +12,7 @@
   ],
   "properties": {
     "inventory_schema": {
-      "const": "1.0.0"
+      "const": "1.1.0"
     },
     "corpus_version": {
       "type": "string",
@@ -37,7 +37,39 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/entry"
-      }
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "const": "LICENSE"
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "const": "THIRD_PARTY_NOTICES.md"
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
     }
   },
   "$defs": {
@@ -52,16 +84,17 @@
         "distribution",
         "indexable",
         "review_owner",
+        "review_fingerprint",
         "checksum"
       ],
       "properties": {
         "source": {
           "type": "string",
-          "pattern": "^(foundation|knowledge|engineering|delivery|skills)/.+"
+          "pattern": "^(LICENSE|THIRD_PARTY_NOTICES\\.md|(foundation|knowledge|engineering|delivery|skills)/.+)$"
         },
         "target": {
           "type": "string",
-          "pattern": "^docs/desys/reference/(foundation|knowledge|engineering|delivery|skills)/.+"
+          "pattern": "^docs/desys/(LICENSE|THIRD_PARTY_NOTICES\\.md|reference/(foundation|knowledge|engineering|delivery|skills)/.+)$"
         },
         "collection": {
           "enum": [
@@ -69,7 +102,8 @@
             "knowledge",
             "engineering",
             "delivery",
-            "skills"
+            "skills",
+            "legal"
           ]
         },
         "classification": {
@@ -77,6 +111,7 @@
             "document",
             "navigation",
             "placeholder",
+            "legal",
             "schema",
             "supplemental"
           ]
@@ -95,6 +130,10 @@
           "type": "string",
           "minLength": 1
         },
+        "review_fingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
         "checksum": {
           "type": "string",
           "pattern": "^sha256:[a-f0-9]{64}$"
@@ -112,7 +151,109 @@
           "type": "string",
           "minLength": 1
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source": {
+                "const": "LICENSE"
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "const": "docs/desys/LICENSE"
+              },
+              "collection": {
+                "const": "legal"
+              },
+              "classification": {
+                "const": "legal"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "source": {
+                "const": "THIRD_PARTY_NOTICES.md"
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "const": "docs/desys/THIRD_PARTY_NOTICES.md"
+              },
+              "collection": {
+                "const": "legal"
+              },
+              "classification": {
+                "const": "legal"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "collection": {
+                "const": "legal"
+              }
+            },
+            "required": [
+              "collection"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "enum": [
+                  "LICENSE",
+                  "THIRD_PARTY_NOTICES.md"
+                ]
+              },
+              "classification": {
+                "const": "legal"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "classification": {
+                "const": "legal"
+              }
+            },
+            "required": [
+              "classification"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "enum": [
+                  "LICENSE",
+                  "THIRD_PARTY_NOTICES.md"
+                ]
+              },
+              "collection": {
+                "const": "legal"
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

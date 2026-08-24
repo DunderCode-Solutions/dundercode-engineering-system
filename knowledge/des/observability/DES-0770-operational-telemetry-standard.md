@@ -5,250 +5,104 @@ canonical_id: des.observability.operational-telemetry
 title: Operational Telemetry Standard
 node_type: standard
 document_class: normative
-version: 1.0.0
+version: 1.1.0
 status: draft
 language: en
 owner: DunderCode Engineering
 applies_to:
-- All software systems operating under DESys
+- Consumer systems that explicitly adopt this draft through their governance
+relationships:
+- type: references
+  target: rfc.corpus.reference-distribution
+- type: references
+  target: adr.corpus.layout-and-authority
+- type: references
+  target: dcsg.canon.style-guide
 ---
 
-# DES-0770 — Operational Telemetry Standard
+# DES-0770 - Operational Telemetry Standard
 
-# 1. Purpose
+## 1. Status and Authority
 
-The Operational Telemetry Standard defines the engineering requirements for collecting, correlating, organizing, and governing operational evidence within the DunderCode Engineering System (DESys).
+This draft is reference-only and non-authoritative until a consumer adopts it.
+It does not authorize collection, transfer, centralized access, or automated
+response. Distribution follows
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md),
+and consumer governance applies under
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md).
+This draft is aligned with
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md).
+Uppercase terms below are proposed requirements only after local adoption.
 
-Its purpose is to establish technology-independent engineering principles that enable software systems to unify logs, metrics, traces, alerts, incidents, and service health information into a coherent operational understanding.
+## 2. Purpose and Scope
 
-Operational telemetry is considered the consolidated evidence layer of observability engineering.
+Telemetry pipelines transport and transform selected logs, metrics, traces, and
+events into operational evidence. This guidance covers pipeline behavior,
+schemas, quality, and evidence handling without requiring a particular protocol,
+architecture, or vendor.
 
----
+Pipelines are fallible systems. Their output can be delayed, duplicated,
+reordered, transformed, sampled, or lost and MUST NOT be treated as a complete
+record without supporting evidence.
 
-# 2. Scope
+## 3. Pipeline Design
 
-This standard applies to every software system developed, deployed, or operated under DESys.
+An adopting consumer SHOULD document producers, collectors, transformations,
+queues, storage, exports, owners, trust boundaries, and data classifications.
+Each stage MUST apply purpose, access, residency, retention, and encryption
+controls appropriate to its data.
 
-It defines engineering expectations for telemetry collection, correlation, aggregation, operational context, traceability, governance, and lifecycle management.
+Production telemetry SHOULD be isolated from untrusted test data. Cross-tenant,
+cross-region, or third-party transfer MUST be explicitly approved and minimized.
+Pipeline control interfaces and credentials MUST be separately protected; this
+document provides no credential-management procedure.
 
-Implementation details related to telemetry platforms, monitoring systems, logging backends, tracing vendors, cloud providers, or analysis tools are intentionally excluded.
+## 4. Backpressure and Loss
 
----
+Every stage MUST define bounded buffers, timeout and retry behavior, overload
+priorities, and recovery limits. Unbounded buffering or retries MUST NOT be used
+to hide sustained overload. Pipeline pressure SHOULD NOT be allowed to exhaust
+the observed service.
 
-# 3. Audience
+Drop, sample, reject, truncate, and aggregation policies MUST be documented by
+signal and priority. Operators SHOULD receive machine-readable and human-visible
+evidence of loss volume, affected interval, reason, and recovery. Silent loss or
+claims of complete coverage are unacceptable when completeness is unknown.
 
-This standard is intended for:
+## 5. Schemas and Transformations
 
-* Solution Architects
-* Software Architects
-* Platform Engineers
-* DevOps Engineers
-* Site Reliability Engineers
-* Software Engineers
-* Technical Leaders
-* AI-assisted engineering systems
+Schemas SHOULD define field meaning, type, unit, sensitivity, requiredness, and
+version. Producers and consumers MUST handle unknown or missing fields safely.
+Breaking semantic changes require review, compatibility planning, and evidence
+that dependent alerts, objectives, and investigations remain interpretable.
 
-Every stakeholder responsible for producing, correlating, consuming, or governing operational telemetry SHALL understand and follow this standard.
+Transformations such as parsing, redaction, enrichment, aggregation, and clock
+normalization SHOULD preserve provenance and disclose material information loss.
+Enrichment data is not inherently trustworthy and MUST NOT elevate authorization
+or identity claims.
 
----
+## 6. Evidence Quality
 
-# 4. Relationship with DESys
+Pipeline evidence SHOULD include source and receive times, schema version,
+transformation path, freshness, and quality flags where relevant. Consumers
+SHOULD monitor the telemetry path independently enough to detect its own outage,
+while avoiding recursive notification storms.
 
-This standard derives its engineering philosophy from:
+Validation SHOULD exercise malformed and oversized records, downstream outage,
+queue saturation, retry duplication, clock skew, schema mismatch, redaction
+failure, regional isolation, replay, and deletion from downstream copies.
 
-* DEC — DunderCode Engineering Canon
-* DEM — DunderCode Engineering Method
-* DCSG — DunderCode Canon Style Guide
-* DES-0700 — Observability Engineering Principles
-* DES-0710 — Logging Standard
-* DES-0720 — Metrics Standard
-* DES-0730 — Distributed Tracing Standard
-* DES-0740 — Alerting Standard
-* DES-0750 — Incident Detection Standard
-* DES-0760 — Service Health Standard
+## 7. Family References
 
-Operational Telemetry consolidates the outputs of observability disciplines into a unified engineering view of system behavior.
+- [Logging](DES-0710-logging-standard.md)
+- [Metrics](DES-0720-metrics-standard.md)
+- [Distributed Tracing](DES-0730-distributed-tracing-standard.md)
+- [Alerting](DES-0740-alerting-standard.md)
+- [Observability Governance](DES-0780-observability-governance.md)
 
----
+## 8. Revision History
 
-# 5. Operational Telemetry Principles
+### 1.1.0 - Draft
 
-Operational telemetry SHALL follow the principles defined below.
-
-## Unified Evidence
-
-Telemetry SHALL represent a coherent view of operational evidence.
-
-Logs, metrics, traces, alerts, incidents, and health states SHOULD be interpretable as related facets of the same operational reality.
-
----
-
-## Correlation
-
-Telemetry data SHOULD be correlatable across events, requests, systems, deployments, and configurations.
-
-Engineering teams SHOULD be able to relate operational evidence to a common context.
-
----
-
-## Context Preservation
-
-Operational context SHALL be preserved whenever practical.
-
-Telemetry SHOULD remain associated with business operations, technical components, and execution flows.
-
----
-
-## Traceability
-
-Telemetry SHALL support traceability across the software lifecycle.
-
-Engineering teams SHOULD be capable of relating operational evidence to versions, environments, deployments, and incidents.
-
----
-
-## Operational Relevance
-
-Telemetry SHALL represent information relevant to system operation, engineering diagnosis, or business understanding.
-
-Telemetry without operational value SHOULD NOT be retained.
-
----
-
-## Consistency
-
-Telemetry practices SHALL remain consistent across software systems.
-
-Equivalent operational situations SHOULD generate comparable telemetry context.
-
----
-
-## Timeliness
-
-Telemetry SHOULD support timely operational analysis and response.
-
-Delayed or stale telemetry SHOULD be minimized.
-
----
-
-## Security
-
-Telemetry SHALL protect sensitive information.
-
-Confidential or regulated data MUST NOT be exposed unnecessarily through telemetry flows.
-
----
-
-## Evolvability
-
-Telemetry capabilities SHALL evolve together with software systems.
-
-Engineering improvements SHOULD preserve correlation and historical interpretability whenever practical.
-
----
-
-# 6. Standard
-
-Every DESys-compliant software system SHALL define:
-
-* Telemetry objectives
-* Telemetry sources
-* Correlation strategy
-* Operational responsibilities
-* Validation process
-* Governance process
-
-Projects MAY implement different telemetry technologies provided they remain consistent with the engineering principles established by this standard.
-
----
-
-# 7. Mandatory Requirements
-
-Every software system developed under DESys MUST:
-
-* Produce operationally relevant telemetry.
-* Preserve context across observability signals.
-* Support evidence correlation.
-* Maintain telemetry traceability.
-* Protect sensitive telemetry content.
-* Define telemetry ownership.
-* Continuously improve telemetry quality.
-
----
-
-# 8. Operational Telemetry Lifecycle
-
-Operational telemetry SHALL follow a continuous engineering lifecycle.
-
-```text
-Telemetry Design
-        ↓
-Instrumentation
-        ↓
-Collection
-        ↓
-Correlation
-        ↓
-Operational Analysis
-        ↓
-Engineering Improvement
-```
-
-Telemetry SHALL continuously support understanding of software behavior throughout the lifecycle.
-
----
-
-# 9. Compliance
-
-A project complies with this standard when its operational telemetry practices satisfy the engineering requirements defined herein.
-
-Compliance SHALL be verified during architecture reviews, observability assessments, operational reviews, engineering audits, and DunderCode Assessment Reports (DAR).
-
----
-
-# 10. Relationship with Other Observability Standards
-
-Operational Telemetry consolidates the outputs of observability disciplines into a unified operational view.
-
-| Standard | Discipline                           |
-| -------- | ------------------------------------ |
-| DES-0700 | Observability Engineering Principles |
-| DES-0710 | Logging                              |
-| DES-0720 | Metrics                              |
-| DES-0730 | Distributed Tracing                  |
-| DES-0740 | Alerting                             |
-| DES-0750 | Incident Detection                   |
-| DES-0760 | Service Health                       |
-| DES-0770 | Operational Telemetry                |
-| DES-0780 | Observability Governance             |
-
-Together, these standards define the Observability Engineering Model adopted by DESys.
-
----
-
-# 11. References
-
-* DEC-0001 — DunderCode Engineering Canon
-* DEM-0001 — DunderCode Engineering Method
-* DCSG-0001 — DunderCode Canon Style Guide
-* DES-0700 — Observability Engineering Principles
-* DES-0710 — Logging Standard
-* DES-0720 — Metrics Standard
-* DES-0730 — Distributed Tracing Standard
-* DES-0740 — Alerting Standard
-* DES-0750 — Incident Detection Standard
-* DES-0760 — Service Health Standard
-
----
-
-# 12. Changelog
-
-## Version 1.0.0 (Draft)
-
-### Added
-
-* Initial Operational Telemetry Standard.
-* Defined engineering principles for unified operational evidence.
-* Established mandatory operational telemetry requirements.
-* Introduced the Operational Telemetry Lifecycle.
-* Positioned operational telemetry as the consolidated evidence layer of observability engineering.
+- Added pipeline topology and trust boundaries, bounded backpressure, explicit
+  drop disclosure, schema evolution, provenance, and failure-mode validation.

@@ -5,238 +5,96 @@ canonical_id: des.observability.alerting
 title: Alerting Standard
 node_type: standard
 document_class: normative
-version: 1.0.0
+version: 1.1.0
 status: draft
 language: en
 owner: DunderCode Engineering
 applies_to:
-- All software systems operating under DESys
+- Consumer systems that explicitly adopt this draft through their governance
+relationships:
+- type: references
+  target: rfc.corpus.reference-distribution
+- type: references
+  target: adr.corpus.layout-and-authority
+- type: references
+  target: dcsg.canon.style-guide
 ---
 
-# DES-0740 — Alerting Standard
+# DES-0740 - Alerting Standard
 
-# 1. Purpose
+## 1. Status and Authority
 
-The Alerting Standard defines the engineering requirements for designing, generating, managing, and governing operational alerts within the DunderCode Engineering System (DESys).
+This draft is reference-only and requires explicit consumer adoption. It does
+not define local paging obligations, severity, staffing, or response authority.
+Distribution follows
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md),
+and consumer governance remains authoritative under
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md).
+This draft is aligned with
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md).
+Uppercase terms are proposed requirements only after adoption.
 
-Its purpose is to establish technology-independent engineering principles that ensure operational alerts communicate significant system conditions, support timely engineering response, and contribute to reliable software operation.
+## 2. Purpose and Limits
 
-Alerting is considered a communication capability of observability engineering rather than a monitoring mechanism.
+An alert requests attention for a condition with a defined response. It is not
+proof of an incident or root cause. Not every anomaly needs notification, and
+not every notification should interrupt a person.
 
----
+## 3. Actionable Alert Definition
 
-# 2. Scope
+Each interrupting alert MUST identify:
 
-This standard applies to every software system developed, deployed, or operated under DESys.
+- the affected service or objective and observed condition;
+- user or operational impact, with uncertainty stated;
+- severity and routing rationale;
+- a current owner and expected first action;
+- supporting evidence, freshness, and known blind spots;
+- suppression, escalation, and resolution behavior;
+- a safe investigation reference maintained by the consumer.
 
-It defines engineering expectations for alert generation, alert quality, operational relevance, governance, and lifecycle management.
+An alert without a timely human action or separately approved automated response
+SHOULD be a dashboard, report, or recorded event instead. Notification content
+MUST minimize sensitive data because delivery channels may have broader access.
 
-Implementation details related to monitoring platforms, notification services, paging systems, messaging platforms, or cloud providers are intentionally excluded.
+## 4. Anti-Fatigue Controls
 
----
+Consumers SHOULD group related symptoms, deduplicate repeated notifications,
+route by ownership, and use delays or persistence windows appropriate to impact.
+Maintenance, testing, and known dependency failure SHOULD have explicit handling
+rather than ad hoc silencing.
 
-# 3. Audience
+Owners MUST review alert volume, repeated pages, false positives, false
+negatives, unowned alerts, time-to-acknowledge, and actions taken. Chronic noisy
+alerts SHOULD be repaired, downgraded, or retired. Fatigue and unsafe workload
+are design failures, not operator shortcomings.
 
-This standard is intended for:
+## 5. Testing and Change
 
-- Solution Architects
-- Software Architects
-- Platform Engineers
-- DevOps Engineers
-- Site Reliability Engineers
-- Software Engineers
-- Technical Leaders
-- AI-assisted engineering systems
+Before enabling an interrupting route, consumers SHOULD test signal absence,
+staleness, threshold boundaries, recovery, notification failure, duplicate
+delivery, ownership gaps, and dependency-wide events. Tests MUST avoid sending
+real secrets or causing unapproved production changes.
 
-Every stakeholder responsible for defining or responding to operational alerts SHALL understand and follow this standard.
+Material changes to thresholds, severity, routing, or automation SHOULD be
+reviewed and reversible. Alert evaluation SHOULD disclose sampled, delayed, or
+dropped telemetry that could suppress or trigger notifications.
 
----
+## 6. Evidence and Limits
 
-# 4. Relationship with DESys
+Useful evidence includes the definition, owner acceptance, test results,
+notification history, response outcomes, suppression history, and review
+decisions. Alert counts alone do not demonstrate reliability or preparedness.
 
-This standard derives its engineering philosophy from:
+## 7. Family References
 
-- DEC — DunderCode Engineering Canon
-- DEM — DunderCode Engineering Method
-- DCSG — DunderCode Canon Style Guide
-- DES-0700 — Observability Engineering Principles
-- DES-0710 — Logging Standard
-- DES-0720 — Metrics Standard
-- DES-0730 — Distributed Tracing Standard
+- [Metrics](DES-0720-metrics-standard.md)
+- [Incident Detection](DES-0750-incident-detection-standard.md)
+- [Service Health](DES-0760-service-health-standard.md)
+- [Observability Governance](DES-0780-observability-governance.md)
 
-Alerting transforms observable operational evidence into actionable engineering notifications.
+## 8. Revision History
 
----
+### 1.1.0 - Draft
 
-# 5. Alerting Principles
-
-Alerting SHALL follow the principles defined below.
-
-## Operational Relevance
-
-Alerts SHALL communicate operationally significant conditions.
-
-Insignificant events SHOULD NOT generate alerts.
-
----
-
-## Actionability
-
-Every alert SHOULD indicate a condition requiring engineering attention.
-
-Alerts without an expected response SHOULD NOT exist.
-
----
-
-## Timeliness
-
-Alerts SHALL be generated early enough to support effective operational response.
-
-Delayed notification SHOULD be minimized.
-
----
-
-## Signal over Noise
-
-Alerting SHOULD maximize useful operational signals while minimizing unnecessary notifications.
-
-Engineering teams SHOULD continuously reduce alert fatigue.
-
----
-
-## Clarity
-
-Alerts SHALL clearly communicate the observed operational condition.
-
-Recipients SHOULD understand why the alert was generated.
-
----
-
-## Traceability
-
-Alerts SHALL remain traceable to the operational evidence that triggered them.
-
-Engineering teams SHOULD be capable of relating alerts to logs, metrics, traces, deployments, and software versions.
-
----
-
-## Consistency
-
-Equivalent operational conditions SHOULD generate equivalent alerts.
-
-Alert definitions SHALL remain consistent across systems whenever practical.
-
----
-
-## Continuous Improvement
-
-Alert definitions SHALL evolve continuously through operational learning.
-
-False positives, false negatives, and obsolete alerts SHOULD be periodically reviewed.
-
----
-
-# 6. Standard
-
-Every DESys-compliant software system SHALL define:
-
-- Alerting objectives
-- Alert categories
-- Alert severity model
-- Operational responsibilities
-- Validation process
-- Governance process
-
-Projects MAY implement different alerting technologies provided they remain consistent with the engineering principles established by this standard.
-
----
-
-# 7. Mandatory Requirements
-
-Every software system developed under DESys MUST:
-
-- Generate operationally relevant alerts.
-- Preserve alert traceability.
-- Support engineering response.
-- Minimize unnecessary alerts.
-- Define alert ownership.
-- Periodically review alert quality.
-- Continuously improve alert effectiveness.
-
----
-
-# 8. Alerting Lifecycle
-
-Alerting SHALL follow a continuous engineering lifecycle.
-
-```text
-Alert Design
-        ↓
-Configuration
-        ↓
-Operational Detection
-        ↓
-Notification
-        ↓
-Engineering Response
-        ↓
-Evaluation
-        ↓
-Continuous Improvement
-```
-
-Alert definitions SHALL continuously evolve together with operational knowledge.
-
----
-
-# 9. Compliance
-
-A project complies with this standard when its alerting practices satisfy the engineering requirements defined herein.
-
-Compliance SHALL be verified during architecture reviews, observability assessments, operational reviews, engineering audits, and DunderCode Assessment Reports (DAR).
-
----
-
-# 10. Relationship with Other Observability Standards
-
-Alerting transforms operational evidence into engineering notifications.
-
-| Standard | Discipline |
-|----------|------------|
-| DES-0700 | Observability Engineering Principles |
-| DES-0710 | Logging |
-| DES-0720 | Metrics |
-| DES-0730 | Distributed Tracing |
-| DES-0740 | Alerting |
-| DES-0750 | Incident Detection |
-| DES-0760 | Service Health |
-| DES-0770 | Operational Telemetry |
-| DES-0780 | Observability Governance |
-
-Together, these standards define the Observability Engineering Model adopted by DESys.
-
----
-
-# 11. References
-
-- DEC-0001 — DunderCode Engineering Canon
-- DEM-0001 — DunderCode Engineering Method
-- DCSG-0001 — DunderCode Canon Style Guide
-- DES-0700 — Observability Engineering Principles
-- DES-0710 — Logging Standard
-- DES-0720 — Metrics Standard
-- DES-0730 — Distributed Tracing Standard
-
----
-
-# 12. Changelog
-
-## Version 1.0.0 (Draft)
-
-### Added
-
-- Initial Alerting Standard.
-- Defined engineering principles for operational alerting.
-- Established mandatory alert engineering requirements.
-- Introduced the Alerting Lifecycle.
-- Positioned alerting as the communication layer of observability engineering.
+- Added actionable-alert content, anti-fatigue controls, sensitive notification
+  handling, ownership, and failure-mode testing.

@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -52,6 +53,12 @@ class TestFrontMatter:
 
 
 class TestMetadataValidation:
+    def test_json_schema_has_stable_resource_id(self) -> None:
+        schema_path = Path("knowledge/architecture/metadata/desys-metadata.schema.json")
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+
+        assert schema["$id"] == "urn:uuid:22eb6a5c-efb9-5581-9ee5-e52435153086"
+
     def test_json_schema_matches_validator_contract(self) -> None:
         schema_path = Path("knowledge/architecture/metadata/desys-metadata.schema.json")
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
@@ -65,6 +72,25 @@ class TestMetadataValidation:
         assert set(properties["status"]["enum"]) == STATUSES
         relationship_enum = schema["$defs"]["relationship"]["properties"]["type"]["enum"]
         assert set(relationship_enum) == RELATIONSHIP_TYPES
+
+    def test_json_schema_patterns_reject_newline_terminated_values_under_search_semantics(self) -> None:
+        schema_path = Path("knowledge/architecture/metadata/desys-metadata.schema.json")
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        definitions = schema["$defs"]
+        relationship_target = definitions["relationship"]["properties"]["target"]
+
+        assert relationship_target == {"$ref": "#/$defs/canonicalId"}
+        cases = (
+            (schema["properties"]["document_id"]["pattern"], "DES-0200"),
+            (definitions["canonicalId"]["pattern"], "des.quality.code-quality"),
+            (definitions["legacyCanonicalId"]["pattern"], "des.code-quality"),
+            (definitions["canonicalId"]["pattern"], "des.quality.relationship-target"),
+            (schema["properties"]["version"]["pattern"], "1.0.0"),
+        )
+
+        for pattern, valid_value in cases:
+            assert re.search(pattern, valid_value) is not None
+            assert re.search(pattern, f"{valid_value}\n") is None
 
     def test_accepts_valid_metadata(self) -> None:
         issues = validate_document_metadata(

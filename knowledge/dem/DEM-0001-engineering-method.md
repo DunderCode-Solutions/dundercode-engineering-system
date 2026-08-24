@@ -14,250 +14,178 @@ relationships:
   target: dec.foundation.engineering-manifesto
 ---
 
-# DEM-0001 — The DunderCode Engineering Method
+# DEM-0001 - The DunderCode Engineering Method
 
-# 1. Purpose
+## 1. Status and Authority
 
-The DunderCode Engineering Method (DEM) defines the official engineering workflow used within the DunderCode Engineering System (DESys).
+This document is a draft normative method for work governed by DESys. Its
+requirements are proposals until an authorized lifecycle decision approves
+them. Draft metadata records that state; it does not itself provide approval.
 
-Its purpose is to transform engineering principles into a repeatable, traceable, and continuously improving development process.
+When this document is installed through the opt-in reference corpus, it is
+read-only reference guidance. It does not govern a consumer project, require
+every project to use this method, or override consumer code, runtime behavior,
+approved decisions, policies, contracts, or legal obligations. A consumer may
+adopt or adapt the method only through its own governance.
 
-The method provides a common language for engineers, ensuring that every project follows the same reasoning before implementation.
+## 2. Purpose
 
----
+The method offers a shared set of engineering concerns for moving from an
+uncertain need to a tested outcome and useful learning. It encourages explicit
+reasoning without treating documentation volume or phase completion as goals in
+themselves.
 
-# 2. Scope
+The [Engineering Manifesto](../../foundation/canon/DEC-0001-engineering-manifesto.md)
+provides related principles. This method proposes one way to apply them; neither
+document replaces project evidence or project-specific decisions.
 
-This method applies to every engineering initiative developed under DESys, including software products, internal tools, research projects, automation, documentation, and AI-assisted engineering.
+## 3. Scope and Tailoring
 
-Regardless of project size or technology, the engineering mindset remains the same.
+The method is intended for DESys engineering work and for consumers that
+explicitly adopt it. It may be useful for software, automation, research,
+documentation, and AI-assisted work, but it is not a universal project mandate.
 
----
+Teams select the depth, order, and artifacts that fit the work. Tailoring should
+consider:
 
-# 3. Relationship with the Engineering Canon
+- impact on users, operations, security, privacy, safety, and compliance;
+- uncertainty, novelty, complexity, and external dependencies;
+- reversibility and the cost of failure;
+- delivery urgency and the useful lifetime of the result;
+- available evidence and the needs of affected stakeholders.
 
-The Engineering Canon (DEC) defines **what we believe**.
+A small, reversible change may address all lifecycle concerns in a short issue
+and review. High-impact or difficult-to-reverse work may need explicit models,
+decisions, specifications, independent review, and operational evidence. A team
+should record a material omission or exception when doing so helps reviewers
+understand accepted risk. It need not create an artifact that adds no useful
+evidence or control.
 
-The Engineering Method (DEM) defines **how we work**.
+## 4. Lifecycle Model
 
-Every phase of this method exists to put the principles established in the Engineering Canon into practice.
-
----
-
-# 4. Engineering Philosophy
-
-Engineering is not the act of writing code.
-
-Engineering is the disciplined process of understanding problems, designing solutions, validating assumptions, and continuously improving knowledge.
-
-Implementation is only one phase of this process.
-
----
-
-# 5. The Engineering Lifecycle
-
-Every engineering initiative follows the same lifecycle.
+The lifecycle consists of seven concerns:
 
 ```text
-Understand
-        ↓
-Model
-        ↓
-Design
-        ↓
-Specify
-        ↓
-Implement
-        ↓
-Validate
-        ↓
-Learn
+Understand <-> Model <-> Design <-> Specify <-> Implement <-> Validate <-> Learn
 ```
 
-Each phase has a distinct purpose and must be completed before progressing to the next.
+The concerns are iterative rather than mandatory sequential gates. Work may
+move backward, combine concerns, run them concurrently, or revisit them as new
+evidence appears. The accountable project authority decides any required gates.
 
----
+## 5. Engineering Concerns
 
-# 6. Engineering Phases
+### 5.1 Understand
 
-## 6.1 Understand
+Establish the need, affected people, desired outcome, constraints, assumptions,
+and important unknowns. Useful evidence may include a problem statement,
+support or operational observations, stakeholder interviews, existing system
+behavior, and initial acceptance measures.
 
-The objective is to understand the problem before proposing solutions.
+Evidence should be current enough and representative enough for the decision.
+Stakeholder statements are inputs, not automatically complete requirements.
 
-Activities include:
+### 5.2 Model
 
-* Identifying stakeholders.
-* Understanding business objectives.
-* Exploring the domain.
-* Defining constraints.
-* Challenging assumptions.
+Represent the parts of the problem that materially affect the solution. A model
+may be prose, examples, a glossary, a state description, a data model, or a
+diagram. It is useful only while its abstractions and limitations are understood;
+it is not presumed to reproduce reality completely.
 
-Deliverables may include:
+### 5.3 Design
 
-* Problem Statement
-* Domain Notes
-* Initial Requirements
+Compare feasible approaches and identify important interfaces, data flows,
+failure modes, tradeoffs, and recovery options. Record a decision when its
+impact, irreversibility, or future maintenance cost warrants a durable rationale.
+Routine implementation choices do not all require architecture records.
 
----
+### 5.4 Specify
 
-## 6.2 Model
+State the behavior and constraints that implementers and reviewers need. The
+form may be acceptance criteria, examples, an interface contract, a risk
+control, or a larger specification. Detail should match the cost of ambiguity;
+it need not predict every implementation detail before work begins.
 
-The objective is to represent reality before designing software.
+### 5.5 Implement
 
-Activities include:
+Create the smallest maintainable change that satisfies the adopted constraints.
+Applicable consumer standards and approved decisions take precedence over
+vendored DESys guidance. Material behavior, assumptions, and operator-facing
+effects should be documented where future users can maintain them.
 
-* Domain modeling.
-* Ubiquitous language.
-* Entity identification.
-* Relationships.
-* Business rules.
+### 5.6 Validate
 
-Deliverables may include:
+Evaluate both the result and the assumptions behind it. Depending on risk,
+evidence may include focused automated tests, static analysis, review,
+experiments, security assessment, accessibility checks, observed runtime
+behavior, recovery exercises, or acceptance by an authorized stakeholder.
 
-* Domain Model
-* Glossary
-* Context Diagrams
+Validation supports bounded claims. Passing tests does not prove all behavior,
+and documentation agreement does not prove runtime correctness. Negative,
+inconclusive, stale, or conflicting evidence should be reported rather than
+silently converted into a successful result.
 
----
+### 5.7 Learn
 
-## 6.3 Design
+Compare outcomes with expectations and decide whether a local adjustment or a
+governed DESys proposal is worthwhile. Useful inputs may include incidents,
+support trends, delivery data, retrospective findings, and user research.
 
-The objective is to transform the domain model into an engineering solution.
+Feedback should be collected for a defined question and handled under applicable
+privacy, consent, retention, and access rules. Small samples, self-selection,
+and missing feedback limit the conclusions that can be drawn. A project is not
+required to contribute information to DESys, and a lesson does not become a
+standard without review and lifecycle approval.
 
-Activities include:
+## 6. Urgent Work
 
-* Architecture.
-* Component design.
-* Interfaces.
-* Data flow.
-* Technical decisions.
+An incident, security response, or other time-critical condition may require
+implementation or containment before normal analysis and documentation. The
+method should not delay action needed to protect people, data, service, or legal
+obligations.
 
-Deliverables may include:
+The response should apply the minimum controls practical in the circumstances:
 
-* Architecture Diagrams
-* ADRs
-* Technical Specifications
+- identify an accountable decision-maker and the immediate objective;
+- preserve relevant evidence without impeding containment;
+- consider blast radius, access, safety, and a rollback or recovery path;
+- validate the immediate effect with the strongest available signal;
+- record material decisions, uncertainty, and deferred work.
 
----
+After stabilization, the team should complete only the analysis, validation,
+documentation, and learning justified by residual risk. Consumer incident and
+emergency policies remain authoritative.
 
-## 6.4 Specify
+## 7. Typical Evidence and Artifacts
 
-The objective is to document the solution before implementation.
+No artifact is mandatory merely because it appears in this table.
 
-Activities include:
+| Concern | Examples |
+| --- | --- |
+| Understand | Problem statement, observations, constraints, outcome measures |
+| Model | Examples, glossary, state or data model, context diagram |
+| Design | Options analysis, prototype, architecture decision, threat model |
+| Specify | Acceptance criteria, interface contract, operational constraints |
+| Implement | Source change, configuration, migration, supporting documentation |
+| Validate | Test results, review record, runtime observation, recovery exercise |
+| Learn | Outcome comparison, incident finding, retrospective, change proposal |
 
-* Standards selection.
-* API contracts.
-* Acceptance criteria.
-* Documentation.
-* Review.
+Evidence may serve more than one concern. Links to durable evidence are often
+more useful than copied summaries that can become stale.
 
-Deliverables may include:
+## 8. Outcome Assessment
 
-* PRDs
-* RFCs
-* Standards
-* Specifications
+The adopting project defines success criteria before making a conformance or
+completion claim. Assessment should account for the intended outcome, accepted
+risk, observed behavior, maintainability, and unresolved evidence. Completion
+of seven labels, production of every example artifact, or incorporation of a
+lesson into DESys is not by itself evidence of project success.
 
----
+## 9. Distribution and Editorial Context
 
-## 6.5 Implement
-
-Implementation transforms validated knowledge into software.
-
-Implementation should follow:
-
-* Engineering Standards.
-* Reference Blueprints.
-* Coding Standards.
-* Testing Standards.
-
-Code should never introduce undocumented behavior.
-
----
-
-## 6.6 Validate
-
-Engineering validates both software and knowledge.
-
-Validation includes:
-
-* Functional tests.
-* Technical review.
-* Architectural review.
-* Documentation review.
-* User validation.
-
-Validation ensures that implementation faithfully reflects the documented design.
-
----
-
-## 6.7 Learn
-
-Every project must improve DESys.
-
-Lessons learned are converted into:
-
-* Better standards.
-* Better methods.
-* Better documentation.
-* Better blueprints.
-* Better products.
-
-Knowledge is the final deliverable of every engineering project.
-
----
-
-# 7. Engineering Deliverables
-
-Each phase produces reusable engineering assets.
-
-| Phase      | Typical Deliverables                  |
-| ---------- | ------------------------------------- |
-| Understand | Problem Statement, Requirements       |
-| Model      | Domain Model, Glossary                |
-| Design     | Architecture, ADRs                    |
-| Specify    | RFCs, PRDs, Standards                 |
-| Implement  | Source Code, Tests                    |
-| Validate   | Test Reports, Reviews                 |
-| Learn      | Canon Improvements, Standards Updates |
-
-Engineering is measured by the quality of its deliverables, not only by the quantity of code produced.
-
----
-
-# 8. Continuous Improvement
-
-The engineering lifecycle is iterative.
-
-Every completed project strengthens DESys through continuous feedback and refinement.
-
-Improvements are documented before becoming standards.
-
----
-
-# 9. Success Criteria
-
-An engineering initiative is considered successful when:
-
-* The problem is understood.
-* The domain is correctly modeled.
-* The solution is well designed.
-* Documentation is complete.
-* Implementation follows standards.
-* Validation confirms the intended behavior.
-* Lessons learned are incorporated into DESys.
-
-Success is measured by sustainable knowledge, not only by delivered software.
-
----
-
-# 10. Closing Statement
-
-The DunderCode Engineering Method transforms engineering from an activity into a disciplined system of continuous learning.
-
-By consistently following this method, every project contributes not only to its own success but also to the evolution of the DunderCode Engineering System.
-
----
-
-> **Think First. Build Better.**
+The [reference corpus RFC](../rfc/RFC-0001-reference-corpus-distribution.md) and
+[authority ADR](../adr/ADR-0001-reference-corpus-layout-and-authority.md) define
+opt-in distribution, ownership, provenance, and consumer authority. The
+[Canon Style Guide](../../foundation/documentation/DCSG-0001-canon-style-guide.md)
+defines the draft editorial conventions used by this document. Vendoring any of
+these documents does not approve or activate the method for a consumer project.

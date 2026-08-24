@@ -10,238 +10,115 @@ status: draft
 language: en
 owner: DunderCode Engineering
 applies_to:
-- All infrastructure definitions managed under DESys
+- Consumer infrastructure-as-code practices that explicitly adopt this draft guidance
+relationships:
+- type: references
+  target: rfc.corpus.reference-distribution
+- type: references
+  target: adr.corpus.layout-and-authority
+- type: references
+  target: dcsg.canon.style-guide
 ---
 
-# DES-0620 — Infrastructure as Code Standard
-
-# 1. Purpose
-
-The Infrastructure as Code (IaC) Standard defines the engineering requirements for managing infrastructure through version-controlled, declarative, and reproducible definitions within the DunderCode Engineering System (DESys).
-
-Its purpose is to establish technology-independent engineering principles that ensure infrastructure evolves consistently, predictably, and safely throughout its lifecycle.
-
-Infrastructure is considered software and SHALL therefore follow the same engineering discipline applied to application code.
-
----
-
-# 2. Scope
-
-This standard applies to every infrastructure definition managed under DESys.
-
-It defines engineering expectations for infrastructure specification, provisioning, versioning, validation, reproducibility, governance, and lifecycle management.
-
-Implementation details related to Terraform, Pulumi, CloudFormation, Kubernetes manifests, Ansible, or any other Infrastructure as Code technology are intentionally excluded.
-
----
-
-# 3. Audience
-
-This standard is intended for:
-
-- Solution Architects
-- Platform Engineers
-- DevOps Engineers
-- Site Reliability Engineers
-- Infrastructure Engineers
-- Software Engineers
-- Technical Leaders
-- AI-assisted engineering systems
-
-Every stakeholder responsible for designing, provisioning, or maintaining infrastructure SHALL understand and follow this standard.
-
----
-
-# 4. Relationship with DESys
-
-This standard derives its engineering philosophy from:
-
-- DEC — DunderCode Engineering Canon
-- DEM — DunderCode Engineering Method
-- DCSG — DunderCode Canon Style Guide
-- DES-0600 — Deployment Engineering Principles
-- DES-0610 — Environment Management Standard
-
-Infrastructure as Code provides the engineering model for provisioning and evolving software environments.
-
----
-
-# 5. Infrastructure as Code Principles
-
-Infrastructure engineering SHALL follow the principles defined below.
-
-## Infrastructure as Software
-
-Infrastructure SHALL be managed as engineering artifacts.
-
-Infrastructure definitions MUST be version-controlled.
-
----
-
-## Declarative Definition
-
-Infrastructure SHOULD be described declaratively whenever practical.
-
-Desired system state SHOULD be explicitly represented.
-
----
-
-## Reproducibility
-
-Infrastructure definitions SHALL produce reproducible environments.
-
-Equivalent definitions SHOULD generate equivalent infrastructure.
-
----
-
-## Version Control
-
-Infrastructure definitions SHALL be maintained under version control.
-
-Infrastructure evolution SHALL remain traceable.
-
----
-
-## Automation
-
-Infrastructure provisioning SHOULD be automated.
-
-Manual infrastructure creation SHOULD be minimized and explicitly justified.
-
----
-
-## Idempotency
-
-Infrastructure provisioning SHOULD be repeatable without producing unintended side effects.
-
-Repeated execution SHOULD converge toward the desired state.
-
----
-
-## Traceability
-
-Infrastructure changes SHALL remain traceable.
-
-Infrastructure history SHOULD support auditing and engineering review.
-
----
-
-## Security
-
-Infrastructure definitions SHALL support organizational security requirements.
-
-Sensitive configuration MUST be protected appropriately.
-
----
-
-## Evolvability
-
-Infrastructure SHALL evolve through controlled engineering processes.
-
-Changes SHOULD preserve operational stability.
-
----
-
-# 6. Standard
-
-Every DESys-compliant infrastructure definition SHALL specify:
-
-- Infrastructure purpose
-- Desired state
-- Versioning strategy
-- Provisioning process
-- Validation approach
-- Governance responsibilities
-- Lifecycle expectations
-
-Projects MAY adopt different Infrastructure as Code technologies provided they remain consistent with the engineering principles established by this standard.
-
----
-
-# 7. Mandatory Requirements
-
-Every infrastructure definition developed under DESys MUST:
-
-- Be version-controlled.
-- Be reproducible.
-- Support automated provisioning.
-- Preserve infrastructure traceability.
-- Define governance responsibilities.
-- Support controlled evolution.
-- Follow engineering review processes.
-
----
-
-# 8. Infrastructure Lifecycle
-
-Infrastructure SHALL follow a controlled engineering lifecycle.
-
-```text
-Infrastructure Design
-          ↓
-Definition
-          ↓
-Version Control
-          ↓
-Provisioning
-          ↓
-Validation
-          ↓
-Operational Use
-          ↓
-Continuous Evolution
-```
-
-Infrastructure SHALL remain reproducible throughout its lifecycle.
-
----
-
-# 9. Compliance
-
-A project complies with this standard when its Infrastructure as Code practices satisfy the engineering requirements defined herein.
-
-Compliance SHALL be verified during architecture reviews, infrastructure assessments, deployment reviews, engineering audits, and DunderCode Assessment Reports (DAR).
-
----
-
-# 10. Relationship with Other Deployment Standards
-
-Infrastructure as Code defines how execution environments are provisioned and evolved.
-
-| Standard | Discipline |
-|----------|------------|
-| DES-0600 | Deployment Engineering Principles |
-| DES-0610 | Environment Management |
-| DES-0620 | Infrastructure as Code |
-| DES-0630 | Configuration Management |
-| DES-0640 | Release Engineering |
-| DES-0650 | Deployment Strategies |
-| DES-0660 | Rollback & Recovery |
-| DES-0670 | Operational Readiness |
-| DES-0680 | Deployment Governance |
-
-Together, these standards define the Deployment Engineering Model adopted by DESys.
-
----
-
-# 11. References
-
-- DEC-0001 — DunderCode Engineering Canon
-- DEM-0001 — DunderCode Engineering Method
-- DCSG-0001 — DunderCode Canon Style Guide
-- DES-0600 — Deployment Engineering Principles
-- DES-0610 — Environment Management Standard
-
----
-
-# 12. Changelog
-
-## Version 1.0.0 (Draft)
-
-### Added
-
-- Initial Infrastructure as Code Standard.
-- Defined engineering principles for declarative infrastructure management.
-- Established mandatory requirements for infrastructure engineering.
-- Introduced the Infrastructure Lifecycle.
-- Defined the relationship between Infrastructure as Code and the remaining Deployment Standards.
+# DES-0620 - Infrastructure as Code Standard
+
+## 1. Status and Authority
+
+This standard is draft, reference-only guidance. Its opt-in distribution under
+[RFC-0001 - Reference Corpus Distribution](../../rfc/RFC-0001-reference-corpus-distribution.md)
+and the authority boundaries in
+[ADR-0001 - Reference Corpus Layout and Authority](../../adr/ADR-0001-reference-corpus-layout-and-authority.md)
+do not authorize infrastructure changes or select a tool for a consumer. The
+project owns adoption, provider choices, access, review, and risk decisions. This
+draft is aligned with and reviewed against the draft
+[DCSG-0001 - DunderCode Canon Style Guide](../../../foundation/documentation/DCSG-0001-canon-style-guide.md),
+which does not grant lifecycle approval.
+
+## 2. Purpose and Scope
+
+Infrastructure as code (IaC) means managing relevant infrastructure intent as
+reviewable definitions and controlled inputs. This document covers definitions,
+dependencies, execution plans, state, secrets, review, drift, and evidence. It
+supports declarative and imperative approaches and does not require one provider,
+language, state backend, or versioning scheme.
+
+## 3. Source and Dependency Control
+
+Material definitions should be version-controlled and linked to an accountable
+owner. Generated files and reusable modules should have reviewable sources.
+Provider, module, image, package, and plugin dependencies should be constrained
+to project-approved versions or immutable identities, with integrity verification
+where supported. Updates should be deliberate and reviewed rather than resolved
+from an unbounded mutable source during deployment.
+
+Pinning reduces unintended change but can retain defects. Projects should define
+how dependency updates, compatibility review, and urgent fixes are handled.
+
+## 4. State and Secrets
+
+When an IaC system uses state, the project should define:
+
+- authoritative location and environment boundary;
+- access control, encryption, locking or concurrency protection, and backup;
+- retention, recovery, migration, and disposal procedures;
+- handling for partial writes, stale locks, imports, and state repair;
+- controls preventing state content from entering logs or public artifacts.
+
+State can contain credentials or other sensitive values even when definitions do
+not. Secrets should be referenced through a project-approved secret channel, not
+stored in source, plan artifacts, state, or logs unless the chosen system cannot
+avoid it and compensating controls are recorded. Secret values should not be used
+as stable identifiers when rotation would force unsafe replacement.
+
+## 5. Review and Execution
+
+A material infrastructure change should separate, where practical:
+
+1. validation of syntax, policy, dependencies, and target context;
+2. generation of a change plan against a known state revision;
+3. human or policy review of additions, replacements, deletions, access changes,
+   data effects, cost, and blast radius;
+4. approval by project-designated authority;
+5. bounded execution of the reviewed revision;
+6. post-change validation and evidence capture.
+
+If the platform cannot guarantee that the reviewed plan equals execution, the
+project should revalidate material differences before proceeding. Plan files may
+contain sensitive data and should receive corresponding access and retention.
+
+Destructive operations, broad target selection, imports, and state repair need
+explicit scope confirmation and a recovery decision. Automation should limit
+concurrency, retries, duration, and credentials, and stop when state, target, or
+approval assumptions no longer hold.
+
+## 6. Drift and Exceptions
+
+Drift is a difference between intended and observed state. Detection should
+report enough context for an owner to classify it as expected, unauthorized,
+emergency, externally managed, or stale definition. Automatic reconciliation is
+appropriate only within preapproved resource, impact, and timing bounds.
+
+Emergency or manual changes should be recorded and then imported, represented,
+or removed according to a project decision. Ignoring drift indefinitely weakens
+the source of truth; automatically overwriting it may worsen an incident.
+
+## 7. Evidence
+
+Useful evidence includes the reviewed definition revision, dependency lock or
+resolution record, target and state identity, redacted plan summary, reviewers
+and approval, executor identity, timestamps, outcome, validation, drift status,
+and exceptions. Evidence should not duplicate secret values.
+
+## 8. Related Guidance
+
+- [Deployment principles](DES-0600-deployment-engineering-principles.md)
+- [Environment management](DES-0610-environment-management.md)
+- [Configuration management](DES-0630-configuration-management.md)
+- [Rollback and recovery](DES-0660-rollback-recovery.md)
+- [Deployment governance](DES-0680-deployment-governance.md)
+
+## 9. Limitations
+
+IaC improves reviewability and repeatability but does not guarantee convergence,
+security, recoverability, or absence of provider-side change. Runtime evidence
+and project-owned controls remain necessary.
