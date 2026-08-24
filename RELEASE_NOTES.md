@@ -1,23 +1,22 @@
-# DESys v0.1.0-alpha.1 Release Notes
+# DESys v0.1.0-alpha.2 Release Notes
 
-DESys `v0.1.0-alpha.1` is the first validated foundation release of the
-DunderCode Engineering System documentation platform.
+DESys `v0.1.0-alpha.2` is a corrective release of the first validated foundation
+of the DunderCode Engineering System documentation platform.
 
-## Highlights
+## Correction
 
-- Canonical metadata validation for 278 engineering documents.
-- Deterministic index, graph, navigation, alias, and search artifacts.
-- Non-destructive and idempotent consumer scaffolding through
-  `desys-project-init`.
-- Isolated Python 3.12 tooling that preserves consumer runtimes and lockfiles.
-- Local and GitHub Actions documentation quality gates.
-- Vendor-neutral `AGENTS.md` instructions for source authority, lifecycle,
-  governance gaps, relationship direction, language consistency, and generated
-  artifacts.
+- Restores the complete MIT License text and the copyright notice for
+  DunderCode Solutions.
+- Adds a release gate that rejects an empty `LICENSE` file.
+- Supersedes `v0.1.0-alpha.1`, whose source and package artifacts contained an
+  empty license file despite declaring the MIT License.
+
+There are no runtime, metadata-schema, indexer, or consumer-scaffold behavior
+changes in this release.
 
 ## Validation
 
-- 40 automated tests pass.
+- 40 automated tests pass, and the license-presence gate passes.
 - 278 documents validate with zero errors.
 - Five generated artifacts are cross-consistent and deterministic.
 - Pilot A passed new-project, documentation, negative, recovery, AI, cache, and
@@ -28,7 +27,7 @@ DunderCode Engineering System documentation platform.
 
 ## Distribution
 
-This alpha is distributed from the public
+This corrective alpha is distributed from the public
 [DunderCode-Solutions/dundercode-engineering-system](https://github.com/DunderCode-Solutions/dundercode-engineering-system)
 repository. It is not published to PyPI. Resolve the release tag to its full
 commit SHA and follow the initialization commands in the repository README.
@@ -43,7 +42,7 @@ limitations statement.
 
 ## Upgrade Policy
 
-This is an alpha release. Managed scaffold files are protected by conflict
+This remains an alpha release. Managed scaffold files are protected by conflict
 preflight rather than silently overwritten. Review release changes, run
 `desys-project-init --dry-run`, and resolve any managed-file differences before
 applying a future candidate.

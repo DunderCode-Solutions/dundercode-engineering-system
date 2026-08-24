@@ -1,6 +1,6 @@
 # DESys Development Checkpoint
 
-Last updated: 2026-08-21
+Last updated: 2026-08-24
 
 ## Current State
 
@@ -24,8 +24,8 @@ The latest verified result is:
 - Python wheel built and smoke-tested in an isolated environment;
 - build ID `sha256:c0df150d39a2c9f12f74fe5a92267d54364ebe2be5bf8b1b01507e8875f104c6`.
 
-The current release candidate uses PEP 440 package version `0.1.0a1` and public
-release label `v0.1.0-alpha.1`.
+The current corrective release uses PEP 440 package version `0.1.0a2` and public
+release label `v0.1.0-alpha.2`.
 
 ## Completed Milestone
 
@@ -49,9 +49,10 @@ The implemented scope covers:
 
 ## Next Milestone
 
-Pilot A and Pilot B are complete. The next milestone is to merge the release
-candidate, create the immutable `v0.1.0-alpha.1` tag, verify public installation
-from its resolved full SHA, and publish the GitHub release.
+Pilot A and Pilot B are complete, and `v0.1.0-alpha.1` was published. The current
+milestone is to publish `v0.1.0-alpha.2` with the restored MIT License text,
+verify public installation from its immutable tag, and supersede the previous
+alpha for new consumers.
 
 The required evidence, scenarios, and go/no-go criteria are defined in
 [`DESYS-V0.1-PILOT-VALIDATION-PLAN.md`](DESYS-V0.1-PILOT-VALIDATION-PLAN.md).
