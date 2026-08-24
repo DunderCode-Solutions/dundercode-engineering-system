@@ -10,7 +10,7 @@ The **DunderCode Engineering System (DESys)** is an engineering platform that tr
 
 | Attribute | Value |
 |-----------|-------|
-| **Release** | v0.1.0-alpha.1 |
+| **Release** | v0.1.0-alpha.2 |
 | **Status** | Alpha Release |
 | **Phase** | Pilot Validation Complete |
 | **Documentation** | Validated |
@@ -451,13 +451,13 @@ The gate validates canonical metadata, tests the tooling, renders deterministic 
 ## Consumer Project Initialization
 
 Use `desys-project-init` to scaffold DESys documentation tooling in an existing
-Git repository. DESys `v0.1.0-alpha.1` is distributed from the official public
+Git repository. DESys `v0.1.0-alpha.2` is distributed from the official public
 GitHub repository. Resolve the immutable release tag to its full commit SHA
 before initialization so the generated quality gate preserves the same source:
 
 ```bash
 DESYS_REPOSITORY="https://github.com/DunderCode-Solutions/dundercode-engineering-system.git"
-DESYS_RELEASE_TAG="v0.1.0-alpha.1"
+DESYS_RELEASE_TAG="v0.1.0-alpha.2"
 DESYS_RELEASE_COMMIT_SHA="$(
   git ls-remote "$DESYS_REPOSITORY" \
     "refs/tags/$DESYS_RELEASE_TAG" \

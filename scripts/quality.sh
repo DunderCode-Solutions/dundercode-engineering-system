@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+test -s LICENSE
+
 uv sync --locked --group dev
 
 uv run ruff check tools tests
