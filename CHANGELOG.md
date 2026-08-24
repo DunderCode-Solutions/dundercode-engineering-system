@@ -2,6 +2,20 @@
 
 All notable changes to DESys are documented in this file.
 
+## [0.1.0-alpha.2] - 2026-08-24
+
+### Fixed
+
+- Restored the complete MIT License text and copyright notice in `LICENSE`.
+- Added a quality-gate check that prevents packaging when `LICENSE` is empty.
+
+### Compatibility
+
+- Runtime behavior and the consumer scaffold are unchanged from
+  `v0.1.0-alpha.1`.
+- Consumers should use `v0.1.0-alpha.2` because the previous release artifact
+  carried an empty license file.
+
 ## [0.1.0-alpha.1] - 2026-08-21
 
 ### Added
