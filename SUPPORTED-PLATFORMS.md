@@ -1,6 +1,6 @@
 # Supported Platforms And Known Limitations
 
-This document applies to DESys `v0.1.0-alpha.1`.
+This document applies to DESys `v0.1.0-alpha.2`.
 
 ## Supported Tool Host
 
