@@ -4,8 +4,9 @@
 corpus proposed by RFC-0001 and ADR-0001.
 
 The inventory covers every Markdown file in the configured `foundation/`,
-`knowledge/`, `engineering/`, `delivery/`, and `skills/` source roots. Coverage
-does not imply approval for public distribution.
+`knowledge/`, `engineering/`, `delivery/`, and `skills/` source roots, plus each
+non-Markdown asset explicitly allowlisted in `assets.yaml`. Coverage does not
+imply approval for public distribution.
 
 ## Distribution States
 
@@ -27,6 +28,7 @@ navigation or supplemental files remain `excluded` with `empty-file`.
 | `document` | Yes | Non-empty, identifier-bearing document with canonical metadata. |
 | `navigation` | No | Collection README used for human navigation. |
 | `placeholder` | No | Empty identifier-bearing file reserved for future work. |
+| `schema` | No | Machine-readable contract required by distributed documents. |
 | `supplemental` | No | Other Markdown content outside the managed identifier contract. |
 
 ## Commands
@@ -46,3 +48,7 @@ uv run desys-corpus-inventory --check
 Manual review changes only `distribution`, `review_owner`, and, for excluded
 entries, `exclusion_reason`. Source paths, targets, metadata fields, and checksums
 are generated and validated.
+
+Non-Markdown files MUST be declared in `assets.yaml`. Paths must identify regular
+files inside the repository; symlinks, traversal, duplicate entries, and implicit
+directory inclusion are rejected.

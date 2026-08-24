@@ -11,10 +11,10 @@ entries:
   target: docs/desys/reference/delivery/README.md
   collection: delivery
   classification: navigation
-  distribution: pending
+  distribution: approved
   indexable: false
   review_owner: DunderCode Engineering
-  checksum: sha256:8432c9f5e8b67c16d8065253575e7b412ae09183a9e844ba4513c8d0b58de510
+  checksum: sha256:649a37d9b6636b05e1e90d1933202d0f566de606adadf1143b785c28f1b66383
 - source: delivery/ci-cd/README.md
   target: docs/desys/reference/delivery/ci-cd/README.md
   collection: delivery
@@ -28,18 +28,18 @@ entries:
   target: docs/desys/reference/delivery/deployment/README.md
   collection: delivery
   classification: navigation
-  distribution: pending
+  distribution: approved
   indexable: false
   review_owner: DunderCode Engineering
-  checksum: sha256:87295a8b3838637c4321459ac86920f23c9679afd3ddca51aa46d504d99948f5
+  checksum: sha256:c20b4e53ec7ee39db74bcdb32341918ade4440e89f2b6324245882340e1b4a7e
 - source: delivery/observability/README.md
   target: docs/desys/reference/delivery/observability/README.md
   collection: delivery
   classification: navigation
-  distribution: pending
+  distribution: approved
   indexable: false
   review_owner: DunderCode Engineering
-  checksum: sha256:11d4139d69fefe2a0164f6fb0dcd9f3cd3353830ab10a3cecfeaeb50a691a42f
+  checksum: sha256:e4a043a87021889801632387359dd9839d968c2d2a7234133f106491a7e0924d
 - source: delivery/operations/README.md
   target: docs/desys/reference/delivery/operations/README.md
   collection: delivery
@@ -53,10 +53,10 @@ entries:
   target: docs/desys/reference/delivery/release/README.md
   collection: delivery
   classification: navigation
-  distribution: pending
+  distribution: approved
   indexable: false
   review_owner: DunderCode Engineering
-  checksum: sha256:d126bc72943b9ae856adb12c744fbec338e19cce0487904f3bfb6320ffea6ca1
+  checksum: sha256:7215ef71e14cfcf6a26669bf8638478fdba48bc0d8a24d7e35ff5ec2e5e79488
 - source: delivery/support/README.md
   target: docs/desys/reference/delivery/support/README.md
   collection: delivery
@@ -400,18 +400,18 @@ entries:
   target: docs/desys/reference/foundation/README.md
   collection: foundation
   classification: navigation
-  distribution: pending
+  distribution: approved
   indexable: false
   review_owner: DunderCode Engineering
-  checksum: sha256:6e488d9360c42b9b88f8d4c34bc2e8985dc8880117e88fa168b1cbe1c0fc0a59
+  checksum: sha256:c5137a24dce9a3a81a9afd46f3739d2029007043f4df10ffbce088a3cdb2e277
 - source: foundation/canon/DEC-0001-engineering-manifesto.md
   target: docs/desys/reference/foundation/canon/DEC-0001-engineering-manifesto.md
   collection: foundation
   classification: document
-  distribution: pending
+  distribution: approved
   indexable: true
   review_owner: DunderCode Engineering
-  checksum: sha256:63d134525c311cf58974654eb6bafebe1df99be5175e3315b33460e409166298
+  checksum: sha256:4f280539cfd3ac06ebb173b450f32550016c3351af02bc7984bcd441e7a6cfa5
   document_id: DEC-0001
   canonical_id: dec.foundation.engineering-manifesto
   metadata_status: draft
@@ -419,18 +419,18 @@ entries:
   target: docs/desys/reference/foundation/canon/README.md
   collection: foundation
   classification: navigation
-  distribution: pending
+  distribution: approved
   indexable: false
   review_owner: DunderCode Engineering
-  checksum: sha256:1e2ee5d265a2d99c1622e2fbc313b9245554bc24d450b2fe6c48769f3ec7bd50
+  checksum: sha256:45c6340a28954819d0374de85f5c47afa5e820b2cf0d1498d8c2988c5dc15525
 - source: foundation/documentation/DCSG-0001-canon-style-guide.md
   target: docs/desys/reference/foundation/documentation/DCSG-0001-canon-style-guide.md
   collection: foundation
   classification: document
-  distribution: pending
+  distribution: approved
   indexable: true
   review_owner: DunderCode Engineering
-  checksum: sha256:80f3e669ae2c1d65db09c55842cec2f751503389e5647e9bfe483c91a82ccafa
+  checksum: sha256:0311307e22b222024c840f84a3e5e518b6945a77a9b4818774af1c574c496bfe
   document_id: DCSG-0001
   canonical_id: dcsg.canon.style-guide
   metadata_status: draft
@@ -438,10 +438,10 @@ entries:
   target: docs/desys/reference/foundation/documentation/README.md
   collection: foundation
   classification: navigation
-  distribution: pending
+  distribution: approved
   indexable: false
   review_owner: DunderCode Engineering
-  checksum: sha256:44be875a48f93b8a1bc430c9f81b3e55a6d1b8925959ae6b7fc4577920314420
+  checksum: sha256:51a28eff8164d1509b19a726f68321171377ee482bd1fc66e274c86891023d36
 - source: foundation/glossary/README.md
   target: docs/desys/reference/foundation/glossary/README.md
   collection: foundation
@@ -482,18 +482,18 @@ entries:
   target: docs/desys/reference/foundation/method/README.md
   collection: foundation
   classification: navigation
-  distribution: pending
+  distribution: approved
   indexable: false
   review_owner: DunderCode Engineering
-  checksum: sha256:8d57b8372e97a77561c41edfee759b8675cf8f67955e36ad016e668e6a44bf0e
+  checksum: sha256:25a9b577b41a103514c9cfc4b9a82cd72a9f84ed56eade041d2d7b8dc7e3c8b8
 - source: foundation/style-guide/README.md
   target: docs/desys/reference/foundation/style-guide/README.md
   collection: foundation
   classification: navigation
-  distribution: pending
+  distribution: approved
   indexable: false
   review_owner: DunderCode Engineering
-  checksum: sha256:ec898acc483cbb37e88e5bb0a6dec696a5a24101d96c375966d292a0c08a58b3
+  checksum: sha256:09c131694a0863e42400f96cf73f1bea71daf215bc6f0611749b2ac4785d9bd1
 - source: knowledge/README.md
   target: docs/desys/reference/knowledge/README.md
   collection: knowledge
@@ -637,6 +637,14 @@ entries:
   indexable: false
   review_owner: DunderCode Engineering
   checksum: sha256:a3a8bb7bab5b5a9ad965dd0be339935c6d179eeb4aea20cb9956e15899f7cb3c
+- source: knowledge/architecture/metadata/desys-metadata.schema.json
+  target: docs/desys/reference/knowledge/architecture/metadata/desys-metadata.schema.json
+  collection: knowledge
+  classification: schema
+  distribution: pending
+  indexable: false
+  review_owner: DunderCode Engineering
+  checksum: sha256:cb129f118c5b0c80f39154f1e3a485ddf8a28ed6b93c39453786452d7ab9b956
 - source: knowledge/architecture/node-types/README.md
   target: docs/desys/reference/knowledge/architecture/node-types/README.md
   collection: knowledge

@@ -1,146 +1,67 @@
-# Delivery Layer
+# Delivery
 
-The Delivery Layer defines the operational practices that transform engineering assets into reliable, production-ready software.
+The Delivery collection provides navigation from engineering output to release,
+deployment, and operational evidence. It describes reusable DESys guidance; it
+does not automatically define a consumer project's production policy.
 
-While the Foundation Layer establishes engineering principles, the Knowledge Layer organizes engineering knowledge, and the Engineering Layer provides implementation guidance, the Delivery Layer ensures that software is built, released, deployed, operated, and supported consistently throughout its lifecycle.
+Consumer projects identify their own release approvers, service objectives,
+environments, security controls, incident processes, and acceptable risk. When
+project evidence conflicts with vendored DESys guidance, the project's code,
+runtime behavior, and approved decisions take precedence.
 
-It represents the operational execution layer of the DunderCode Engineering System (DESys).
+## Current Scope
 
----
+The first reviewed Delivery reference set provides navigation for:
 
-# Purpose
+| Area | Purpose | Navigation |
+| --- | --- | --- |
+| Release | Version, provenance, validation, and publication | [Release](release/README.md) |
+| Deployment | Controlled change to an execution environment | [Deployment](deployment/README.md) |
+| Observability | Telemetry, service health, diagnosis, and feedback | [Observability](observability/README.md) |
 
-The purpose of the Delivery Layer is to standardize the processes involved in delivering software from source code to production.
+The `ci-cd/`, `operations/`, and `support/` directories do not yet contain
+substantive reviewed assets. Their current README files are excluded from the
+public corpus rather than presented as complete guidance.
 
-By defining repeatable delivery practices, DESys promotes reliability, automation, operational excellence, and continuous improvement across every software product.
-
-The Delivery Layer ensures that engineering quality extends beyond development into deployment and long-term operation.
-
----
-
-# Delivery Domains
-
-The Delivery Layer is organized into specialized operational domains.
-
-| Domain | Responsibility |
-|---------|----------------|
-| **CI/CD** | Automates build, testing, integration, and delivery pipelines. |
-| **Release** | Defines versioning, packaging, and release management practices. |
-| **Deployment** | Standardizes software deployment across environments. |
-| **Operations** | Establishes operational procedures and runtime management. |
-| **Observability** | Defines monitoring, logging, tracing, and alerting practices. |
-| **Support** | Provides incident management, maintenance, and user support guidance. |
-
-Together, these domains ensure that software is delivered and operated with consistency and reliability.
-
----
-
-# Delivery Lifecycle
-
-The Delivery Layer governs the operational lifecycle of software after implementation.
+## Delivery Flow
 
 ```text
-Engineering Standards
-        │
-        ▼
-Software Development
-        │
-        ▼
-Continuous Integration
-        │
-        ▼
-Release
-        │
-        ▼
-Deployment
-        │
-        ▼
-Production
-        │
-        ▼
-Monitoring
-        │
-        ▼
-Support
-        │
-        ▼
-Continuous Improvement
+Reviewed change
+      |
+      v
+Versioned release
+      |
+      v
+Controlled deployment
+      |
+      v
+Runtime evidence and feedback
 ```
 
-This lifecycle enables software to evolve safely and predictably throughout its operational life.
+This flow is descriptive, not a universal approval sequence. Projects tailor
+activities according to change risk, urgency, architecture, and governance.
 
----
+## Cross-Cutting Requirements
 
-# Relationship with the Engineering Layer
+Delivery decisions should identify:
 
-The Engineering Layer produces software according to DESys standards.
+- accountable human or organizational owners;
+- immutable source and artifact provenance;
+- validation evidence and acceptance criteria;
+- security, privacy, and compliance constraints;
+- rollout, abort, recovery, and communication plans;
+- service objectives and observable outcomes;
+- retained evidence for later review.
 
-The Delivery Layer ensures that this software reaches production through standardized operational processes.
+Automation may execute an approved plan, but automation does not grant approval
+authority or determine acceptable business risk.
 
-```text
-Engineering
-        │
-        ▼
-Source Code
-        │
-        ▼
-Delivery
-        │
-        ▼
-Production Software
-```
+## Related Standards
 
-Engineering focuses on building software.
+- [Deployment standards](../knowledge/des/deployment/README.md)
+- [Observability standards](../knowledge/des/observability/README.md)
+- [Engineering processes](../engineering/dep/README.md)
+- [Foundation authority model](../foundation/README.md)
 
-Delivery focuses on operating software.
-
----
-
-# Relationship with Production
-
-The Delivery Layer connects engineering activities to real-world operation.
-
-```text
-Engineering Assets
-        │
-        ▼
-Delivery Processes
-        │
-        ▼
-Production Environment
-        │
-        ▼
-Users
-        │
-        ▼
-Operational Feedback
-```
-
-Operational feedback continuously improves engineering standards, creating a closed-loop engineering ecosystem.
-
----
-
-# Navigation
-
-Continue according to your objective.
-
-| If you want to... | Read |
-|-------------------|------|
-| Configure delivery pipelines | CI/CD |
-| Learn release management | Release |
-| Standardize deployments | Deployment |
-| Operate software in production | Operations |
-| Implement monitoring and observability | Observability |
-| Manage production support | Support |
-
----
-
-# Final Thought
-
-Software engineering does not end when development is complete.
-
-The Delivery Layer exists to ensure that software is released, deployed, operated, monitored, and supported with the same level of discipline applied during its design and implementation.
-
-By standardizing operational practices, DESys extends engineering excellence into production and throughout the entire software lifecycle.
-
-> **Engineering creates software. Delivery makes software reliable in the real world.**
+The linked standards are currently drafts. They are reference candidates until
+their own lifecycle and distribution reviews are complete.

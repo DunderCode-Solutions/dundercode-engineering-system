@@ -1,0 +1,6 @@
+version: 1
+
+assets:
+- source: knowledge/architecture/metadata/desys-metadata.schema.json
+  classification: schema
+  review_owner: DunderCode Engineering

@@ -5,228 +5,155 @@ canonical_id: dec.foundation.engineering-manifesto
 title: The DunderCode Engineering Manifesto
 node_type: canon
 document_class: normative
-version: 1.0.0
+version: 1.1.0
 status: draft
 language: en
 owner: DunderCode Engineering
+applies_to:
+- DESys governance and engineering assets
+relationships:
+- type: related
+  target: dem.foundation.engineering-method
+- type: related
+  target: dcsg.canon.style-guide
 ---
 
-# DEC-0001 — The DunderCode Engineering Manifesto
+# DEC-0001 - The DunderCode Engineering Manifesto
 
-# 1. Purpose
+## 1. Status and Authority
 
-This document establishes the foundational engineering philosophy of DunderCode.
+This document is a draft statement of DunderCode's engineering philosophy. It
+does not create binding requirements until approved through DESys governance.
 
-It defines the principles that guide every decision, every process, every standard, and every product developed within the DunderCode Engineering System (DESys).
+When distributed to a consumer repository, it is reference guidance. Consumer
+code, runtime behavior, approved policies, and project decisions remain the
+authority for claims about that project. Adoption requires an explicit consumer
+decision or policy.
 
-The manifesto exists to answer a single question:
+## 2. Purpose
 
-> **How does DunderCode think?**
+The manifesto records principles intended to guide the design and evolution of
+DESys. It is independent of a specific programming language, framework, vendor,
+or delivery method.
 
-It is intentionally independent of technologies, programming languages, frameworks, methodologies, or market trends.
+The manifesto asks:
 
----
+> How should DunderCode reason about engineering work and reusable knowledge?
 
-# 2. Scope
+## 3. Scope
 
-The principles described in this manifesto apply to every engineering activity performed within DunderCode.
+The principles apply to DESys governance, documentation, architecture, software,
+automation, artificial intelligence, research, and organizational learning.
 
-This includes software development, documentation, architecture, product design, automation, artificial intelligence, research, and organizational learning.
+They guide decisions but do not replace domain evidence, safety constraints,
+legal obligations, or context-specific risk assessment. A tool-versus-principle
+conflict must be evaluated against observed behavior and the applicable approved
+decision rather than resolved by slogan or hierarchy alone.
 
-Whenever a conflict arises between tools and principles, principles shall prevail.
+## 4. Principles
 
----
+### 4.1 Understand Before Committing
 
-# 3. Motivation
+Engineering begins by identifying the problem, stakeholders, constraints,
+evidence, and desired outcomes. Time spent reducing material uncertainty is
+engineering work.
 
-Software changes.
+Urgent remediation may precede complete analysis. In that case, teams should
+record assumptions, risk controls, and follow-up work proportionate to impact.
 
-Technologies evolve.
+### 4.2 Preserve Intent and Evidence
 
-Frameworks become obsolete.
+Documentation records intended behavior, decisions, and rationale. Source code
+records implementation. Tests and runtime observations provide evidence of
+actual behavior.
 
-Programming languages rise and fall.
+No single representation is universally sufficient. Material disagreement
+between them is a defect to investigate, not a reason to ignore one source.
 
-Engineering principles, however, endure.
+### 4.3 Make Decisions Traceable
 
-DunderCode believes that sustainable software is the consequence of disciplined thinking rather than technological choices.
+Significant engineering decisions should identify their context, evidence,
+owner, consequences, and related assets. Traceability supports review and future
+change; it does not infer approval authority.
 
-For this reason, the organization builds its engineering culture upon principles instead of tools.
+### 4.4 Prefer Necessary Simplicity
 
----
+Complexity should have a demonstrated purpose. Designs should favor the simplest
+approach that satisfies current requirements, safety constraints, and credible
+evolution needs.
 
-# 4. Engineering Philosophy
+Clarity is preferred over novelty when both meet the same outcomes.
 
-DunderCode believes that software is not the ultimate objective.
+### 4.5 Standardize Repeated Decisions
 
-Knowledge is.
+Standards reduce repeated analysis and improve consistency. They should define
+scope, evidence, exceptions, and a path for revision.
 
-Software is merely one manifestation of engineering knowledge.
+Standards are not substitutes for judgment. Teams should tailor implementation
+to project context while documenting material deviations from adopted policy.
 
-Every implementation should increase the organization's collective understanding.
+### 4.6 Connect Knowledge to Implementation
 
-Every project should leave the engineering system stronger than before.
+Analysis without delivery produces limited value. Implementation without
+understanding accumulates avoidable risk. Engineering connects explicit
+knowledge to testable outcomes and operational evidence.
 
-Knowledge accumulated today becomes the foundation for tomorrow's decisions.
+### 4.7 Learn From Outcomes
 
----
+Documents, standards, processes, and implementations evolve as evidence changes.
+Participating teams should capture reusable lessons when doing so is appropriate
+and permitted. Public consumers are not required to contribute project content
+back to DESys.
 
-# 5. Core Principles
+## 5. Evidence and Authority
 
-## Principle 1 — Think Before Building
+DESys distinguishes forms of engineering evidence:
 
-Engineering begins with understanding.
+| Evidence | Primary purpose |
+| --- | --- |
+| Approved decisions and policies | Record governance and intended constraints. |
+| Product and architecture documents | Record goals, design intent, and rationale. |
+| Source code and configuration | Record the implemented system. |
+| Tests and validation results | Demonstrate selected behavior and properties. |
+| Runtime observations | Demonstrate behavior in an operating environment. |
+| DESys reference guidance | Offer reusable practices and terminology. |
 
-Implementation begins only after the problem, the domain, and the desired outcome are clearly understood.
+The applicable project defines approval authority. Metadata relationships and
+generated indexes improve discovery but do not approve a document or resolve a
+conflict.
 
-Thinking is considered productive engineering work.
+## 6. Role of AI Assistance
 
----
+AI systems may help retrieve, draft, compare, and validate engineering material.
+They are not approval authorities. Outputs require review proportionate to risk,
+and claims about a project require project evidence.
 
-## Principle 2 — Documentation Is the Source of Truth
+## 7. Governance
 
-Documentation precedes implementation.
+Changes to this manifesto require:
 
-Architecture, standards, and engineering decisions are documented before code is written.
+- an explicit proposal and rationale;
+- review against existing DESys decisions;
+- identification of affected guidance;
+- recorded approval by the DESys governance owner;
+- a version and changelog update.
 
-The documentation defines the system.
+Until that process completes, draft changes remain proposals.
 
-The code implements it.
+## 8. Related Documents
 
----
+- [DEM-0001 - The DunderCode Engineering Method](../../knowledge/dem/DEM-0001-engineering-method.md)
+- [DCSG-0001 - DunderCode Canon Style Guide](../documentation/DCSG-0001-canon-style-guide.md)
+- [Foundation navigation](../README.md)
 
-## Principle 3 — Principles Before Code
+## 9. Revision History
 
-Code is transient.
+### 1.1.0 - Draft
 
-Principles endure.
+- Scoped authority to DESys and explicit consumer adoption.
+- Replaced documentation-only source-of-truth claims with an evidence model.
+- Added urgent-work, tailoring, AI, governance, and contribution boundaries.
 
-Engineering decisions must always be traceable to explicit principles.
+### 1.0.0 - Draft
 
----
-
-## Principle 4 — Knowledge Before Implementation
-
-Implementation without understanding produces technical debt.
-
-Understanding without implementation produces no value.
-
-Engineering balances both by transforming knowledge into software.
-
----
-
-## Principle 5 — Simplicity Creates Sustainability
-
-Complexity should never be introduced without necessity.
-
-Simple systems are easier to understand, maintain, improve, and teach.
-
-Clarity is preferred over cleverness.
-
----
-
-## Principle 6 — Standards Enable Freedom
-
-Standards reduce unnecessary decisions.
-
-By standardizing common practices, engineers gain more freedom to solve meaningful problems.
-
----
-
-## Principle 7 — Continuous Improvement
-
-No document, process, standard, or implementation is considered final.
-
-Engineering is a continuous process of learning, validating, refining, and evolving.
-
-Every project contributes back to DESys.
-
----
-
-# 6. Engineering Mindset
-
-DunderCode encourages engineers to ask:
-
-* Why does this exist?
-* What problem does it solve?
-* Is there a simpler approach?
-* Can this knowledge be reused?
-* Can this decision be explained to someone else?
-
-Engineering begins with questions before answers.
-
----
-
-# 7. The Role of Documentation
-
-Documentation is not an obligation.
-
-Documentation is an engineering asset.
-
-It preserves knowledge.
-
-It accelerates learning.
-
-It reduces ambiguity.
-
-It enables collaboration.
-
-It provides continuity beyond individuals.
-
-Within DESys, documentation is the single source of truth.
-
----
-
-# 8. The Role of Standards
-
-Standards exist to reduce cognitive load, improve consistency, and enable predictable engineering outcomes.
-
-They are not intended to restrict creativity.
-
-Instead, they create a stable foundation upon which innovation can flourish.
-
----
-
-# 9. The Role of Products
-
-Products are not the destination.
-
-They are validation.
-
-Every product validates principles.
-
-Every implementation validates standards.
-
-Every lesson learned strengthens the engineering system.
-
-The engineering system evolves through real-world application.
-
----
-
-# 10. The DunderCode Commitment
-
-DunderCode is committed to building engineering knowledge that is:
-
-* Practical
-* Reusable
-* Evolvable
-* Traceable
-* Understandable
-
-Engineering excellence is measured not only by the quality of software, but also by the quality of the knowledge that produces it.
-
----
-
-# 11. Closing Statement
-
-DunderCode does not seek to create software alone.
-
-It seeks to create engineering knowledge capable of producing better software continuously.
-
-Software is the consequence.
-
-Knowledge is the legacy.
-
----
-
-> **Think First. Build Better.**
+- Initial manifesto draft.

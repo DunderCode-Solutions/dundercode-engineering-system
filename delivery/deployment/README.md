@@ -1,151 +1,83 @@
 # Deployment
 
-The Deployment Domain defines the engineering practices used to install, configure, and activate software releases across different execution environments within the DunderCode Engineering System (DESys).
+Deployment is the controlled introduction of a reviewed change into an execution
+environment. This page navigates DESys deployment guidance and does not authorize
+changes to a consumer environment.
 
-Deployment transforms an approved software release into a running application through standardized, automated, and repeatable operational procedures.
+Consumer projects define who may deploy, which controls apply, how credentials
+are bounded, and what evidence permits continuation or requires abort.
 
-Rather than governing software versions, this domain governs software installation.
+## Principles
 
----
+- **Automation:** automate repeatable steps when controls and observability are
+  sufficient for the associated risk.
+- **Controlled differences:** environments should make necessary differences
+  explicit; they are not expected to be identical.
+- **Provenance:** connect deployed artifacts to immutable source, build, and
+  approval evidence.
+- **Progressive validation:** limit exposure and evaluate defined health signals
+  before expanding a change when architecture permits.
+- **Recovery:** select and test rollback, roll-forward, restore, traffic-shift,
+  or containment strategies appropriate to the change.
+- **Least privilege:** deployment identities receive only the access and duration
+  required for the approved operation.
+- **Auditability:** retain the plan, operator or automation identity, timestamps,
+  outcomes, and exceptions.
 
-# Purpose
+Availability is an objective constrained by service requirements, safety,
+security, consistency, and cost. "Zero downtime" describes a desired outcome,
+not a deployment strategy or universal guarantee.
 
-The purpose of the Deployment Domain is to ensure that software releases are deployed safely, consistently, and predictably across development, testing, staging, and production environments.
+## Strategy Selection
 
-By standardizing deployment strategies and operational procedures, DESys minimizes deployment risk, reduces downtime, and improves software reliability.
+Common strategies include rolling replacement, blue-green switching, canary
+release, recreate deployment, feature control, and other progressive-delivery
+patterns. Selection depends on:
 
-Deployment practices enable engineering teams to deliver software with confidence while maintaining operational stability.
+- state and data compatibility;
+- reversibility and recovery time;
+- capacity and traffic-management capability;
+- user and regulatory impact;
+- health signals and abort thresholds;
+- operational complexity and cost.
 
----
+Database and data migrations may not be safely reversible. Their plans should
+address compatibility windows, backups, restore validation, forward recovery,
+and partial-failure handling instead of assuming rollback is possible.
 
-# Deployment Principles
-
-Deployment within DESys follows a common set of engineering principles.
-
-## Automation
-
-Deployments should be automated whenever practical.
-
-## Repeatability
-
-The same deployment process should produce identical results across environments.
-
-## Reliability
-
-Deployment procedures should minimize operational risk.
-
-## Recoverability
-
-Every deployment strategy should include rollback capabilities whenever feasible.
-
-## Environment Consistency
-
-Infrastructure and application configuration should remain consistent across environments.
-
-## Minimal Downtime
-
-Deployment strategies should prioritize service availability whenever possible.
-
----
-
-# Deployment Strategies
-
-DESys supports multiple deployment strategies depending on system requirements.
-
-| Strategy | Purpose |
-|----------|---------|
-| Rolling Deployment | Gradually replaces running instances. |
-| Blue-Green Deployment | Switches traffic between identical environments. |
-| Canary Deployment | Releases software incrementally to a subset of users. |
-| Recreate Deployment | Replaces the existing deployment entirely. |
-| Progressive Delivery | Expands deployment based on validation metrics. |
-| Zero Downtime Deployment | Maintains service availability during updates. |
-
-Each strategy should be selected according to operational requirements and system characteristics.
-
----
-
-# Deployment Lifecycle
-
-Software deployment follows a controlled operational workflow.
+## Evidence Flow
 
 ```text
-Approved Release
-        │
-        ▼
-Deployment Pipeline
-        │
-        ▼
-Environment Validation
-        │
-        ▼
-Application Deployment
-        │
-        ▼
-Configuration
-        │
-        ▼
-Health Verification
-        │
-        ▼
-Traffic Activation
-        │
-        ▼
-Production Environment
+Approved change and artifact
+          |
+          v
+Preflight and environment checks
+          |
+          v
+Bounded rollout
+          |
+          v
+Health and acceptance evaluation
+          |
+          +--> Continue or expand
+          |
+          `--> Abort, contain, or recover
 ```
 
-This lifecycle ensures that software reaches production through standardized deployment procedures.
+The applicable project defines exact gates and human decision ownership.
 
----
+## Standards Navigation
 
-# Relationship with the Delivery Layer
+| Objective | Read |
+| --- | --- |
+| Understand deployment principles | [DES-0600](../../knowledge/des/deployment/DES-0600-deployment-engineering-principles.md) |
+| Manage environment differences | [DES-0610](../../knowledge/des/deployment/DES-0610-environment-management.md) |
+| Manage configuration | [DES-0630](../../knowledge/des/deployment/DES-0630-configuration-management.md) |
+| Select a deployment strategy | [DES-0650](../../knowledge/des/deployment/DES-0650-deployment-strategies.md) |
+| Plan rollback and recovery | [DES-0660](../../knowledge/des/deployment/DES-0660-rollback-recovery.md) |
+| Assess operational readiness | [DES-0670](../../knowledge/des/deployment/DES-0670-operational-readiness.md) |
+| Review deployment governance | [DES-0680](../../knowledge/des/deployment/DES-0680-deployment-governance.md) |
+| Return to Delivery | [Delivery](../README.md) |
 
-Deployment connects release management with production operations.
-
-```text
-CI/CD
-        │
-        ▼
-Release
-        │
-        ▼
-Deployment
-        │
-        ▼
-Operations
-        │
-        ▼
-Observability
-```
-
-Deployment installs software.
-
-Operations manage running software.
-
-Observability measures software behavior.
-
----
-
-# Navigation
-
-Continue according to your objective.
-
-| If you want to... | Read |
-|-------------------|------|
-| Automate engineering pipelines | CI/CD |
-| Learn release governance | Release |
-| Operate production systems | Operations |
-| Monitor production environments | Observability |
-| Support software users | Support |
-
----
-
-# Final Thought
-
-Reliable software delivery depends on disciplined deployment practices.
-
-The Deployment Domain exists to ensure that approved software releases are installed safely, consistently, and efficiently across every execution environment.
-
-By standardizing deployment strategies, DESys enables engineering teams to deliver software with confidence while maintaining operational stability.
-
-> **Deployment transforms software releases into running systems.**
+These standards are drafts and require their own editorial and lifecycle review
+before public bundle inclusion.

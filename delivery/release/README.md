@@ -1,125 +1,76 @@
 # Release Management
 
-The Release Management Domain defines the processes and practices used to prepare, version, approve, and publish software releases throughout the DunderCode Engineering System (DESys).
+A release is a versioned and traceable set of changes or artifacts made available
+for distribution, deployment, or adoption. A release does not require one
+packaging technology, versioning scheme, or deployment model.
 
-A release represents an officially packaged and approved version of a software product that is ready to be distributed or deployed.
+This page provides DESys reference guidance. Consumer projects define release
+authority, version policy, validation evidence, publication channels, and
+acceptable residual risk.
 
-Rather than focusing on software deployment, this domain governs the lifecycle of software versions.
+## Principles
 
----
+- **Provenance:** connect a release to immutable source, build inputs, artifacts,
+  and validation evidence.
+- **Integrity:** publish checksums or signatures appropriate to the distribution
+  channel and threat model.
+- **Version policy:** use a documented scheme suitable for the artifact and its
+  compatibility commitments.
+- **Reproducibility:** control inputs and document environmental factors; do not
+  promise byte-identical output unless the build demonstrates it.
+- **Approval:** identify the human or organizational authority responsible for
+  accepting residual risk.
+- **Communication:** publish relevant changes, compatibility effects,
+  limitations, and recovery guidance.
+- **Immutability:** do not move or silently replace a published immutable release
+  identifier.
 
-# Purpose
+## Release Evidence
 
-The purpose of the Release Management Domain is to establish a consistent and traceable process for creating and publishing software releases.
+A release record should identify, when applicable:
 
-By standardizing versioning, release preparation, approval, and publication, DESys ensures that every software release is reliable, reproducible, and aligned with engineering standards.
+- source revision and build identity;
+- artifact names, checksums, and signatures;
+- dependency and toolchain versions;
+- test and review results;
+- known limitations and unresolved risks;
+- migration, rollback, roll-forward, or restoration guidance;
+- approver and publication timestamp;
+- support and deprecation expectations.
 
-Release Management promotes predictable software evolution while reducing operational risk.
+Emergency releases may use an expedited process defined by project governance.
+They should preserve essential authorization and evidence and record deferred
+review work explicitly.
 
----
-
-# Release Principles
-
-Release Management within DESys follows a common set of engineering principles.
-
-## Version Consistency
-
-Every release must follow an officially adopted versioning strategy.
-
-## Traceability
-
-Every release must be traceable to source code, engineering changes, and supporting documentation.
-
-## Repeatability
-
-Release creation should be reproducible through automated processes.
-
-## Approval
-
-Official releases should follow a defined approval workflow before publication.
-
-## Documentation
-
-Every release should include appropriate documentation, including release notes and change history.
-
-## Recoverability
-
-Release strategies should consider rollback and recovery mechanisms whenever applicable.
-
----
-
-# Release Lifecycle
-
-Software releases progress through a structured lifecycle.
+## Reference Flow
 
 ```text
-Engineering Changes
-        │
-        ▼
-Continuous Integration
-        │
-        ▼
-Version Assignment
-        │
-        ▼
-Release Candidate
-        │
-        ▼
-Validation
-        │
-        ▼
-Approval
-        │
-        ▼
-Official Release
-        │
-        ▼
-Deployment
+Reviewed change
+      |
+      v
+Version and artifact creation
+      |
+      v
+Integrity and validation evidence
+      |
+      v
+Authorized publication
+      |
+      v
+Deployment or consumer adoption
 ```
 
-This lifecycle ensures that software versions are formally managed before reaching production.
+This flow is not a universal approval gate. Projects tailor it according to the
+artifact, risk, distribution channel, and operational context.
 
----
+## Navigation
 
-# Relationship with the Delivery Layer
+| Objective | Read |
+| --- | --- |
+| Review the release engineering standard | [DES-0640](../../knowledge/des/deployment/DES-0640-release-engineering.md) |
+| Select deployment strategies | [Deployment](../deployment/README.md) |
+| Review runtime evidence | [Observability](../observability/README.md) |
+| Return to Delivery | [Delivery](../README.md) |
 
-Release Management connects continuous integration with software deployment.
-
-```text
-CI/CD
-        │
-        ▼
-Release
-        │
-        ▼
-Deployment
-        │
-        ▼
-Operations
-```
-
-Release Management governs software versions, while Deployment governs software installation.
-
----
-
-# Navigation
-
-Continue according to your objective.
-
-| If you want to... | Read |
-|-------------------|------|
-| Automate software delivery | CI/CD |
-| Deploy software | Deployment |
-| Operate production environments | Operations |
-| Implement observability | Observability |
-| Manage production support | Support |
-
----
-
-# Final Thought
-
-Reliable software delivery depends on disciplined release management.
-
-The Release Management Domain exists to ensure that software versions are prepared, documented, approved, and published through consistent engineering practices before they are deployed to production.
-
-> **Every successful deployment begins with a well-managed release.**
+DES-0640 is currently a draft and requires its own editorial and lifecycle review
+before public bundle inclusion.
