@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dundercode.dev/schemas/desys-corpus-inventory-1.0.0.json",
+  "title": "DESys Reference Corpus Inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "inventory_schema",
+    "corpus_version",
+    "source_roots",
+    "entries"
+  ],
+  "properties": {
+    "inventory_schema": {
+      "const": "1.0.0"
+    },
+    "corpus_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "source_roots": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "foundation",
+          "knowledge",
+          "engineering",
+          "delivery",
+          "skills"
+        ]
+      },
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "target",
+        "collection",
+        "classification",
+        "distribution",
+        "indexable",
+        "review_owner",
+        "checksum"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "pattern": "^(foundation|knowledge|engineering|delivery|skills)/.+\\.md$"
+        },
+        "target": {
+          "type": "string",
+          "pattern": "^docs/desys/reference/(foundation|knowledge|engineering|delivery|skills)/.+\\.md$"
+        },
+        "collection": {
+          "enum": [
+            "foundation",
+            "knowledge",
+            "engineering",
+            "delivery",
+            "skills"
+          ]
+        },
+        "classification": {
+          "enum": [
+            "document",
+            "navigation",
+            "placeholder",
+            "supplemental"
+          ]
+        },
+        "distribution": {
+          "enum": [
+            "approved",
+            "excluded",
+            "pending"
+          ]
+        },
+        "indexable": {
+          "type": "boolean"
+        },
+        "review_owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "checksum": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "document_id": {
+          "type": "string"
+        },
+        "canonical_id": {
+          "type": "string"
+        },
+        "metadata_status": {
+          "type": "string"
+        },
+        "exclusion_reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

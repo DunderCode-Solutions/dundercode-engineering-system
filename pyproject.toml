@@ -21,6 +21,7 @@ Issues = "https://github.com/DunderCode-Solutions/dundercode-engineering-system/
 [project.scripts]
 desys-build-index = "tools.build_index:main"
 desys-check-indexes = "tools.check_generated_artifacts:main"
+desys-corpus-inventory = "tools.build_corpus_inventory:main"
 desys-metadata-migrate = "tools.migrate_metadata:main"
 desys-metadata-validate = "tools.validate_metadata:main"
 desys-project-init = "tools.init_project:main"
