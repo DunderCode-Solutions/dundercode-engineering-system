@@ -63,7 +63,7 @@ def test_reference_corpus_dry_run_plans_without_writing(tmp_path: Path) -> None:
     corpus_files = [
         operation
         for operation in plan.operations
-        if operation.path == Path("docs/desys/corpus-manifest.yaml")
+        if operation.path.as_posix() == "docs/desys/corpus-manifest.yaml"
         or "docs/desys/reference" in operation.path.as_posix()
         or operation.path.name in {"LICENSE", "THIRD_PARTY_NOTICES.md"}
     ]
@@ -238,7 +238,11 @@ def test_opt_in_rejects_unmanaged_paths_inside_reference_namespace(tmp_path: Pat
 
     plan = initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
 
-    conflict = next(operation for operation in plan.operations if operation.path == unmanaged.relative_to(root))
+    conflict = next(
+        operation
+        for operation in plan.operations
+        if operation.path.as_posix() == unmanaged.relative_to(root).as_posix()
+    )
     assert plan.has_conflicts
     assert conflict.reason == "unmanaged path inside the DESys reference namespace"
     assert unmanaged.read_bytes() == b"consumer owned\n"
@@ -290,7 +294,7 @@ def test_reference_corpus_rerun_preserves_bytes_and_mtimes(tmp_path: Path) -> No
     corpus_operations = [
         operation
         for operation in plan.operations
-        if operation.path == Path("docs/desys/corpus-manifest.yaml")
+        if operation.path.as_posix() == "docs/desys/corpus-manifest.yaml"
         or operation.path.as_posix().startswith("docs/desys/reference/")
         or operation.path.name in {"LICENSE", "THIRD_PARTY_NOTICES.md"}
     ]
@@ -353,9 +357,11 @@ def test_malformed_corpus_manifest_blocks_all_writes(tmp_path: Path) -> None:
     plan = initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
 
     assert plan.has_conflicts
-    assert next(item for item in plan.operations if item.path == Path("docs/desys/corpus-manifest.yaml")).action == (
-        "CONFLICT"
-    )
+    assert next(
+        item
+        for item in plan.operations
+        if item.path.as_posix() == "docs/desys/corpus-manifest.yaml"
+    ).action == "CONFLICT"
     assert before == (readme.read_bytes(), readme.stat().st_mtime_ns)
 
 
@@ -371,9 +377,11 @@ def test_omitted_flag_rejects_unowned_manifest_without_enabling_corpus(tmp_path:
     plan = initialize_project(root, version=TEST_VERSION)
 
     assert plan.has_conflicts
-    assert next(item for item in plan.operations if item.path == Path("docs/desys/corpus-manifest.yaml")).action == (
-        "CONFLICT"
-    )
+    assert next(
+        item
+        for item in plan.operations
+        if item.path.as_posix() == "docs/desys/corpus-manifest.yaml"
+    ).action == "CONFLICT"
     assert {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in (agents, config)} == before
     assert "docs/desys/reference" not in config.read_text(encoding="utf-8")
 
@@ -402,7 +410,11 @@ def test_omitted_flag_rejects_unsupported_manifest_without_enabling_corpus(tmp_p
 
     plan = initialize_project(root, version=TEST_VERSION)
 
-    manifest_operation = next(item for item in plan.operations if item.path == Path("docs/desys/corpus-manifest.yaml"))
+    manifest_operation = next(
+        item
+        for item in plan.operations
+        if item.path.as_posix() == "docs/desys/corpus-manifest.yaml"
+    )
     assert plan.has_conflicts
     assert manifest_operation.reason == "unsupported prior corpus bundle"
     assert {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in managed} == before
@@ -444,7 +456,11 @@ def test_forged_predecessor_manifest_cannot_authorize_overwrite(tmp_path: Path) 
 
     plan = initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
 
-    manifest_operation = next(item for item in plan.operations if item.path == Path("docs/desys/corpus-manifest.yaml"))
+    manifest_operation = next(
+        item
+        for item in plan.operations
+        if item.path.as_posix() == "docs/desys/corpus-manifest.yaml"
+    )
     assert plan.has_conflicts
     assert manifest_operation.action == "CONFLICT"
     assert manifest_operation.reason == "unsupported prior corpus bundle"
@@ -482,7 +498,11 @@ def test_forged_predecessor_manifest_cannot_authorize_delete(tmp_path: Path) -> 
 
     plan = initialize_project(root, version=TEST_VERSION)
 
-    manifest_operation = next(item for item in plan.operations if item.path == Path("docs/desys/corpus-manifest.yaml"))
+    manifest_operation = next(
+        item
+        for item in plan.operations
+        if item.path.as_posix() == "docs/desys/corpus-manifest.yaml"
+    )
     assert plan.has_conflicts
     assert manifest_operation.reason == "unsupported prior corpus bundle"
     assert victim.read_bytes() == b"consumer-owned\n"
@@ -673,28 +693,23 @@ def fake_uvx_environment(tmp_path: Path) -> tuple[dict[str, str], Path]:
     fake_bin.mkdir()
     marker = tmp_path / "uvx-called"
     fake_uvx = fake_bin / "uvx"
-    fake_uvx.write_text('#!/usr/bin/env bash\nprintf "%s\\n" "$*" >> "$UVX_MARKER"\n', encoding="utf-8")
+    fake_uvx.write_bytes(b'#!/usr/bin/env bash\nprintf "%s\\n" "$*" >> "$UVX_MARKER"\n')
     fake_uvx.chmod(0o755)
     return (
         {
             **os.environ,
-            "PATH": f"{fake_bin}{os.pathsep}{os.environ['PATH']}",
-            "UVX_MARKER": str(marker),
+            "PATH": f"{fake_bin.as_posix()}{os.pathsep}{os.environ['PATH']}",
+            "UVX_MARKER": marker.as_posix(),
         },
         marker,
     )
 
 
 def bash_executable() -> str:
-    if os.name != "nt":
-        return "bash"
-    git = shutil.which("git")
-    if git is None:
-        raise RuntimeError("Git is required for the generated quality-script tests.")
-    candidate = Path(git).resolve().parent.parent / "bin/bash.exe"
-    if not candidate.is_file():
-        raise RuntimeError(f"Git Bash is unavailable at {candidate}.")
-    return str(candidate)
+    candidate = shutil.which("bash")
+    if candidate is None:
+        raise RuntimeError("Bash is required for the generated quality-script tests.")
+    return candidate
 
 
 def test_quality_script_accepts_source_without_terminal_newline(tmp_path: Path) -> None:
@@ -705,7 +720,7 @@ def test_quality_script_accepts_source_without_terminal_newline(tmp_path: Path) 
     environment, marker = fake_uvx_environment(tmp_path)
 
     result = subprocess.run(
-        [bash_executable(), str(root / "scripts/desys-docs-quality.sh")],
+        [bash_executable(), (root / "scripts/desys-docs-quality.sh").as_posix()],
         cwd=tmp_path,
         check=False,
         capture_output=True,
@@ -727,7 +742,7 @@ def test_quality_script_rejects_tampered_source_before_uvx(tmp_path: Path) -> No
     environment, marker = fake_uvx_environment(tmp_path)
 
     result = subprocess.run(
-        [bash_executable(), str(root / "scripts/desys-docs-quality.sh")],
+        [bash_executable(), (root / "scripts/desys-docs-quality.sh").as_posix()],
         cwd=tmp_path,
         check=False,
         capture_output=True,
@@ -750,7 +765,7 @@ def test_quality_script_rejects_multiple_source_lines_before_uvx(tmp_path: Path)
     environment, marker = fake_uvx_environment(tmp_path)
 
     result = subprocess.run(
-        [bash_executable(), str(root / "scripts/desys-docs-quality.sh")],
+        [bash_executable(), (root / "scripts/desys-docs-quality.sh").as_posix()],
         cwd=tmp_path,
         check=False,
         capture_output=True,

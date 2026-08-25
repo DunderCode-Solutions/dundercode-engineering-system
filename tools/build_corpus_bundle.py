@@ -384,7 +384,7 @@ def _read_package_files(package_root: Path) -> dict[str, bytes]:
         if path.is_symlink():
             raise BundleError(f"Packaged corpus resource is a symlink: {path}")
         relative = path.relative_to(package_root)
-        if relative == PurePosixPath("__init__.py") or relative.parts[:1] == ("__pycache__",):
+        if relative.parts == ("__init__.py",) or relative.parts[:1] == ("__pycache__",):
             continue
         if path.is_dir() and path.name == "__pycache__":
             raise BundleError(f"Packaged corpus resources contain unexpected files: {path}")
