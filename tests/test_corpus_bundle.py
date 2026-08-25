@@ -217,6 +217,7 @@ def test_bundle_preflights_descriptor_before_cleanup(tmp_path: Path, link_type: 
     assert legacy.read_text(encoding="utf-8") == "stale\n"
 
 
+@pytest.mark.skipif(not hasattr(os, "mkfifo"), reason="FIFOs are not available on this platform")
 def test_bundle_rejects_special_nodes_before_cleanup(tmp_path: Path) -> None:
     package_root = tmp_path / "reference_corpus_data"
     legacy = package_root / "files/stale.txt"

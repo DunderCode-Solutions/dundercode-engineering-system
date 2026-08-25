@@ -1,6 +1,6 @@
 # Supported Platforms And Known Limitations
 
-This document applies to DESys `v0.1.0-alpha.2`.
+This document applies to the unpublished DESys `v0.2.0-alpha.1` candidate.
 
 ## Supported Tool Host
 
@@ -30,6 +30,10 @@ The alpha has not been validated on:
 
 These environments are not claimed as supported by this release.
 
+The candidate includes native `macos-latest` and `windows-latest` compatibility
+jobs. Passing those remote jobs is required before either host can move into the
+supported list.
+
 ## Known Product Limitations
 
 - Metadata schema v1 supports canonical source prose in English only and
@@ -38,8 +42,10 @@ These environments are not claimed as supported by this release.
   package is published for this release.
 - Consumer source configuration accepts only an exact package version, a full
   SHA HTTPS Git source, or a repository-relative wheel.
-- Skills are documentation assets in v0.1; automatic skill installation or
+- Skills are documentation assets in v0.2; automatic skill installation or
   activation is outside this release.
+- Cross-snapshot corpus reconciliation is not supported in the first v0.2 alpha.
+  A manifest from another bundle checksum fails closed.
 - Generated `search-index.json` intentionally includes source-document content.
   Source documents must be reviewed for credentials and confidential data.
 - The DESys repository carries a governed baseline of 127 legacy warnings. New

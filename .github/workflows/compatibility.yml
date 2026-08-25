@@ -1,0 +1,66 @@
+name: Platform Compatibility
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compatibility-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compatibility:
+    name: Python 3.12 / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          version: "0.12.3"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install locked environment
+        run: uv sync --locked --group dev
+
+      - name: Run portable quality gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv run python -c "from pathlib import Path; assert Path('LICENSE').stat().st_size > 0"
+          uv run ruff check tools tests scripts/platform-package-smoke.py
+          uv run pytest
+          uv run desys-corpus-inventory --check
+          uv run desys-corpus-bundle --check
+          uv run desys-metadata-validate --config tools/desys_indexer.yaml --max-warnings 127
+          uv run desys-build-index --dry-run
+          uv run desys-check-indexes
+
+      - name: Verify installed package
+        run: uv run python scripts/platform-package-smoke.py
+
+      - name: Minimize cached data
+        if: always()
+        run: uv cache prune --ci

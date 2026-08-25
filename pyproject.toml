@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dundercode-engineering-system"
-version = "0.1.0a2"
+version = "0.2.0a1"
 description = "DunderCode Engineering System knowledge platform"
 readme = "README.md"
 license = "MIT"

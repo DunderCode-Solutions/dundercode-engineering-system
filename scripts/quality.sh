@@ -5,7 +5,7 @@ test -s LICENSE
 
 uv sync --locked --group dev
 
-uv run ruff check tools tests
+uv run ruff check tools tests scripts/platform-package-smoke.py
 uv run pytest
 uv run desys-corpus-inventory --check
 uv run desys-corpus-bundle --check

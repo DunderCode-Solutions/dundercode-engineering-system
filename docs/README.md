@@ -1,6 +1,6 @@
 # DESys Development Checkpoint
 
-Last updated: 2026-08-24
+Last updated: 2026-08-25
 
 ## Current State
 
@@ -17,15 +17,17 @@ bash scripts/quality.sh
 
 The latest verified result is:
 
-- 278 canonical documents validated;
+- 280 documents validated;
 - 0 metadata errors and 127 governed legacy warnings;
-- 40 native pytest tests passing;
+- 118 native pytest tests passing;
 - 5 deterministic index artifacts generated and cross-validated;
-- Python wheel built and smoke-tested in an isolated environment;
-- build ID `sha256:c0df150d39a2c9f12f74fe5a92267d54364ebe2be5bf8b1b01507e8875f104c6`.
+- source distribution and derived wheel built and smoke-tested in an isolated
+  environment;
+- approved 41-entry reference bundle checksum
+  `sha256:cdaa64e389b897fdc673da24d552468f2edd0ddf569f8b3b9dc0f00c092997df`.
 
-The current corrective release uses PEP 440 package version `0.1.0a2` and public
-release label `v0.1.0-alpha.2`.
+The current candidate uses PEP 440 package version `0.2.0a1` and intended public
+release label `v0.2.0-alpha.1`. It is not yet tagged or published.
 
 ## Completed Milestone
 
@@ -46,13 +48,15 @@ The implemented scope covers:
 - deterministic and idempotent generation;
 - dry-run support;
 - built-wheel consumer smoke testing.
+- opt-in governed reference-corpus installation;
+- manifest-backed ownership and same-snapshot reconciliation;
+- consumer-authority preservation and fail-closed conflict handling.
 
 ## Next Milestone
 
-Pilot A and Pilot B are complete, and `v0.1.0-alpha.1` was published. The current
-milestone is to publish `v0.1.0-alpha.2` with the restored MIT License text,
-verify public installation from its immutable tag, and supersede the previous
-alpha for new consumers.
+The current milestone is to validate the `v0.2.0-alpha.1` candidate on Linux,
+macOS, and Windows, complete consumer corpus pilots, approve release evidence,
+and only then create and verify the immutable public tag.
 
 The required evidence, scenarios, and go/no-go criteria are defined in
 [`DESYS-V0.1-PILOT-VALIDATION-PLAN.md`](DESYS-V0.1-PILOT-VALIDATION-PLAN.md).
@@ -72,5 +76,5 @@ and the final AI scenario archive is in
 
 ## Resume Point
 
-Resume by completing the release-preparation checklist in
-[`DESYS-V0.1-PILOT-VALIDATION-PLAN.md`](DESYS-V0.1-PILOT-VALIDATION-PLAN.md).
+Resume by running the new platform compatibility workflow and recording the
+`v0.2.0-alpha.1` consumer-pilot and release-approval evidence.

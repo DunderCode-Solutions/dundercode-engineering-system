@@ -677,7 +677,7 @@ def fake_uvx_environment(tmp_path: Path) -> tuple[dict[str, str], Path]:
     return (
         {
             **os.environ,
-            "PATH": f"{fake_bin}:{os.environ['PATH']}",
+            "PATH": f"{fake_bin}{os.pathsep}{os.environ['PATH']}",
             "UVX_MARKER": str(marker),
         },
         marker,

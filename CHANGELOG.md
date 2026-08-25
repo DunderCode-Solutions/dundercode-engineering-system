@@ -2,6 +2,33 @@
 
 All notable changes to DESys are documented in this file.
 
+## [0.2.0-alpha.1] - Unreleased
+
+### Added
+
+- Opt-in installation of a governed reference corpus through
+  `desys-project-init --with-reference-corpus`.
+- An approved, transitively closed 41-entry bundle with legal notices,
+  deterministic package resources, and a consumer ownership manifest.
+- Repository-wide indexing of consumer and installed reference documents with
+  actionable identity-collision diagnostics.
+- Native macOS and Windows compatibility gates in addition to the complete
+  Linux release gate.
+
+### Security
+
+- Corpus installation fails closed for unsupported prior bundle checksums,
+  modified or deleted managed files, unsafe links, and unmanaged paths inside
+  the DESys reference namespace.
+- Bundle generation preflights descriptor links, both generated resource roots,
+  and special filesystem nodes before cleanup.
+
+### Limitations
+
+- Cross-snapshot corpus reconciliation remains deferred until packages carry
+  trusted predecessor descriptors. The first alpha supports initial installation
+  and same-snapshot reconciliation only.
+
 ## [0.1.0-alpha.2] - 2026-08-24
 
 ### Fixed

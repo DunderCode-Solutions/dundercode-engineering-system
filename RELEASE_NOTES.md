@@ -1,48 +1,59 @@
-# DESys v0.1.0-alpha.2 Release Notes
+# DESys v0.2.0-alpha.1 Candidate Release Notes
 
-DESys `v0.1.0-alpha.2` is a corrective release of the first validated foundation
-of the DunderCode Engineering System documentation platform.
+DESys `v0.2.0-alpha.1` introduces an opt-in, governed reference corpus while
+preserving consumer documentation as the authoritative project evidence. This
+candidate is not yet published or tagged.
 
-## Correction
+## Reference Corpus
 
-- Restores the complete MIT License text and the copyright notice for
-  DunderCode Solutions.
-- Adds a release gate that rejects an empty `LICENSE` file.
-- Supersedes `v0.1.0-alpha.1`, whose source and package artifacts contained an
-  empty license file despite declaring the MIT License.
+- `desys-project-init --with-reference-corpus` installs 41 approved resources
+  under `docs/desys/`.
+- The bundle contains 24 indexable reference documents, navigation assets, the
+  metadata schema, the MIT License, and third-party notices.
+- A checksum-validated consumer manifest records package, bundle, source,
+  target, classification, distribution, and installed-content provenance.
+- Existing consumer ADRs, PRDs, RFCs, code, policies, and operational evidence
+  retain authority and are never silently overwritten.
 
-There are no runtime, metadata-schema, indexer, or consumer-scaffold behavior
-changes in this release.
+## Safety And Upgrade Policy
+
+- Initial installation and same-snapshot reconciliation are supported.
+- Manifests from other bundle checksums fail closed before ownership is trusted.
+- Modified, deleted, unmanaged, linked, executable, or otherwise unsafe managed
+  paths block all planned writes with actionable diagnostics.
+- Cross-snapshot reconciliation is deferred until trusted predecessor
+  descriptors are available.
 
 ## Validation
 
-- 40 automated tests pass, and the license-presence gate passes.
-- 278 documents validate with zero errors.
-- Five generated artifacts are cross-consistent and deterministic.
-- Pilot A passed new-project, documentation, negative, recovery, AI, cache, and
-  CI concurrency scenarios.
-- Pilot B preserved a populated Python 3.13 environment and lockfile, passed 55
-  application tests, and passed CI on a nonstandard default branch.
-- All critical, high, medium, and low pilot defects are fixed and retested.
+- 118 automated tests pass on the local Linux release gate.
+- The governed inventory contains 349 entries, including 41 approved bundle
+  resources.
+- 280 repository documents validate with zero errors and the governed baseline
+  of 127 warnings.
+- The source distribution, derived wheel, exact package-resource coverage,
+  isolated installation, opt-in initialization, idempotent rerun, and a
+  24-document consumer indexing pilot pass.
+- Native macOS and Windows candidate gates are defined but must pass remotely
+  before release approval.
 
 ## Distribution
 
-This corrective alpha is distributed from the public
+The candidate will be distributed from the public
 [DunderCode-Solutions/dundercode-engineering-system](https://github.com/DunderCode-Solutions/dundercode-engineering-system)
-repository. It is not published to PyPI. Resolve the release tag to its full
-commit SHA and follow the initialization commands in the repository README.
+repository after release approval. It is not published to PyPI. No installation
+should claim `v0.2.0-alpha.1` until the immutable tag exists.
 
 ## Compatibility And Limitations
 
-DESys tooling requires CPython 3.12 and is validated on Linux x86_64. Consumer
-projects are not required to use Python 3.12. Canonical documentation is English
-only in metadata schema v1. See
+DESys tooling requires CPython 3.12. Consumer projects are not required to use
+Python 3.12. Canonical documentation is English only in metadata schema v1. See
 [`SUPPORTED-PLATFORMS.md`](SUPPORTED-PLATFORMS.md) for the complete support and
 limitations statement.
 
 ## Upgrade Policy
 
-This remains an alpha release. Managed scaffold files are protected by conflict
-preflight rather than silently overwritten. Review release changes, run
-`desys-project-init --dry-run`, and resolve any managed-file differences before
-applying a future candidate.
+This remains an alpha release. Review release changes, run
+`desys-project-init --dry-run --with-reference-corpus`, and resolve every
+conflict before applying the candidate. Do not manually transfer a corpus
+manifest between package snapshots.
