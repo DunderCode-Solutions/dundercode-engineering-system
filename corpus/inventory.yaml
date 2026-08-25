@@ -577,8 +577,8 @@ entries:
   distribution: approved
   indexable: true
   review_owner: DunderCode Engineering
-  review_fingerprint: sha256:3cf2e9ea345c316cef2b6f17e15372681c783f9b2acc030329389264997f129d
-  checksum: sha256:f8543f96d926b3dd6cd7685d9ac48618f68637ce55649de4a46e17270042f897
+  review_fingerprint: sha256:3ce38500ad493bb7e2bec9471cf03e3932665efc7d512ee9a63e375155e85732
+  checksum: sha256:1e335138720863cdedef8ecce2516d9b99ec832594c6d83de1f5ed4aec521bdf
   document_id: ADR-0001
   canonical_id: adr.corpus.layout-and-authority
   metadata_status: approved
@@ -656,8 +656,8 @@ entries:
   distribution: approved
   indexable: true
   review_owner: DunderCode Engineering
-  review_fingerprint: sha256:ed88f56de8daa34b1436022c77d86e06c9a2407c73e9919fd1a36bc368fbbaea
-  checksum: sha256:8d02fbae6ae7619dd05e66e58c6a331c7ec194ee22eb37b9c57d0a801e44a463
+  review_fingerprint: sha256:28a32978e257e4339421ed31e056d884700bb43450435777b126d52e4b2ce8fe
+  checksum: sha256:3117d76fe67dfda23de29804523e5350c612149352823073bb7c29bdd309e25f
   document_id: DEKG-0040
   canonical_id: dekg.specification.metadata-schema
   metadata_status: draft
@@ -2027,8 +2027,8 @@ entries:
   distribution: approved
   indexable: true
   review_owner: DunderCode Engineering
-  review_fingerprint: sha256:2a27efc6316e54e0a9b98636a09eeef35fcf9a6a81c3d1c9f2bc4ad9a4fc4e9c
-  checksum: sha256:b5d40595f8a6de41b60ca109fab9bc9012fb4a8340994ffe290c3e765378fa67
+  review_fingerprint: sha256:b0ac3b3aef5edca85895f53038d9ec777d58c61b0ee1cb8727e178c72f778e37
+  checksum: sha256:81f3ee29378b0413cec47295fefe7ba95aa3330b80ad76a31395343793f67f10
   document_id: RFC-0001
   canonical_id: rfc.corpus.reference-distribution
   metadata_status: approved

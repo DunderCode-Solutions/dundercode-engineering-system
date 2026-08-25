@@ -337,8 +337,11 @@ def _validate_repository_identity(documents: list[tuple[Path, dict[str, Any]]]) 
 
     resolvable_ids = set(canonical_ids) | set(aliases)
     for alias, path in aliases.items():
-        if alias in canonical_ids:
-            issues.append(_error(path, f"alias '{alias}' conflicts with a canonical_id"))
+        canonical_owner = canonical_ids.get(alias)
+        if canonical_owner is not None:
+            issues.append(
+                _error(path, f"alias '{alias}' conflicts with a canonical_id used by {canonical_owner}")
+            )
 
     for path, metadata in documents:
         relationships = metadata.get("relationships", [])

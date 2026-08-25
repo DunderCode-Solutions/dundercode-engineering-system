@@ -1,17 +1,23 @@
 from __future__ import annotations
 
+import hashlib
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 import pytest
+import yaml
 
+from tools import init_project as init_project_module
 from tools.check_generated_artifacts import validate_generated_artifacts
+from tools.corpus_resources import load_reference_bundle, render_consumer_manifest
 from tools.desys_indexer.config import SUPPORTED_ARTIFACTS, load_config
 from tools.desys_indexer.parser import parse_documents
 from tools.desys_indexer.scanner import scan_markdown_documents
 from tools.desys_indexer.writer import render_indexes, write_indexes
+from tools.desys_metadata import validate_repository
 from tools.init_project import ProjectInitializationError, initialize_project
 
 TEST_VERSION = "0.1.0a1"
@@ -36,6 +42,43 @@ def test_dry_run_reports_plan_without_writing(tmp_path: Path) -> None:
     assert not plan.has_conflicts
     assert all(operation.action == "CREATE" for operation in plan.operations)
     assert [path.name for path in root.iterdir()] == [".git"]
+
+
+def test_default_initialization_does_not_install_reference_corpus(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+
+    initialize_project(root, version=TEST_VERSION)
+
+    assert not (root / "docs/desys/corpus-manifest.yaml").exists()
+    assert not (root / "docs/desys/reference").exists()
+    assert (root / "tools/desys_indexer.yaml").read_text(encoding="utf-8").count("docs/desys/reference") == 0
+
+
+def test_reference_corpus_dry_run_plans_without_writing(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+
+    plan = initialize_project(root, dry_run=True, version=TEST_VERSION, with_reference_corpus=True)
+
+    corpus_files = [
+        operation
+        for operation in plan.operations
+        if operation.path == Path("docs/desys/corpus-manifest.yaml")
+        or "docs/desys/reference" in operation.path.as_posix()
+        or operation.path.name in {"LICENSE", "THIRD_PARTY_NOTICES.md"}
+    ]
+    assert not plan.has_conflicts
+    assert corpus_files
+    assert all(operation.action == "CREATE" for operation in corpus_files)
+    assert [path.name for path in root.iterdir()] == [".git"]
+
+
+def test_reference_corpus_dry_run_matches_applied_plan(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+
+    planned = initialize_project(root, dry_run=True, version=TEST_VERSION, with_reference_corpus=True)
+    applied = initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+
+    assert planned == applied
 
 
 def test_initializes_a_loadable_consumer_configuration(tmp_path: Path) -> None:
@@ -112,6 +155,386 @@ def test_second_run_is_idempotent(tmp_path: Path) -> None:
     assert not plan.has_conflicts
     assert all(operation.action == "UNCHANGED" for operation in plan.operations)
     assert {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in files} == before
+
+
+def test_installs_reference_corpus_manifest_legal_files_and_sources(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    vendor = root / "tools/vendor"
+    vendor.mkdir(parents=True)
+    wheel = vendor / "dundercode_engineering_system-0.1.0a1-py3-none-any.whl"
+    wheel.write_bytes(b"pilot wheel")
+    source = wheel.relative_to(root).as_posix()
+
+    plan = initialize_project(
+        root,
+        version=TEST_VERSION,
+        desys_source=source,
+        with_reference_corpus=True,
+    )
+    bundle = load_reference_bundle()
+    manifest = yaml.safe_load((root / "docs/desys/corpus-manifest.yaml").read_text(encoding="utf-8"))
+    config = load_config(root / "tools/desys_indexer.yaml")
+
+    assert not plan.has_conflicts
+    assert manifest["manifest_schema"] == "1.0.0"
+    assert manifest["package_version"] == TEST_VERSION
+    assert manifest["package_source"] == source
+    assert manifest["corpus_version"] == bundle.corpus_version
+    assert manifest["bundle_checksum"] == bundle.bundle_checksum
+    assert len(manifest["entries"]) == 41
+    assert {entry["classification"] for entry in manifest["entries"]} >= {"document", "navigation", "legal"}
+    assert all(entry["distribution"] == "approved" for entry in manifest["entries"])
+    assert all(entry["original_checksum"] == entry["installed_checksum"] for entry in manifest["entries"])
+    assert (root / "docs/desys/LICENSE").read_bytes() == next(
+        entry.content for entry in bundle.entries if entry.target.as_posix() == "docs/desys/LICENSE"
+    )
+    assert (root / "docs/desys/THIRD_PARTY_NOTICES.md").is_file()
+    assert all((root / entry.target).stat().st_mode & 0o111 == 0 for entry in bundle.entries)
+    assert {path.relative_to(root).as_posix() for path in config.sources} == {
+        "docs/adr",
+        "docs/prd",
+        "docs/rfc",
+        "docs/desys/reference/delivery",
+        "docs/desys/reference/engineering",
+        "docs/desys/reference/foundation",
+        "docs/desys/reference/knowledge",
+    }
+    readme = (root / "docs/desys/README.md").read_text(encoding="utf-8")
+    assert "reference-only" in readme
+    assert "ownership boundary" in readme
+    agents = (root / "AGENTS.md").read_text(encoding="utf-8")
+    assert "They do not override consumer code, policies, ADRs, PRDs, RFCs" in agents
+    assert "Report contradictions and follow the consumer project's evidence" in agents
+    assert "defines DESys ownership of vendored files" in agents
+    assert "generated indexes as ownership or authority evidence" in agents
+
+
+def test_opt_in_preserves_consumer_owned_documents(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION)
+    consumer_files = {
+        root / "docs/adr/ADR-0042-consumer.md": b"consumer adr\n",
+        root / "docs/prd/PRD-0042-consumer.md": b"consumer prd\n",
+        root / "docs/rfc/RFC-0042-consumer.md": b"consumer rfc\n",
+    }
+    for path, content in consumer_files.items():
+        path.write_bytes(content)
+
+    plan = initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+
+    assert not plan.has_conflicts
+    assert {path: path.read_bytes() for path in consumer_files} == consumer_files
+
+
+def test_opt_in_rejects_unmanaged_paths_inside_reference_namespace(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION)
+    unmanaged = root / "docs/desys/reference/consumer.md"
+    unmanaged.parent.mkdir(parents=True)
+    unmanaged.write_bytes(b"consumer owned\n")
+    managed = (root / "AGENTS.md", root / "docs/desys/README.md", root / "tools/desys_indexer.yaml")
+    before = {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in managed}
+
+    plan = initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+
+    conflict = next(operation for operation in plan.operations if operation.path == unmanaged.relative_to(root))
+    assert plan.has_conflicts
+    assert conflict.reason == "unmanaged path inside the DESys reference namespace"
+    assert unmanaged.read_bytes() == b"consumer owned\n"
+    assert {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in managed} == before
+    assert not (root / "docs/desys/corpus-manifest.yaml").exists()
+
+
+def test_metadata_validation_reports_consumer_corpus_identity_collision(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    consumer = root / "docs/rfc/RFC-0042-consumer.md"
+    consumer.write_text(
+        """---
+metadata_schema: 1.0.0
+document_id: RFC-0042
+canonical_id: rfc.corpus.reference-distribution
+title: Consumer RFC
+node_type: proposal
+document_class: normative
+version: 1.0.0
+status: draft
+language: en
+owner: Consumer
+---
+# Consumer RFC
+""",
+        encoding="utf-8",
+    )
+    config = load_config(root / "tools/desys_indexer.yaml")
+
+    report = validate_repository(root, sources=config.sources, is_excluded=config.is_excluded)
+
+    collision = next(issue for issue in report.errors if "duplicate canonical_id" in issue.message)
+    assert collision.path == Path("docs/rfc/RFC-0042-consumer.md")
+    assert "docs/desys/reference/knowledge/rfc/RFC-0001-reference-corpus-distribution.md" in collision.message
+
+
+def test_reference_corpus_rerun_preserves_bytes_and_mtimes(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    files = tuple(
+        path for path in (root / "docs/desys").rglob("*") if path.is_file()
+    )
+    before = {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in files}
+    time.sleep(0.01)
+
+    plan = initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+
+    corpus_operations = [
+        operation
+        for operation in plan.operations
+        if operation.path == Path("docs/desys/corpus-manifest.yaml")
+        or operation.path.as_posix().startswith("docs/desys/reference/")
+        or operation.path.name in {"LICENSE", "THIRD_PARTY_NOTICES.md"}
+    ]
+    assert not plan.has_conflicts
+    assert all(operation.action == "UNCHANGED" for operation in corpus_operations)
+    assert {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in files} == before
+
+
+@pytest.mark.parametrize("change", ["modify", "delete"])
+@pytest.mark.parametrize("with_reference_corpus", [False, True])
+def test_local_corpus_change_conflicts_without_other_writes(
+    tmp_path: Path,
+    change: str,
+    with_reference_corpus: bool,
+) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    bundle = load_reference_bundle()
+    changed = root / bundle.entries[-1].target
+    sentinel = root / bundle.entries[0].target
+    sentinel_before = (sentinel.read_bytes(), sentinel.stat().st_mtime_ns)
+    manifest = root / "docs/desys/corpus-manifest.yaml"
+    manifest_before = (manifest.read_bytes(), manifest.stat().st_mtime_ns)
+    if change == "modify":
+        changed.write_bytes(changed.read_bytes() + b"\nlocal change\n")
+    else:
+        changed.unlink()
+
+    plan = initialize_project(root, version=TEST_VERSION, with_reference_corpus=with_reference_corpus)
+
+    operation = next(item for item in plan.operations if item.path == bundle.entries[-1].target)
+    assert plan.has_conflicts
+    assert operation.action == "CONFLICT"
+    assert sentinel_before == (sentinel.read_bytes(), sentinel.stat().st_mtime_ns)
+    assert manifest_before == (manifest.read_bytes(), manifest.stat().st_mtime_ns)
+
+
+def test_unmanaged_corpus_target_blocks_first_install(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    target = root / "docs/desys/LICENSE"
+    target.parent.mkdir(parents=True)
+    target.write_text("consumer owned\n", encoding="utf-8")
+
+    plan = initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+
+    assert plan.has_conflicts
+    assert target.read_text(encoding="utf-8") == "consumer owned\n"
+    assert not (root / "docs/desys/corpus-manifest.yaml").exists()
+    assert not (root / "tools").exists()
+
+
+def test_malformed_corpus_manifest_blocks_all_writes(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    manifest = root / "docs/desys/corpus-manifest.yaml"
+    manifest.write_text("manifest_schema: 1.0.0\nmanifest_schema: duplicate\n", encoding="utf-8")
+    readme = root / "docs/desys/README.md"
+    before = (readme.read_bytes(), readme.stat().st_mtime_ns)
+
+    plan = initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+
+    assert plan.has_conflicts
+    assert next(item for item in plan.operations if item.path == Path("docs/desys/corpus-manifest.yaml")).action == (
+        "CONFLICT"
+    )
+    assert before == (readme.read_bytes(), readme.stat().st_mtime_ns)
+
+
+def test_omitted_flag_rejects_unowned_manifest_without_enabling_corpus(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION)
+    manifest = root / "docs/desys/corpus-manifest.yaml"
+    manifest.write_text("not: a corpus manifest\n", encoding="utf-8")
+    agents = root / "AGENTS.md"
+    config = root / "tools/desys_indexer.yaml"
+    before = {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in (agents, config)}
+
+    plan = initialize_project(root, version=TEST_VERSION)
+
+    assert plan.has_conflicts
+    assert next(item for item in plan.operations if item.path == Path("docs/desys/corpus-manifest.yaml")).action == (
+        "CONFLICT"
+    )
+    assert {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in (agents, config)} == before
+    assert "docs/desys/reference" not in config.read_text(encoding="utf-8")
+
+
+def test_omitted_flag_rejects_unsupported_manifest_without_enabling_corpus(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION)
+    bundle = load_reference_bundle()
+    manifest = yaml.safe_load(
+        render_consumer_manifest(
+            bundle,
+            package_name="dundercode-engineering-system",
+            package_version=TEST_VERSION,
+            package_source=f"dundercode-engineering-system=={TEST_VERSION}",
+        )
+    )
+    manifest["bundle_checksum"] = f"sha256:{'f' * 64}"
+    manifest_path = root / "docs/desys/corpus-manifest.yaml"
+    manifest_path.write_text(yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8")
+    managed = (
+        root / "AGENTS.md",
+        root / "docs/desys/README.md",
+        root / "tools/desys_indexer.yaml",
+    )
+    before = {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in managed}
+
+    plan = initialize_project(root, version=TEST_VERSION)
+
+    manifest_operation = next(item for item in plan.operations if item.path == Path("docs/desys/corpus-manifest.yaml"))
+    assert plan.has_conflicts
+    assert manifest_operation.reason == "unsupported prior corpus bundle"
+    assert {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in managed} == before
+    assert "docs/desys/reference" not in (root / "tools/desys_indexer.yaml").read_text(encoding="utf-8")
+
+
+def test_default_scaffold_can_safely_transition_to_reference_corpus(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION)
+    collection_readme = root / "docs/adr/README.md"
+    before = collection_readme.read_bytes()
+
+    plan = initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+
+    actions = {operation.path.as_posix(): operation.action for operation in plan.operations}
+    assert not plan.has_conflicts
+    assert actions["tools/desys_indexer.yaml"] == "UPDATE"
+    assert actions["docs/desys/README.md"] == "UPDATE"
+    assert actions["AGENTS.md"] == "UPDATE"
+    assert collection_readme.read_bytes() == before
+    assert (root / "docs/desys/corpus-manifest.yaml").is_file()
+
+
+def test_forged_predecessor_manifest_cannot_authorize_overwrite(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    bundle = load_reference_bundle()
+    target = root / bundle.entries[2].target
+    local_content = b"consumer-local-content\n"
+    target.write_bytes(local_content)
+    manifest_path = root / "docs/desys/corpus-manifest.yaml"
+    manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+    forged_checksum = f"sha256:{hashlib.sha256(local_content).hexdigest()}"
+    manifest["bundle_checksum"] = f"sha256:{'f' * 64}"
+    entry = next(item for item in manifest["entries"] if item["target"] == bundle.entries[2].target.as_posix())
+    entry["original_checksum"] = forged_checksum
+    entry["installed_checksum"] = forged_checksum
+    manifest_path.write_text(yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8")
+
+    plan = initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+
+    manifest_operation = next(item for item in plan.operations if item.path == Path("docs/desys/corpus-manifest.yaml"))
+    assert plan.has_conflicts
+    assert manifest_operation.action == "CONFLICT"
+    assert manifest_operation.reason == "unsupported prior corpus bundle"
+    assert target.read_bytes() == local_content
+    assert all(
+        operation.action not in {"UPDATE", "DELETE"}
+        for operation in plan.operations
+        if operation.path == bundle.entries[2].target
+    )
+
+
+def test_forged_predecessor_manifest_cannot_authorize_delete(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    victim = root / "docs/desys/reference/consumer/victim.txt"
+    victim.parent.mkdir()
+    victim.write_bytes(b"consumer-owned\n")
+    manifest_path = root / "docs/desys/corpus-manifest.yaml"
+    manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+    victim_checksum = f"sha256:{hashlib.sha256(victim.read_bytes()).hexdigest()}"
+    manifest["bundle_checksum"] = f"sha256:{'e' * 64}"
+    manifest["entries"].append(
+        {
+            "source": "consumer/victim.txt",
+            "target": "docs/desys/reference/consumer/victim.txt",
+            "collection": "consumer",
+            "classification": "navigation",
+            "distribution": "approved",
+            "original_checksum": victim_checksum,
+            "installed_checksum": victim_checksum,
+            1: "must not be trusted for an unsupported bundle",
+        }
+    )
+    manifest_path.write_text(yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8")
+
+    plan = initialize_project(root, version=TEST_VERSION)
+
+    manifest_operation = next(item for item in plan.operations if item.path == Path("docs/desys/corpus-manifest.yaml"))
+    assert plan.has_conflicts
+    assert manifest_operation.reason == "unsupported prior corpus bundle"
+    assert victim.read_bytes() == b"consumer-owned\n"
+    assert all(operation.path.as_posix() != "docs/desys/reference/consumer/victim.txt" for operation in plan.operations)
+
+
+def test_complete_preapply_validation_detects_post_plan_change(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    bundle = load_reference_bundle()
+    changed = root / bundle.entries[-1].target
+    missing_scaffold = root / ".github/workflows/desys-docs-quality.yml"
+    missing_scaffold.unlink()
+    original_validate = init_project_module._validate_plan_safety
+
+    def change_after_plan(repository: Path, plan: init_project_module.InitializationPlan) -> None:
+        changed.write_bytes(changed.read_bytes() + b"\nlate local change\n")
+        original_validate(repository, plan)
+
+    monkeypatch.setattr(init_project_module, "_validate_plan_safety", change_after_plan)
+
+    with pytest.raises(ProjectInitializationError, match="changed after planning"):
+        initialize_project(root, version=TEST_VERSION)
+
+    assert not missing_scaffold.exists()
+    assert changed.read_bytes().endswith(b"late local change\n")
+
+
+def test_preapply_validation_detects_late_unmanaged_reference_path(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    manifest = root / "docs/desys/corpus-manifest.yaml"
+    before = (manifest.read_bytes(), manifest.stat().st_mtime_ns)
+    unmanaged = root / "docs/desys/reference/knowledge/consumer.md"
+    original_validate = init_project_module._validate_plan_safety
+
+    def add_after_plan(repository: Path, plan: init_project_module.InitializationPlan) -> None:
+        unmanaged.write_bytes(b"consumer owned\n")
+        original_validate(repository, plan)
+
+    monkeypatch.setattr(init_project_module, "_validate_plan_safety", add_after_plan)
+
+    with pytest.raises(ProjectInitializationError, match="Reference namespace changed after planning"):
+        initialize_project(root, version=TEST_VERSION)
+
+    assert unmanaged.read_bytes() == b"consumer owned\n"
+    assert (manifest.read_bytes(), manifest.stat().st_mtime_ns) == before
 
 
 def test_conflict_prevents_all_writes(tmp_path: Path) -> None:

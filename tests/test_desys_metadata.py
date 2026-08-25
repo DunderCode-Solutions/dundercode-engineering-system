@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 
 import pytest
+import yaml
 
 from tools.desys_metadata import (
     DOCUMENT_CLASSES,
@@ -186,6 +187,31 @@ class TestMetadataValidation:
         report = validate_repository(tmp_path)
 
         assert any("duplicate canonical_id" in issue.message for issue in report.errors)
+
+    def test_alias_collision_identifies_canonical_owner(self, tmp_path: Path) -> None:
+        first = tmp_path / "DES-0200-first.md"
+        first_metadata = VALID_METADATA
+        first.write_text(
+            f"---\n{yaml.safe_dump(first_metadata, sort_keys=False)}---\n# First\n",
+            encoding="utf-8",
+        )
+        second = tmp_path / "DES-0210-second.md"
+        second_metadata = {
+            **VALID_METADATA,
+            "document_id": "DES-0210",
+            "canonical_id": "des.quality.second",
+            "aliases": [VALID_METADATA["canonical_id"]],
+        }
+        second.write_text(
+            f"---\n{yaml.safe_dump(second_metadata, sort_keys=False)}---\n# Second\n",
+            encoding="utf-8",
+        )
+
+        report = validate_repository(tmp_path)
+
+        collision = next(issue for issue in report.errors if "conflicts with a canonical_id" in issue.message)
+        assert collision.path == Path("DES-0210-second.md")
+        assert "DES-0200-first.md" in collision.message
 
 
 class TestMetadataMigration:

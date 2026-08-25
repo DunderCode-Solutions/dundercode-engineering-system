@@ -49,12 +49,12 @@ entry to `pending`.
 
 | Source | SHA-256 |
 | --- | --- |
-| `knowledge/adr/ADR-0001-reference-corpus-layout-and-authority.md` | `f8543f96d926b3dd6cd7685d9ac48618f68637ce55649de4a46e17270042f897` |
-| `knowledge/architecture/dekg/specification/DEKG-0040-metadata-schema.md` | `8d02fbae6ae7619dd05e66e58c6a331c7ec194ee22eb37b9c57d0a801e44a463` |
+| `knowledge/adr/ADR-0001-reference-corpus-layout-and-authority.md` | `1e335138720863cdedef8ecce2516d9b99ec832594c6d83de1f5ed4aec521bdf` |
+| `knowledge/architecture/dekg/specification/DEKG-0040-metadata-schema.md` | `3117d76fe67dfda23de29804523e5350c612149352823073bb7c29bdd309e25f` |
 | `knowledge/architecture/metadata/README.md` | `2fec1340ace94a92739b9484103fc1d252fe6aa22d63a485d1c666044f45b54a` |
 | `knowledge/architecture/metadata/desys-metadata.schema.json` | `69393a4421cff1a268b4a453709859cf5735e3dcd95bee719345981f1d9dffbb` |
 | `knowledge/dem/DEM-0001-engineering-method.md` | `db2895e8269bf6a709e7772e683175c9f61a49d8cb84652de19256d34301fbe3` |
-| `knowledge/rfc/RFC-0001-reference-corpus-distribution.md` | `b5d40595f8a6de41b60ca109fab9bc9012fb4a8340994ffe290c3e765378fa67` |
+| `knowledge/rfc/RFC-0001-reference-corpus-distribution.md` | `81f3ee29378b0413cec47295fefe7ba95aa3330b80ad76a31395343793f67f10` |
 
 ## Deployment Standards
 
@@ -103,3 +103,17 @@ entry to `pending`.
 This review approves corpus content as bundle input. Package-resource generation,
 manifest generation, initializer reconciliation, wheel verification, and consumer
 pilots remain separate implementation gates.
+
+## Safe-Alpha Update Addendum
+
+ADR-0001 and RFC-0001 received a focused independent re-review after documenting
+the first alpha's fail-closed limitation for cross-snapshot reconciliation. The
+review confirmed that same-snapshot behavior is accurate, target cross-snapshot
+acceptance requirements remain intact, and the non-destructive authority boundary
+is not weakened. The replacement checksums in the table above are approved.
+
+A final focused review also approved the explicit split between first-alpha and
+future cross-snapshot completion gates in ADR-0001 and RFC-0001, and removal of
+the non-security-relevant installation timestamp from RFC-0001 and DEKG-0040.
+Immutable package/source identity, corpus and bundle versions, target paths, and
+content checksums continue to provide the required ownership provenance.
