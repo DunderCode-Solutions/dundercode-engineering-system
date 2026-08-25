@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -684,6 +685,18 @@ def fake_uvx_environment(tmp_path: Path) -> tuple[dict[str, str], Path]:
     )
 
 
+def bash_executable() -> str:
+    if os.name != "nt":
+        return "bash"
+    git = shutil.which("git")
+    if git is None:
+        raise RuntimeError("Git is required for the generated quality-script tests.")
+    candidate = Path(git).resolve().parent.parent / "bin/bash.exe"
+    if not candidate.is_file():
+        raise RuntimeError(f"Git Bash is unavailable at {candidate}.")
+    return str(candidate)
+
+
 def test_quality_script_accepts_source_without_terminal_newline(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
     initialize_project(root, version=TEST_VERSION)
@@ -692,7 +705,7 @@ def test_quality_script_accepts_source_without_terminal_newline(tmp_path: Path) 
     environment, marker = fake_uvx_environment(tmp_path)
 
     result = subprocess.run(
-        ["bash", str(root / "scripts/desys-docs-quality.sh")],
+        [bash_executable(), str(root / "scripts/desys-docs-quality.sh")],
         cwd=tmp_path,
         check=False,
         capture_output=True,
@@ -714,7 +727,7 @@ def test_quality_script_rejects_tampered_source_before_uvx(tmp_path: Path) -> No
     environment, marker = fake_uvx_environment(tmp_path)
 
     result = subprocess.run(
-        ["bash", str(root / "scripts/desys-docs-quality.sh")],
+        [bash_executable(), str(root / "scripts/desys-docs-quality.sh")],
         cwd=tmp_path,
         check=False,
         capture_output=True,
@@ -737,7 +750,7 @@ def test_quality_script_rejects_multiple_source_lines_before_uvx(tmp_path: Path)
     environment, marker = fake_uvx_environment(tmp_path)
 
     result = subprocess.run(
-        ["bash", str(root / "scripts/desys-docs-quality.sh")],
+        [bash_executable(), str(root / "scripts/desys-docs-quality.sh")],
         cwd=tmp_path,
         check=False,
         capture_output=True,

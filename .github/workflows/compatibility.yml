@@ -56,6 +56,7 @@ jobs:
           uv run desys-corpus-bundle --check
           uv run desys-metadata-validate --config tools/desys_indexer.yaml --max-warnings 127
           uv run desys-build-index --dry-run
+          uv run desys-build-index
           uv run desys-check-indexes
 
       - name: Verify installed package
