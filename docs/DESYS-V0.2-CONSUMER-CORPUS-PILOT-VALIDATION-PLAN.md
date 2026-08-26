@@ -1,6 +1,6 @@
 # DESys v0.2 Consumer Corpus Pilot Validation Plan
 
-Status: PRE-TAG GO; public-tag validation pending
+Status: `TAG-001` PASS; final approval pending
 
 Plan date: 2026-08-26
 
@@ -20,7 +20,9 @@ installation from that tag must pass before the final release decision.
 | --- | --- |
 | Package version | `0.2.0a1` |
 | Intended release tag | `v0.2.0-alpha.1` |
-| Tooling commit | `e7db715635e8611f08144ef27c7f803daa468a49` |
+| Pilot tooling commit | `e7db715635e8611f08144ef27c7f803daa468a49` |
+| Tagged release commit | `d736b028b285a3c4f4d22b685ddd5a0903c9822d` |
+| Annotated tag object | `8f913d87884641edc6ad366c0718788fd5b2cecd` |
 | Corpus source commit | `1ba18c126dc9adf035f64c0ca6eda75186e73b60` |
 | Corpus version | `0.1.0` |
 | Inventory schema | `1.2.0` |
@@ -31,6 +33,8 @@ installation from that tag must pass before the final release decision.
 | Bundle checksum | `sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a` |
 | Linux quality run | [32967325745](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32967325745) |
 | Platform compatibility run | [32967325802](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32967325802) |
+| Public-tag quality run | [32970276050](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32970276050) |
+| Public-tag platform run | [32970276004](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32970276004) |
 
 ## 3. Pilot Profiles
 
@@ -106,7 +110,7 @@ tag under anonymous conditions and the signed decision below is complete.
 | Project-owned files remain byte-identical | Pilot B | PASS |
 | Local and corpus sources indexed exactly | Pilot A and Pilot B | PASS |
 | Generated artifacts deterministic | Both pilots | PASS |
-| Anonymous public-tag installation | `TAG-001` | Blocked until authorized tag exists |
+| Anonymous public-tag installation | [`TAG-001`](pilot/TAG-001-V0.2-ANONYMOUS-PUBLIC-TAG-EVIDENCE.md) | PASS |
 | Linux, macOS, and Windows gates | Final GitHub Actions runs | PASS |
 | Both consumer pilots pass | [Pilot A](pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md) and [Pilot B](pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md) | PASS |
 | Limitations and authority model published | Release notes and supported platforms | Ready |
@@ -120,10 +124,10 @@ tag under anonymous conditions and the signed decision below is complete.
 | DESys maintainer | Joilton | PRE-TAG GO | 2026-08-26 |
 | Engineering owner | Pending | FINAL GO / NO-GO | Pending |
 
-Final decision: PRE-TAG GO; `TAG-001` AND FINAL APPROVAL PENDING
+Final decision: RELEASE EVIDENCE COMPLETE; FINAL APPROVAL PENDING
 
 Pre-tag approval was granted for the exact immutable candidate after all
 automated gates and consumer pilots passed without a blocking defect.
 
-Required post-tag action: Execute `TAG-001` anonymously on the claimed supported
-hosts before publishing the release.
+Required final action: Record the engineering owner's FINAL GO or NO-GO before
+publishing the GitHub Release.

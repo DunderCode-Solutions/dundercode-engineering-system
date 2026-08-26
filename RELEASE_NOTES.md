@@ -1,8 +1,8 @@
-# DESys v0.2.0-alpha.1 Candidate Release Notes
+# DESys v0.2.0-alpha.1 Tagged Candidate Release Notes
 
 DESys `v0.2.0-alpha.1` introduces an opt-in, governed reference corpus while
-preserving consumer documentation as the authoritative project evidence. This
-candidate is not yet published or tagged.
+preserving consumer documentation as the authoritative project evidence. The
+immutable tag exists; a GitHub Release and PyPI package are not published.
 
 ## Reference Corpus
 
@@ -46,14 +46,18 @@ candidate is not yet published or tagged.
   [v0.2 pilot validation plan](docs/DESYS-V0.2-CONSUMER-CORPUS-PILOT-VALIDATION-PLAN.md).
   [Pilot A](docs/pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md) and
   [Pilot B](docs/pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md) pass every
-  required pre-tag scenario; anonymous public-tag installation remains pending.
+  required pre-tag scenario.
+- Anonymous installation and initialization from public tag
+  [`v0.2.0-alpha.1`](https://github.com/DunderCode-Solutions/dundercode-engineering-system/tree/v0.2.0-alpha.1)
+  passes [`TAG-001`](docs/pilot/TAG-001-V0.2-ANONYMOUS-PUBLIC-TAG-EVIDENCE.md),
+  including tag-triggered Linux, macOS, and Windows gates.
 
 ## Distribution
 
-The candidate will be distributed from the public
+The immutable candidate tag is available from the public
 [DunderCode-Solutions/dundercode-engineering-system](https://github.com/DunderCode-Solutions/dundercode-engineering-system)
-repository after release approval. It is not published to PyPI. No installation
-should claim `v0.2.0-alpha.1` until the immutable tag exists.
+repository and resolves to commit `d736b028b285a3c4f4d22b685ddd5a0903c9822d`.
+Final GitHub Release approval is pending. It is not published to PyPI.
 
 ## Compatibility And Limitations
 

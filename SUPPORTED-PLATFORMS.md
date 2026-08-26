@@ -1,6 +1,7 @@
 # Supported Platforms And Known Limitations
 
-This document applies to the unpublished DESys `v0.2.0-alpha.1` candidate.
+This document applies to the tagged but unpublished DESys `v0.2.0-alpha.1`
+candidate.
 
 ## Supported Tool Host
 
@@ -47,8 +48,13 @@ The same immutable candidate passed the
 [new-project corpus pilot](docs/pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md)
 and the
 [populated-project corpus pilot](docs/pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md)
-on Linux x86_64. Anonymous installation from the intended public tag is not yet
-claimed because no tag has been authorized or created.
+on Linux x86_64. Anonymous installation from public tag `v0.2.0-alpha.1` also
+passed with credentials disabled, as recorded in
+[`TAG-001`](docs/pilot/TAG-001-V0.2-ANONYMOUS-PUBLIC-TAG-EVIDENCE.md). The tag's
+[Linux quality gate](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32970276050)
+and
+[macOS/Windows gates](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32970276004)
+passed on commit `d736b028b285a3c4f4d22b685ddd5a0903c9822d`.
 
 Support claims are limited to the environments and hosted runner labels above.
 They do not imply validation of every operating-system release or hardware

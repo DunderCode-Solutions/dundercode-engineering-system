@@ -27,11 +27,14 @@ The latest verified result is:
   `windows-latest`, including installed-package smoke tests on macOS and Windows;
 - both v0.2 consumer corpus pilots passed every required pre-tag scenario on
   immutable candidate `e7db715635e8611f08144ef27c7f803daa468a49`;
+- anonymous installation from public tag `v0.2.0-alpha.1` and its Linux, macOS,
+  and Windows gates passed on tagged commit
+  `d736b028b285a3c4f4d22b685ddd5a0903c9822d`;
 - approved 41-entry reference bundle checksum
   `sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a`.
 
-The current candidate uses PEP 440 package version `0.2.0a1` and intended public
-release label `v0.2.0-alpha.1`. It is not yet tagged or published.
+The tagged candidate uses PEP 440 package version `0.2.0a1` and public release
+label `v0.2.0-alpha.1`. A GitHub Release and PyPI package are not published.
 
 ## Completed Milestone
 
@@ -58,10 +61,9 @@ The implemented scope covers:
 
 ## Next Milestone
 
-Cross-platform candidate validation is complete on Linux, GitHub-hosted macOS,
-and GitHub-hosted Windows. The current milestone is to complete consumer corpus
-pilots, approve release evidence, and only then create and verify the immutable
-public tag.
+Cross-platform candidate validation, both consumer corpus pilots, and anonymous
+public-tag verification are complete. The remaining milestone is the final
+engineering-owner release decision.
 
 The current corpus-pilot evidence, scenarios, and staged go/no-go criteria are
 defined in
@@ -70,6 +72,8 @@ The executed evidence is recorded in
 [`pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md`](pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md)
 and
 [`pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md`](pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md).
+Anonymous public-tag evidence is recorded in
+[`pilot/TAG-001-V0.2-ANONYMOUS-PUBLIC-TAG-EVIDENCE.md`](pilot/TAG-001-V0.2-ANONYMOUS-PUBLIC-TAG-EVIDENCE.md).
 
 The v0.1 adoption evidence remains available as historical compatibility proof.
 Its validation plan is
