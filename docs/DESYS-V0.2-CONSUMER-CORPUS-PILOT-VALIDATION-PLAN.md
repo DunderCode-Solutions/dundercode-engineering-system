@@ -1,6 +1,6 @@
 # DESys v0.2 Consumer Corpus Pilot Validation Plan
 
-Status: Pre-tag evidence complete; formal approval pending
+Status: PRE-TAG GO; public-tag validation pending
 
 Plan date: 2026-08-26
 
@@ -117,14 +117,13 @@ tag under anonymous conditions and the signed decision below is complete.
 | --- | --- | --- | --- |
 | Pilot A tester | OpenCode automated execution | PASS | 2026-08-26 |
 | Pilot B tester | OpenCode automated execution | PASS | 2026-08-26 |
-| DESys maintainer | Pending | PRE-TAG GO / NO-GO | Pending |
+| DESys maintainer | Joilton | PRE-TAG GO | 2026-08-26 |
 | Engineering owner | Pending | FINAL GO / NO-GO | Pending |
 
-Final decision: PRE-TAG EVIDENCE COMPLETE; FORMAL APPROVAL PENDING
+Final decision: PRE-TAG GO; `TAG-001` AND FINAL APPROVAL PENDING
 
-Required pre-tag action: Record maintainer approval or rejection of the exact
-immutable candidate. No blocking defect was observed in the automated gates or
-consumer pilots.
+Pre-tag approval was granted for the exact immutable candidate after all
+automated gates and consumer pilots passed without a blocking defect.
 
 Required post-tag action: Execute `TAG-001` anonymously on the claimed supported
 hosts before publishing the release.
