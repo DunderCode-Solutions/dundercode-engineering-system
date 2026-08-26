@@ -35,16 +35,18 @@ candidate is not yet published or tagged.
 - The source distribution, derived wheel, exact package-resource coverage,
   isolated installation, opt-in initialization, idempotent rerun, and a
   24-document installed-wheel consumer smoke test pass.
-- Candidate commit
-  [`91bade2`](https://github.com/DunderCode-Solutions/dundercode-engineering-system/commit/91bade279c22028c7c6b926bac7196b28650bd93)
+- Immutable pilot candidate
+  [`e7db715`](https://github.com/DunderCode-Solutions/dundercode-engineering-system/commit/e7db715635e8611f08144ef27c7f803daa468a49)
   passes the Linux
-  [`Quality` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32852527313)
+  [`Quality` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32967325745)
   and the native macOS and Windows
-  [`Platform Compatibility` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32852527428),
+  [`Platform Compatibility` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32967325802),
   including installed-package smoke tests on both compatibility hosts.
 - The two required consumer corpus pilots are governed by the
-  [v0.2 pilot validation plan](docs/DESYS-V0.2-CONSUMER-CORPUS-PILOT-VALIDATION-PLAN.md)
-  and remain pending execution from the final immutable candidate commit.
+  [v0.2 pilot validation plan](docs/DESYS-V0.2-CONSUMER-CORPUS-PILOT-VALIDATION-PLAN.md).
+  [Pilot A](docs/pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md) and
+  [Pilot B](docs/pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md) pass every
+  required pre-tag scenario; anonymous public-tag installation remains pending.
 
 ## Distribution
 

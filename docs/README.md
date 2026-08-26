@@ -25,6 +25,8 @@ The latest verified result is:
   environment;
 - native GitHub Actions gates passed on `ubuntu-latest`, `macos-latest`, and
   `windows-latest`, including installed-package smoke tests on macOS and Windows;
+- both v0.2 consumer corpus pilots passed every required pre-tag scenario on
+  immutable candidate `e7db715635e8611f08144ef27c7f803daa468a49`;
 - approved 41-entry reference bundle checksum
   `sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a`.
 
@@ -64,6 +66,10 @@ public tag.
 The current corpus-pilot evidence, scenarios, and staged go/no-go criteria are
 defined in
 [`DESYS-V0.2-CONSUMER-CORPUS-PILOT-VALIDATION-PLAN.md`](DESYS-V0.2-CONSUMER-CORPUS-PILOT-VALIDATION-PLAN.md).
+The executed evidence is recorded in
+[`pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md`](pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md)
+and
+[`pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md`](pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md).
 
 The v0.1 adoption evidence remains available as historical compatibility proof.
 Its validation plan is

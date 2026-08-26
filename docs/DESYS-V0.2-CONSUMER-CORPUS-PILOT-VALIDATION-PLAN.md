@@ -1,6 +1,6 @@
 # DESys v0.2 Consumer Corpus Pilot Validation Plan
 
-Status: Ready for immutable-candidate execution
+Status: Pre-tag evidence complete; formal approval pending
 
 Plan date: 2026-08-26
 
@@ -20,7 +20,7 @@ installation from that tag must pass before the final release decision.
 | --- | --- |
 | Package version | `0.2.0a1` |
 | Intended release tag | `v0.2.0-alpha.1` |
-| Tooling commit | Record the full immutable pilot commit |
+| Tooling commit | `e7db715635e8611f08144ef27c7f803daa468a49` |
 | Corpus source commit | `1ba18c126dc9adf035f64c0ca6eda75186e73b60` |
 | Corpus version | `0.1.0` |
 | Inventory schema | `1.2.0` |
@@ -29,8 +29,8 @@ installation from that tag must pass before the final release decision.
 | Approved resources | 41 |
 | Indexable reference documents | 24 |
 | Bundle checksum | `sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a` |
-| Linux quality run | Record the final run URL |
-| Platform compatibility run | Record the final macOS/Windows run URL |
+| Linux quality run | [32967325745](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32967325745) |
+| Platform compatibility run | [32967325802](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32967325802) |
 
 ## 3. Pilot Profiles
 
@@ -99,31 +99,32 @@ tag under anonymous conditions and the signed decision below is complete.
 | --- | --- | --- |
 | Exact approved package inventory | Inventory, bundle checks, wheel inspection | Ready |
 | License and attribution checksums | Final distribution review and manifest | Ready |
-| Install and dry-run without source checkout | Pilot A and Pilot B | Pending |
-| Same-version rerun produces zero changes | Pilot A and Pilot B | Pending |
-| Other bundle checksum fails closed | Automated tests and Pilot B | Automated pass; pilot pending |
-| Modified or deleted corpus blocks writes | Automated tests and Pilot B | Automated pass; pilot pending |
-| Project-owned files remain byte-identical | Pilot B | Pending |
-| Local and corpus sources indexed exactly | Pilot A and Pilot B | Pending |
-| Generated artifacts deterministic | Both pilots | Pending |
+| Install and dry-run without source checkout | Pilot A and Pilot B | PASS |
+| Same-version rerun produces zero changes | Pilot A and Pilot B | PASS |
+| Other bundle checksum fails closed | Automated tests and Pilot B | PASS |
+| Modified or deleted corpus blocks writes | Automated tests and Pilot B | PASS |
+| Project-owned files remain byte-identical | Pilot B | PASS |
+| Local and corpus sources indexed exactly | Pilot A and Pilot B | PASS |
+| Generated artifacts deterministic | Both pilots | PASS |
 | Anonymous public-tag installation | `TAG-001` | Blocked until authorized tag exists |
-| Linux, macOS, and Windows gates | Final GitHub Actions runs | Pending final candidate |
-| Both consumer pilots pass | Pilot reports | Pending |
+| Linux, macOS, and Windows gates | Final GitHub Actions runs | PASS |
+| Both consumer pilots pass | [Pilot A](pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md) and [Pilot B](pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md) | PASS |
 | Limitations and authority model published | Release notes and supported platforms | Ready |
 
 ## 8. Decision Record
 
 | Role | Name | Decision | Date |
 | --- | --- | --- | --- |
-| Pilot A tester | Pending | PASS / FAIL | Pending |
-| Pilot B tester | Pending | PASS / FAIL | Pending |
+| Pilot A tester | OpenCode automated execution | PASS | 2026-08-26 |
+| Pilot B tester | OpenCode automated execution | PASS | 2026-08-26 |
 | DESys maintainer | Pending | PRE-TAG GO / NO-GO | Pending |
 | Engineering owner | Pending | FINAL GO / NO-GO | Pending |
 
-Final decision: PENDING
+Final decision: PRE-TAG EVIDENCE COMPLETE; FORMAL APPROVAL PENDING
 
-Required pre-tag actions: Execute both pilots from the same immutable commit,
-record final CI evidence, and resolve every blocking defect.
+Required pre-tag action: Record maintainer approval or rejection of the exact
+immutable candidate. No blocking defect was observed in the automated gates or
+consumer pilots.
 
 Required post-tag action: Execute `TAG-001` anonymously on the claimed supported
 hosts before publishing the release.

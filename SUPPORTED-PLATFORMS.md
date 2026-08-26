@@ -11,7 +11,7 @@ The alpha is validated on:
 - GitHub Actions `macos-latest`;
 - GitHub Actions `windows-latest` with Git Bash;
 - CPython 3.12 for DESys tooling;
-- `uv` 0.12.3;
+- `uv` 0.12.3 and 0.12.5;
 - Git 2.43.0;
 - GitHub-hosted repositories and GitHub Actions.
 
@@ -35,13 +35,20 @@ These environments are not claimed as supported by this release.
 ## Validation Evidence
 
 Candidate commit
-[`91bade2`](https://github.com/DunderCode-Solutions/dundercode-engineering-system/commit/91bade279c22028c7c6b926bac7196b28650bd93)
+[`e7db715`](https://github.com/DunderCode-Solutions/dundercode-engineering-system/commit/e7db715635e8611f08144ef27c7f803daa468a49)
 passed the Linux
-[`Quality` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32852527313)
+[`Quality` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32967325745)
 and the native macOS and Windows
-[`Platform Compatibility` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32852527428)
-on 2026-08-25. Both compatibility jobs passed the portable quality gates and
+[`Platform Compatibility` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32967325802)
+on 2026-08-26. Both compatibility jobs passed the portable quality gates and
 installed-package smoke test.
+
+The same immutable candidate passed the
+[new-project corpus pilot](docs/pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md)
+and the
+[populated-project corpus pilot](docs/pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md)
+on Linux x86_64. Anonymous installation from the intended public tag is not yet
+claimed because no tag has been authorized or created.
 
 Support claims are limited to the environments and hosted runner labels above.
 They do not imply validation of every operating-system release or hardware
