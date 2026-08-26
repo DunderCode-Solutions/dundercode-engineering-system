@@ -23,6 +23,8 @@ The latest verified result is:
 - 5 deterministic index artifacts generated and cross-validated;
 - source distribution and derived wheel built and smoke-tested in an isolated
   environment;
+- native GitHub Actions gates passed on `ubuntu-latest`, `macos-latest`, and
+  `windows-latest`, including installed-package smoke tests on macOS and Windows;
 - approved 41-entry reference bundle checksum
   `sha256:cdaa64e389b897fdc673da24d552468f2edd0ddf569f8b3b9dc0f00c092997df`.
 
@@ -54,9 +56,10 @@ The implemented scope covers:
 
 ## Next Milestone
 
-The current milestone is to validate the `v0.2.0-alpha.1` candidate on Linux,
-macOS, and Windows, complete consumer corpus pilots, approve release evidence,
-and only then create and verify the immutable public tag.
+Cross-platform candidate validation is complete on Linux, GitHub-hosted macOS,
+and GitHub-hosted Windows. The current milestone is to complete consumer corpus
+pilots, approve release evidence, and only then create and verify the immutable
+public tag.
 
 The required evidence, scenarios, and go/no-go criteria are defined in
 [`DESYS-V0.1-PILOT-VALIDATION-PLAN.md`](DESYS-V0.1-PILOT-VALIDATION-PLAN.md).
@@ -76,5 +79,7 @@ and the final AI scenario archive is in
 
 ## Resume Point
 
-Resume by running the new platform compatibility workflow and recording the
-`v0.2.0-alpha.1` consumer-pilot and release-approval evidence.
+Resume by recording the remaining `v0.2.0-alpha.1` consumer-pilot and
+release-approval evidence. The completed host-validation evidence is recorded in
+[`SUPPORTED-PLATFORMS.md`](../SUPPORTED-PLATFORMS.md) and
+[`RELEASE_NOTES.md`](../RELEASE_NOTES.md).

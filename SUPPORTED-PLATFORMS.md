@@ -8,6 +8,8 @@ The alpha is validated on:
 
 - Linux x86_64;
 - Pop!_OS 24.04 LTS and GitHub Actions `ubuntu-latest`;
+- GitHub Actions `macos-latest`;
+- GitHub Actions `windows-latest` with Git Bash;
 - CPython 3.12 for DESys tooling;
 - `uv` 0.12.3;
 - Git 2.43.0;
@@ -22,17 +24,28 @@ and lockfile while DESys used isolated Python 3.12.
 
 The alpha has not been validated on:
 
-- Windows;
-- macOS;
 - Linux ARM64;
+- self-hosted Windows or macOS runners;
+- Windows or macOS versions outside the GitHub-hosted `*-latest` images;
 - non-GitHub CI platforms;
 - Python tool hosts other than CPython 3.12.
 
 These environments are not claimed as supported by this release.
 
-The candidate includes native `macos-latest` and `windows-latest` compatibility
-jobs. Passing those remote jobs is required before either host can move into the
-supported list.
+## Validation Evidence
+
+Candidate commit
+[`91bade2`](https://github.com/DunderCode-Solutions/dundercode-engineering-system/commit/91bade279c22028c7c6b926bac7196b28650bd93)
+passed the Linux
+[`Quality` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32852527313)
+and the native macOS and Windows
+[`Platform Compatibility` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32852527428)
+on 2026-08-25. Both compatibility jobs passed the portable quality gates and
+installed-package smoke test.
+
+Support claims are limited to the environments and hosted runner labels above.
+They do not imply validation of every operating-system release or hardware
+architecture represented by those platform families.
 
 ## Known Product Limitations
 

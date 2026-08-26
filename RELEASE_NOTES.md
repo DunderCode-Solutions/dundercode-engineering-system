@@ -34,8 +34,13 @@ candidate is not yet published or tagged.
 - The source distribution, derived wheel, exact package-resource coverage,
   isolated installation, opt-in initialization, idempotent rerun, and a
   24-document consumer indexing pilot pass.
-- Native macOS and Windows candidate gates are defined but must pass remotely
-  before release approval.
+- Candidate commit
+  [`91bade2`](https://github.com/DunderCode-Solutions/dundercode-engineering-system/commit/91bade279c22028c7c6b926bac7196b28650bd93)
+  passes the Linux
+  [`Quality` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32852527313)
+  and the native macOS and Windows
+  [`Platform Compatibility` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32852527428),
+  including installed-package smoke tests on both compatibility hosts.
 
 ## Distribution
 
