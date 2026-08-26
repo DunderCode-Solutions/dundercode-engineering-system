@@ -22,6 +22,15 @@ returns its distribution state to `pending`. Empty managed placeholders remain
 `excluded` with `empty-placeholder` until substantive content is added. Empty
 navigation or supplemental files remain `excluded` with `empty-file`.
 
+## Release Provenance
+
+The inventory records the intended immutable `release_tag` and the full
+`source_commit` that introduced the approved corpus bytes. Both fields are
+generated and validated as part of the inventory contract, copied into the
+checksum-bound package descriptor, and installed in the consumer ownership
+manifest. The tooling revision that builds a release is recorded separately in
+release evidence.
+
 ## Classifications
 
 | Classification | Indexable | Meaning |
@@ -48,10 +57,10 @@ uv run desys-corpus-inventory --check
 ```
 
 Manual review changes only `distribution` and, for excluded entries,
-`exclusion_reason`. The review owner, source paths, targets, metadata fields,
-checksums, and review fingerprints are generated and validated. A fingerprint
-binds an approval to the content and its target, collection, classification,
-indexability, and configured owner.
+`exclusion_reason`. Release provenance, the review owner, source paths, targets,
+metadata fields, checksums, and review fingerprints are generated and
+validated. A fingerprint binds an approval to the content and its target,
+collection, classification, indexability, and configured owner.
 
 Non-Markdown files MUST be declared in `assets.yaml`. Paths must identify regular
 files inside the repository; symlinks, traversal, duplicate entries, and implicit

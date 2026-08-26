@@ -11,7 +11,8 @@ candidate is not yet published or tagged.
 - The bundle contains 24 indexable reference documents, navigation assets, the
   metadata schema, the MIT License, and third-party notices.
 - A checksum-validated consumer manifest records package, bundle, source,
-  target, classification, distribution, and installed-content provenance.
+  immutable release tag, corpus source commit, target, classification,
+  distribution, and installed-content provenance.
 - Existing consumer ADRs, PRDs, RFCs, code, policies, and operational evidence
   retain authority and are never silently overwritten.
 
@@ -26,14 +27,14 @@ candidate is not yet published or tagged.
 
 ## Validation
 
-- 118 automated tests pass on the local Linux release gate.
+- 123 automated tests pass on the local Linux release gate.
 - The governed inventory contains 349 entries, including 41 approved bundle
   resources.
 - 280 repository documents validate with zero errors and the governed baseline
   of 127 warnings.
 - The source distribution, derived wheel, exact package-resource coverage,
   isolated installation, opt-in initialization, idempotent rerun, and a
-  24-document consumer indexing pilot pass.
+  24-document installed-wheel consumer smoke test pass.
 - Candidate commit
   [`91bade2`](https://github.com/DunderCode-Solutions/dundercode-engineering-system/commit/91bade279c22028c7c6b926bac7196b28650bd93)
   passes the Linux
@@ -41,6 +42,9 @@ candidate is not yet published or tagged.
   and the native macOS and Windows
   [`Platform Compatibility` run](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32852527428),
   including installed-package smoke tests on both compatibility hosts.
+- The two required consumer corpus pilots are governed by the
+  [v0.2 pilot validation plan](docs/DESYS-V0.2-CONSUMER-CORPUS-PILOT-VALIDATION-PLAN.md)
+  and remain pending execution from the final immutable candidate commit.
 
 ## Distribution
 

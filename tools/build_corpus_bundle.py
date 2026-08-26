@@ -25,7 +25,7 @@ from tools.build_corpus_inventory import (
 from tools.desys_indexer.config import load_config
 from tools.desys_metadata import FrontMatterError, parse_front_matter
 
-BUNDLE_SCHEMA = "1.0.0"
+BUNDLE_SCHEMA = "1.1.0"
 DEFAULT_PACKAGE_ROOT = Path("tools/reference_corpus_data")
 RESOURCE_DIRECTORY = "corpus-files"
 FENCE_PATTERN = re.compile(r"^[ ]{0,3}(`{3,}|~{3,})")
@@ -77,6 +77,8 @@ def build_bundle(inventory: dict, repository_root: Path) -> tuple[dict, dict[Pur
         "bundle_schema": BUNDLE_SCHEMA,
         "inventory_schema": inventory["inventory_schema"],
         "corpus_version": inventory["corpus_version"],
+        "release_tag": inventory["release_tag"],
+        "source_commit": inventory["source_commit"],
         "entries": entries,
     }
     descriptor_bytes = _render_yaml(descriptor)

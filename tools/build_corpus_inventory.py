@@ -21,8 +21,10 @@ from tools.desys_metadata import (
     validate_document_metadata,
 )
 
-INVENTORY_SCHEMA = "1.1.0"
+INVENTORY_SCHEMA = "1.2.0"
 CORPUS_VERSION = "0.1.0"
+RELEASE_TAG = "v0.2.0-alpha.1"
+SOURCE_COMMIT = "1ba18c126dc9adf035f64c0ca6eda75186e73b60"
 DEFAULT_OUTPUT = Path("corpus/inventory.yaml")
 DEFAULT_CONFIG = Path("tools/desys_indexer.yaml")
 DEFAULT_ASSETS = Path("corpus/assets.yaml")
@@ -261,6 +263,8 @@ def build_inventory(
     payload = {
         "inventory_schema": INVENTORY_SCHEMA,
         "corpus_version": CORPUS_VERSION,
+        "release_tag": RELEASE_TAG,
+        "source_commit": SOURCE_COMMIT,
         "source_roots": source_roots,
         "entries": entries,
     }
@@ -274,13 +278,24 @@ def validate_inventory(
     assets: tuple[CorpusAsset, ...] = (),
 ) -> None:
     """Validate inventory structure, coverage, paths, metadata, and checksums."""
-    required_top_level = {"inventory_schema", "corpus_version", "source_roots", "entries"}
+    required_top_level = {
+        "inventory_schema",
+        "corpus_version",
+        "release_tag",
+        "source_commit",
+        "source_roots",
+        "entries",
+    }
     if set(payload) != required_top_level:
         raise InventoryError("Inventory top-level fields do not match the supported contract.")
     if payload["inventory_schema"] != INVENTORY_SCHEMA:
         raise InventoryError(f"inventory_schema must be {INVENTORY_SCHEMA!r}.")
     if payload["corpus_version"] != CORPUS_VERSION:
         raise InventoryError(f"corpus_version must be {CORPUS_VERSION!r}.")
+    if payload["release_tag"] != RELEASE_TAG:
+        raise InventoryError(f"release_tag must be {RELEASE_TAG!r}.")
+    if payload["source_commit"] != SOURCE_COMMIT:
+        raise InventoryError(f"source_commit must be {SOURCE_COMMIT!r}.")
 
     expected_roots = [source.relative_to(config.repository_root).as_posix() for source in config.sources]
     if payload["source_roots"] != expected_roots:

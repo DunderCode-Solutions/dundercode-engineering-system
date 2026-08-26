@@ -17,17 +17,25 @@ import yaml
 from tools.build_corpus_inventory import InventoryError, validate_portable_target
 from tools.desys_metadata import UniqueKeyLoader
 
-BUNDLE_SCHEMA = "1.0.0"
-CONSUMER_MANIFEST_SCHEMA = "1.0.0"
+BUNDLE_SCHEMA = "1.1.0"
+CONSUMER_MANIFEST_SCHEMA = "1.1.0"
 RESOURCE_PACKAGE = "tools.reference_corpus_data"
 RESOURCE_DIRECTORY = "corpus-files"
 PACKAGE_NAME = "dundercode-engineering-system"
 CHECKSUM_PATTERN = re.compile(r"sha256:[0-9a-f]{64}")
+RELEASE_TAG_PATTERN = re.compile(
+    r"v(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-(?:alpha|beta|rc)\.[0-9]+)?"
+)
+SOURCE_COMMIT_PATTERN = re.compile(r"(?:[0-9a-f]{40}|[0-9a-f]{64})")
 VERSION_PATTERN = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:[-+][0-9A-Za-z.-]+)?")
 PACKAGE_VERSION_PATTERN = re.compile(
     r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)"
     r"(?:(?:a|b|rc)[0-9]+)?(?:\.post[0-9]+)?(?:\.dev[0-9]+)?"
     r"(?:\+[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?"
+)
+CORPUS_PACKAGE_VERSION_PATTERN = re.compile(
+    r"(?P<release>(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*))"
+    r"(?:(?P<phase>a|b|rc)(?P<number>[0-9]+))?"
 )
 GIT_SOURCE_PATTERN = re.compile(
     rf"{re.escape(PACKAGE_NAME)} @ git\+https://[^\s@?#]+@(?:[0-9a-fA-F]{{40}}|[0-9a-fA-F]{{64}})"
@@ -70,6 +78,8 @@ class ReferenceBundle:
     bundle_schema: str
     inventory_schema: str
     corpus_version: str
+    release_tag: str
+    source_commit: str
     bundle_checksum: str
     entries: tuple[BundleEntry, ...]
 
@@ -101,6 +111,8 @@ class ConsumerManifest:
     package_name: str
     package_version: str
     package_source: str
+    release_tag: str
+    source_commit: str
     corpus_version: str
     bundle_checksum: str
     entries: tuple[InstalledEntry, ...]
@@ -113,13 +125,23 @@ def load_reference_bundle() -> ReferenceBundle:
     data = _load_mapping(manifest_bytes, "packaged corpus bundle")
     _require_fields(
         data,
-        {"bundle_schema", "inventory_schema", "corpus_version", "entries", "bundle_checksum"},
+        {
+            "bundle_schema",
+            "inventory_schema",
+            "corpus_version",
+            "release_tag",
+            "source_commit",
+            "entries",
+            "bundle_checksum",
+        },
         "packaged corpus bundle",
     )
     if data["bundle_schema"] != BUNDLE_SCHEMA:
         raise CorpusResourceError(f"Unsupported corpus bundle schema: {data['bundle_schema']!r}")
     inventory_schema = _require_version(data["inventory_schema"], "inventory_schema")
     corpus_version = _require_version(data["corpus_version"], "corpus_version")
+    release_tag = _require_release_tag(data["release_tag"])
+    source_commit = _require_source_commit(data["source_commit"])
     bundle_checksum = _require_checksum(data["bundle_checksum"], "bundle_checksum")
     raw_entries = data["entries"]
     if not isinstance(raw_entries, list) or not raw_entries:
@@ -129,6 +151,8 @@ def load_reference_bundle() -> ReferenceBundle:
         "bundle_schema": BUNDLE_SCHEMA,
         "inventory_schema": inventory_schema,
         "corpus_version": corpus_version,
+        "release_tag": release_tag,
+        "source_commit": source_commit,
         "entries": raw_entries,
     }
     descriptor_bytes = yaml.safe_dump(
@@ -155,7 +179,15 @@ def load_reference_bundle() -> ReferenceBundle:
     actual_resources = _collect_package_resources(package)
     if actual_resources != expected_resources:
         raise CorpusResourceError("Packaged corpus resources are missing, stale, or contain unexpected files.")
-    return ReferenceBundle(BUNDLE_SCHEMA, inventory_schema, corpus_version, bundle_checksum, entries)
+    return ReferenceBundle(
+        BUNDLE_SCHEMA,
+        inventory_schema,
+        corpus_version,
+        release_tag,
+        source_commit,
+        bundle_checksum,
+        entries,
+    )
 
 
 def load_consumer_manifest(
@@ -170,6 +202,8 @@ def load_consumer_manifest(
         "package_name",
         "package_version",
         "package_source",
+        "release_tag",
+        "source_commit",
         "corpus_version",
         "bundle_checksum",
         "entries",
@@ -182,6 +216,10 @@ def load_consumer_manifest(
         raise CorpusResourceError(f"package_name must be {PACKAGE_NAME!r}.")
     package_version = _require_package_version(data["package_version"])
     package_source = _require_package_source(data["package_source"], package_version)
+    release_tag = _require_release_tag(data["release_tag"])
+    if release_tag != _release_tag_for_package_version(package_version):
+        raise CorpusResourceError("release_tag does not match package_version.")
+    source_commit = _require_source_commit(data["source_commit"])
     corpus_version = _require_version(data["corpus_version"], "corpus_version")
     bundle_checksum = _require_checksum(data["bundle_checksum"], "bundle_checksum")
     if expected_bundle_checksum is not None and bundle_checksum != expected_bundle_checksum:
@@ -198,6 +236,8 @@ def load_consumer_manifest(
         package_name,
         package_version,
         package_source,
+        release_tag,
+        source_commit,
         corpus_version,
         bundle_checksum,
         entries,
@@ -212,11 +252,15 @@ def render_consumer_manifest(
     package_source: str,
 ) -> bytes:
     """Render canonical ownership and provenance for installed corpus files."""
+    if bundle.release_tag != _release_tag_for_package_version(package_version):
+        raise CorpusResourceError("Packaged release_tag does not match package_version.")
     payload: dict[str, Any] = {
         "manifest_schema": CONSUMER_MANIFEST_SCHEMA,
         "package_name": package_name,
         "package_version": package_version,
         "package_source": package_source,
+        "release_tag": bundle.release_tag,
+        "source_commit": bundle.source_commit,
         "corpus_version": bundle.corpus_version,
         "bundle_checksum": bundle.bundle_checksum,
         "entries": [],
@@ -475,6 +519,31 @@ def _require_checksum(value: Any, field: str) -> str:
     if CHECKSUM_PATTERN.fullmatch(text) is None:
         raise CorpusResourceError(f"{field} must be a lowercase SHA-256 checksum.")
     return text
+
+
+def _require_release_tag(value: Any) -> str:
+    text = _require_text(value, "release_tag")
+    if RELEASE_TAG_PATTERN.fullmatch(text) is None:
+        raise CorpusResourceError("release_tag must be an immutable DESys release tag.")
+    return text
+
+
+def _require_source_commit(value: Any) -> str:
+    text = _require_text(value, "source_commit")
+    if SOURCE_COMMIT_PATTERN.fullmatch(text) is None:
+        raise CorpusResourceError("source_commit must be a full lowercase Git commit SHA.")
+    return text
+
+
+def _release_tag_for_package_version(package_version: str) -> str:
+    match = CORPUS_PACKAGE_VERSION_PATTERN.fullmatch(package_version)
+    if match is None:
+        raise CorpusResourceError("package_version cannot be represented by a corpus release tag.")
+    phase = match.group("phase")
+    if phase is None:
+        return f"v{match.group('release')}"
+    phase_name = {"a": "alpha", "b": "beta", "rc": "rc"}[phase]
+    return f"v{match.group('release')}-{phase_name}.{match.group('number')}"
 
 
 def _require_package_version(value: Any) -> str:

@@ -19,14 +19,14 @@ The latest verified result is:
 
 - 280 documents validated;
 - 0 metadata errors and 127 governed legacy warnings;
-- 118 native pytest tests passing;
+- 123 native pytest tests passing;
 - 5 deterministic index artifacts generated and cross-validated;
 - source distribution and derived wheel built and smoke-tested in an isolated
   environment;
 - native GitHub Actions gates passed on `ubuntu-latest`, `macos-latest`, and
   `windows-latest`, including installed-package smoke tests on macOS and Windows;
 - approved 41-entry reference bundle checksum
-  `sha256:cdaa64e389b897fdc673da24d552468f2edd0ddf569f8b3b9dc0f00c092997df`.
+  `sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a`.
 
 The current candidate uses PEP 440 package version `0.2.0a1` and intended public
 release label `v0.2.0-alpha.1`. It is not yet tagged or published.
@@ -61,7 +61,12 @@ and GitHub-hosted Windows. The current milestone is to complete consumer corpus
 pilots, approve release evidence, and only then create and verify the immutable
 public tag.
 
-The required evidence, scenarios, and go/no-go criteria are defined in
+The current corpus-pilot evidence, scenarios, and staged go/no-go criteria are
+defined in
+[`DESYS-V0.2-CONSUMER-CORPUS-PILOT-VALIDATION-PLAN.md`](DESYS-V0.2-CONSUMER-CORPUS-PILOT-VALIDATION-PLAN.md).
+
+The v0.1 adoption evidence remains available as historical compatibility proof.
+Its validation plan is
 [`DESYS-V0.1-PILOT-VALIDATION-PLAN.md`](DESYS-V0.1-PILOT-VALIDATION-PLAN.md).
 The first AI validation findings and mandatory regression scenarios are in
 [`pilot/AI-VALIDATION-ROUND-1.md`](pilot/AI-VALIDATION-ROUND-1.md).

@@ -1,6 +1,8 @@
-bundle_schema: 1.0.0
-inventory_schema: 1.1.0
+bundle_schema: 1.1.0
+inventory_schema: 1.2.0
 corpus_version: 0.1.0
+release_tag: v0.2.0-alpha.1
+source_commit: 1ba18c126dc9adf035f64c0ca6eda75186e73b60
 entries:
 - source: LICENSE
   target: docs/desys/LICENSE
@@ -320,4 +322,4 @@ entries:
   document_id: RFC-0001
   canonical_id: rfc.corpus.reference-distribution
   metadata_status: approved
-bundle_checksum: sha256:cdaa64e389b897fdc673da24d552468f2edd0ddf569f8b3b9dc0f00c092997df
+bundle_checksum: sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a

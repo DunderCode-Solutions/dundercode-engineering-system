@@ -18,8 +18,10 @@ from tools.corpus_resources import (
 def test_packaged_resources_match_all_bundle_checksums() -> None:
     bundle = load_reference_bundle()
 
-    assert bundle.bundle_schema == "1.0.0"
+    assert bundle.bundle_schema == "1.1.0"
     assert bundle.corpus_version == "0.1.0"
+    assert bundle.release_tag == "v0.2.0-alpha.1"
+    assert bundle.source_commit == "1ba18c126dc9adf035f64c0ca6eda75186e73b60"
     assert len(bundle.entries) == 41
     assert {path.as_posix() for path in bundle.source_roots} == {
         "docs/desys/reference/delivery",
@@ -35,7 +37,7 @@ def test_resource_loader_rejects_duplicate_yaml_keys(monkeypatch: pytest.MonkeyP
     package = tmp_path / "reference_corpus_data"
     package.mkdir()
     (package / "bundle.yaml").write_text(
-        "bundle_schema: 1.0.0\nbundle_schema: 1.0.0\n",
+        "bundle_schema: 1.1.0\nbundle_schema: 1.1.0\n",
         encoding="utf-8",
     )
     monkeypatch.setattr(corpus_resources.resources, "files", lambda _: package)
@@ -51,7 +53,10 @@ def test_resource_loader_rejects_unchecked_target_paths(
     tracked = Path("tools/reference_corpus_data/bundle.yaml").read_text(encoding="utf-8")
     data = yaml.safe_load(tracked)
     data["entries"][0]["target"] = "../outside"
-    descriptor = {key: data[key] for key in ("bundle_schema", "inventory_schema", "corpus_version", "entries")}
+    descriptor = {
+        key: data[key]
+        for key in ("bundle_schema", "inventory_schema", "corpus_version", "release_tag", "source_commit", "entries")
+    }
     descriptor_bytes = yaml.safe_dump(
         descriptor, sort_keys=False, allow_unicode=False, width=120
     ).encode("utf-8")
@@ -91,10 +96,12 @@ def test_consumer_manifest_rejects_casefold_equivalent_paths() -> None:
         "installed_checksum": f"sha256:{'a' * 64}",
     }
     payload = {
-        "manifest_schema": "1.0.0",
+        "manifest_schema": "1.1.0",
         "package_name": "dundercode-engineering-system",
-        "package_version": "0.1.0a1",
-        "package_source": "dundercode-engineering-system==0.1.0a1",
+        "package_version": "0.2.0a1",
+        "package_source": "dundercode-engineering-system==0.2.0a1",
+        "release_tag": "v0.2.0-alpha.1",
+        "source_commit": "1ba18c126dc9adf035f64c0ca6eda75186e73b60",
         "corpus_version": "0.1.0",
         "bundle_checksum": f"sha256:{'b' * 64}",
         "entries": [entry, {**entry, "source": "knowledge/a.md", "target": "docs/desys/reference/knowledge/a.md"}],
@@ -106,10 +113,12 @@ def test_consumer_manifest_rejects_casefold_equivalent_paths() -> None:
 
 def test_consumer_manifest_rejects_nested_nonstring_keys() -> None:
     payload = {
-        "manifest_schema": "1.0.0",
+        "manifest_schema": "1.1.0",
         "package_name": "dundercode-engineering-system",
-        "package_version": "0.1.0a1",
-        "package_source": "dundercode-engineering-system==0.1.0a1",
+        "package_version": "0.2.0a1",
+        "package_source": "dundercode-engineering-system==0.2.0a1",
+        "release_tag": "v0.2.0-alpha.1",
+        "source_commit": "1ba18c126dc9adf035f64c0ca6eda75186e73b60",
         "corpus_version": "0.1.0",
         "bundle_checksum": f"sha256:{'b' * 64}",
         "entries": [
@@ -127,6 +136,42 @@ def test_consumer_manifest_rejects_nested_nonstring_keys() -> None:
     }
 
     with pytest.raises(CorpusResourceError, match="string field names"):
+        load_consumer_manifest(yaml.safe_dump(payload).encode("utf-8"))
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    (
+        ("release_tag", "v0.2.0-beta.1", "does not match package_version"),
+        ("release_tag", "0.2.0-alpha.1", "immutable DESys release tag"),
+        ("source_commit", "1ba18c1", "full lowercase Git commit SHA"),
+    ),
+)
+def test_consumer_manifest_rejects_invalid_release_provenance(field: str, value: str, message: str) -> None:
+    payload = {
+        "manifest_schema": "1.1.0",
+        "package_name": "dundercode-engineering-system",
+        "package_version": "0.2.0a1",
+        "package_source": "dundercode-engineering-system==0.2.0a1",
+        "release_tag": "v0.2.0-alpha.1",
+        "source_commit": "1ba18c126dc9adf035f64c0ca6eda75186e73b60",
+        "corpus_version": "0.1.0",
+        "bundle_checksum": f"sha256:{'b' * 64}",
+        "entries": [
+            {
+                "source": "knowledge/a.md",
+                "target": "docs/desys/reference/knowledge/a.md",
+                "collection": "knowledge",
+                "classification": "navigation",
+                "distribution": "approved",
+                "original_checksum": f"sha256:{'a' * 64}",
+                "installed_checksum": f"sha256:{'a' * 64}",
+            }
+        ],
+    }
+    payload[field] = value
+
+    with pytest.raises(CorpusResourceError, match=message):
         load_consumer_manifest(yaml.safe_dump(payload).encode("utf-8"))
 
 
@@ -157,9 +202,11 @@ def test_resource_loader_rejects_filesystem_symlinks(
             }
         )
     descriptor = {
-        "bundle_schema": "1.0.0",
-        "inventory_schema": "1.1.0",
+        "bundle_schema": "1.1.0",
+        "inventory_schema": "1.2.0",
         "corpus_version": "0.1.0",
+        "release_tag": "v0.2.0-alpha.1",
+        "source_commit": "1ba18c126dc9adf035f64c0ca6eda75186e73b60",
         "entries": entries,
     }
     descriptor_bytes = yaml.safe_dump(descriptor, sort_keys=False, allow_unicode=False, width=120).encode("utf-8")

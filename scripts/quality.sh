@@ -51,7 +51,14 @@ with zipfile.ZipFile(sys.argv[1]) as wheel:
 
     descriptor = {
         key: bundle[key]
-        for key in ("bundle_schema", "inventory_schema", "corpus_version", "entries")
+        for key in (
+            "bundle_schema",
+            "inventory_schema",
+            "corpus_version",
+            "release_tag",
+            "source_commit",
+            "entries",
+        )
     }
     descriptor_bytes = yaml.safe_dump(
         descriptor,
@@ -146,7 +153,7 @@ uv pip install \
   test -s "$consumer_repository/docs/desys/THIRD_PARTY_NOTICES.md"
   test -s "$consumer_repository/docs/desys/corpus-manifest.yaml"
   "$temporary_directory/venv/bin/python" -c \
-    'import sys, yaml; data = yaml.safe_load(open(sys.argv[1], encoding="utf-8")); assert data["manifest_schema"] == "1.0.0"; assert len(data["entries"]) == 41' \
+    'import sys, yaml; data = yaml.safe_load(open(sys.argv[1], encoding="utf-8")); assert data["manifest_schema"] == "1.1.0"; assert data["release_tag"] == "v0.2.0-alpha.1"; assert data["source_commit"] == "1ba18c126dc9adf035f64c0ca6eda75186e73b60"; assert len(data["entries"]) == 41' \
     "$consumer_repository/docs/desys/corpus-manifest.yaml"
   bash "$consumer_repository/scripts/desys-docs-quality.sh"
   "$temporary_directory/venv/bin/python" -c \

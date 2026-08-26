@@ -14,6 +14,8 @@ All notable changes to DESys are documented in this file.
   actionable identity-collision diagnostics.
 - Native macOS and Windows compatibility gates in addition to the complete
   Linux release gate.
+- Checksum-bound release-tag and corpus-source provenance in bundle and
+  consumer manifests.
 
 ### Security
 

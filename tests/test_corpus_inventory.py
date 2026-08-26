@@ -71,7 +71,9 @@ def test_inventory_schema_identity_matches_runtime_contract() -> None:
     schema = json.loads(Path("corpus/inventory.schema.json").read_text(encoding="utf-8"))
 
     assert schema["$id"] == "urn:uuid:8dfc7e36-1e0a-4b96-9f13-e98f8187a59a"
-    assert schema["properties"]["inventory_schema"]["const"] == "1.1.0"
+    assert schema["properties"]["inventory_schema"]["const"] == "1.2.0"
+    assert schema["properties"]["release_tag"]["const"] == "v0.2.0-alpha.1"
+    assert schema["properties"]["source_commit"]["const"] == "1ba18c126dc9adf035f64c0ca6eda75186e73b60"
 
 
 def test_changed_approved_document_returns_to_pending(tmp_path: Path) -> None:

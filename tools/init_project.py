@@ -731,6 +731,8 @@ def _same_bundle_inconsistency(
         return "corpus manifest package name is inconsistent"
     if manifest.package_version != package_version or manifest.package_source != package_source:
         return "corpus manifest package provenance is inconsistent"
+    if manifest.release_tag != bundle.release_tag or manifest.source_commit != bundle.source_commit:
+        return "corpus manifest release provenance is inconsistent"
     if manifest.corpus_version != bundle.corpus_version:
         return "corpus manifest version is inconsistent with its bundle checksum"
     expected = {

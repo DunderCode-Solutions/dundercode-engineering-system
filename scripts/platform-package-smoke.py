@@ -45,7 +45,10 @@ def main() -> None:
             "from importlib.metadata import version; "
             "from tools.corpus_resources import load_reference_bundle; "
             f"assert version({project['name']!r}) == {expected_version!r}; "
-            "assert len(load_reference_bundle().entries) == 41"
+            "bundle = load_reference_bundle(); "
+            "assert bundle.release_tag == 'v0.2.0-alpha.1'; "
+            "assert bundle.source_commit == '1ba18c126dc9adf035f64c0ca6eda75186e73b60'; "
+            "assert len(bundle.entries) == 41"
         )
         run(str(python), "-c", probe, cwd=root)
         executable = environment / (
