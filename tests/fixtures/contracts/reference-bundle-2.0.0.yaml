@@ -1,0 +1,19 @@
+bundle_schema: 2.0.0
+inventory_schema: 1.2.0
+corpus_version: 0.1.0
+release_tag: v0.2.0-alpha.1
+source_commit: 1ba18c126dc9adf035f64c0ca6eda75186e73b60
+entries:
+- source: LICENSE
+  target: docs/desys/LICENSE
+  collection: legal
+  classification: legal
+  indexable: false
+  checksum: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+- source: THIRD_PARTY_NOTICES.md
+  target: docs/desys/THIRD_PARTY_NOTICES.md
+  collection: legal
+  classification: legal
+  indexable: false
+  checksum: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bundle_checksum: sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

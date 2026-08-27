@@ -42,6 +42,23 @@ release evidence.
 | `schema` | No | Machine-readable contract required by distributed documents. |
 | `supplemental` | No | Other Markdown content outside the managed identifier contract. |
 
+## Distribution Contracts
+
+Versioned structural contracts for the generated bundle, installed consumer
+manifest, and compatibility matrix are packaged under
+`tools/reference_corpus_data/contracts/`. The machine-readable
+`tools/reference_corpus_data/compatibility.yaml` profile binds the installed
+package version to release provenance, corpus and schema versions, bundle
+checksum, contract checksums, Python support, host platforms, and explicitly
+supported direct predecessors.
+
+JSON Schema validation establishes the portable document shape. Runtime
+validation remains authoritative for semantic invariants that JSON Schema does
+not express, including descriptor checksums, package-resource coverage,
+cross-field provenance, portable path uniqueness, legal-resource coverage, and
+installed package metadata alignment. Tests require supported fixtures to pass
+both layers and unsupported major versions to fail before ownership is trusted.
+
 ## Commands
 
 Update the inventory after source changes:

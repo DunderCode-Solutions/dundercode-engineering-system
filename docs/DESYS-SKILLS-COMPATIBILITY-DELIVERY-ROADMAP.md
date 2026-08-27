@@ -43,6 +43,8 @@ DSK collection for distribution and does not authorize active Skill execution.
 
 ### PR 1 - Versioned Compatibility Contracts
 
+Status: COMPLETE
+
 Deliverables:
 
 - formal JSON Schemas for bundle and consumer manifest;
