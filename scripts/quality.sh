@@ -45,12 +45,14 @@ with zipfile.ZipFile(sys.argv[1]) as wheel:
         f"{prefix}__init__.py",
         f"{prefix}bundle.yaml",
         f"{prefix}compatibility.yaml",
-        f"{prefix}contracts/compatibility-1.0.0.schema.json",
+        f"{prefix}contracts/compatibility-1.1.0.schema.json",
         f"{prefix}contracts/consumer-manifest-1.1.0.schema.json",
+        f"{prefix}contracts/predecessor-descriptor-1.0.0.schema.json",
         f"{prefix}contracts/reference-bundle-1.1.0.schema.json",
+        f"{prefix}predecessors/sha256-d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a.yaml",
         *(f"{prefix}corpus-files/{entry['target']}" for entry in entries),
     }
-    assert len(entries) + 6 == len(expected), "Corpus bundle contains duplicate targets."
+    assert len(entries) + 8 == len(expected), "Corpus bundle contains duplicate targets."
     assert names == expected, f"Wheel corpus resources differ: missing={sorted(expected - names)}, extra={sorted(names - expected)}"
 
     descriptor = {
@@ -157,7 +159,7 @@ uv pip install \
   test -s "$consumer_repository/docs/desys/THIRD_PARTY_NOTICES.md"
   test -s "$consumer_repository/docs/desys/corpus-manifest.yaml"
   "$temporary_directory/venv/bin/python" -c \
-    'import sys, yaml; data = yaml.safe_load(open(sys.argv[1], encoding="utf-8")); assert data["manifest_schema"] == "1.1.0"; assert data["release_tag"] == "v0.2.0-alpha.1"; assert data["source_commit"] == "1ba18c126dc9adf035f64c0ca6eda75186e73b60"; assert len(data["entries"]) == 41' \
+    'import sys, yaml; data = yaml.safe_load(open(sys.argv[1], encoding="utf-8")); assert data["manifest_schema"] == "1.1.0"; assert data["release_tag"] == "v0.3.0-alpha.1"; assert data["source_commit"] == "d84693cd117e5b792fe63fcaaa1550acda427c16"; assert len(data["entries"]) == 41' \
     "$consumer_repository/docs/desys/corpus-manifest.yaml"
   bash "$consumer_repository/scripts/desys-docs-quality.sh"
   "$temporary_directory/venv/bin/python" -c \

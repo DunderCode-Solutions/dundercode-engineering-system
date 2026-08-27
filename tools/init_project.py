@@ -23,6 +23,7 @@ from tools.corpus_resources import (
     load_consumer_manifest,
     load_reference_bundle,
     render_consumer_manifest,
+    validate_predecessor_manifest,
 )
 
 PACKAGE_NAME = "dundercode-engineering-system"
@@ -574,7 +575,16 @@ def _plan_corpus(
                         expected_bundle_checksum=bundle.bundle_checksum,
                     )
             except UnsupportedCorpusBundleError:
-                manifest_conflict = "unsupported prior corpus bundle"
+                try:
+                    validate_predecessor_manifest(old_manifest_content, target_bundle=bundle)
+                except UnsupportedCorpusBundleError:
+                    manifest_conflict = "unsupported prior corpus bundle"
+                except CorpusResourceError as error:
+                    manifest_conflict = f"invalid predecessor corpus manifest: {error}"
+                else:
+                    manifest_conflict = (
+                        "trusted predecessor validated; cross-snapshot planning is not implemented"
+                    )
             except (CorpusResourceError, OSError) as error:
                 manifest_conflict = f"invalid corpus ownership manifest: {error}"
 

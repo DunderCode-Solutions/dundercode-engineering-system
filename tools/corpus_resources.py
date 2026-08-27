@@ -21,14 +21,19 @@ from tools.desys_metadata import UniqueKeyLoader
 
 BUNDLE_SCHEMA = "1.1.0"
 CONSUMER_MANIFEST_SCHEMA = "1.1.0"
-COMPATIBILITY_SCHEMA = "1.0.0"
+COMPATIBILITY_SCHEMA = "1.1.0"
+PREDECESSOR_DESCRIPTOR_SCHEMA = "1.0.0"
 RESOURCE_PACKAGE = "tools.reference_corpus_data"
 RESOURCE_DIRECTORY = "corpus-files"
+PREDECESSOR_DIRECTORY = PurePosixPath("predecessors")
 COMPATIBILITY_RESOURCE = PurePosixPath("compatibility.yaml")
 CONTRACT_RESOURCES = {
     "reference_bundle_schema_checksum": PurePosixPath("contracts/reference-bundle-1.1.0.schema.json"),
     "consumer_manifest_schema_checksum": PurePosixPath("contracts/consumer-manifest-1.1.0.schema.json"),
-    "compatibility_schema_checksum": PurePosixPath("contracts/compatibility-1.0.0.schema.json"),
+    "compatibility_schema_checksum": PurePosixPath("contracts/compatibility-1.1.0.schema.json"),
+    "predecessor_descriptor_schema_checksum": PurePosixPath(
+        "contracts/predecessor-descriptor-1.0.0.schema.json"
+    ),
 }
 PACKAGE_NAME = "dundercode-engineering-system"
 CHECKSUM_PATTERN = re.compile(r"sha256:[0-9a-f]{64}")
@@ -117,6 +122,7 @@ class InstalledEntry:
 
 @dataclass(frozen=True, slots=True)
 class ConsumerManifest:
+    manifest_schema: str
     package_name: str
     package_version: str
     package_source: str
@@ -141,7 +147,36 @@ class CompatibilityProfile:
     requires_python: str
     platforms: tuple[str, ...]
     direct_predecessor_bundle_checksums: tuple[str, ...]
+    predecessor_descriptor_checksums: dict[str, str]
     contract_checksums: dict[str, str]
+
+
+@dataclass(frozen=True, slots=True)
+class DescriptorEntry:
+    source: str
+    target: PurePosixPath
+    collection: str
+    classification: str
+    indexable: bool
+    checksum: str
+    document_id: str | None = None
+    canonical_id: str | None = None
+    metadata_status: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class PredecessorDescriptor:
+    descriptor_schema: str
+    target_bundle_checksum: str
+    accepted_manifest_schemas: tuple[str, ...]
+    predecessor_package_version: str
+    bundle_schema: str
+    inventory_schema: str
+    corpus_version: str
+    release_tag: str
+    source_commit: str
+    bundle_checksum: str
+    entries: tuple[DescriptorEntry, ...]
 
 
 def load_reference_bundle() -> ReferenceBundle:
@@ -198,10 +233,15 @@ def load_reference_bundle() -> ReferenceBundle:
     }
     if {entry.target for entry in entries if entry.classification == "legal"} != required_legal:
         raise CorpusResourceError("Packaged corpus must contain exactly the required legal resources.")
+    profile = _current_compatibility_profile(package)
+    predecessor_resources = {
+        _predecessor_resource(checksum) for checksum in profile.direct_predecessor_bundle_checksums
+    }
     expected_resources = {
         PurePosixPath("bundle.yaml"),
         COMPATIBILITY_RESOURCE,
         *CONTRACT_RESOURCES.values(),
+        *predecessor_resources,
         *(PurePosixPath(RESOURCE_DIRECTORY) / entry.target for entry in entries),
     }
     actual_resources = _collect_package_resources(package)
@@ -216,8 +256,14 @@ def load_reference_bundle() -> ReferenceBundle:
         bundle_checksum,
         entries,
     )
-    profile = _current_compatibility_profile(package)
     _validate_bundle_compatibility(package, bundle, profile)
+    for checksum in profile.direct_predecessor_bundle_checksums:
+        _load_predecessor_descriptor(
+            package,
+            checksum,
+            profile.predecessor_descriptor_checksums[checksum],
+            bundle.bundle_checksum,
+        )
     return bundle
 
 
@@ -232,12 +278,75 @@ def load_compatibility_profile(package_version: str | None = None) -> Compatibil
     return profile
 
 
+def load_predecessor_descriptor(predecessor_bundle_checksum: str) -> PredecessorDescriptor:
+    """Load an explicitly declared predecessor authorized for the current target bundle."""
+    predecessor_bundle_checksum = _require_checksum(
+        predecessor_bundle_checksum, "predecessor_bundle_checksum"
+    )
+    target = load_reference_bundle()
+    package = resources.files(RESOURCE_PACKAGE)
+    profile = _current_compatibility_profile(package)
+    return _declared_predecessor_descriptor(
+        package, profile, predecessor_bundle_checksum, target.bundle_checksum
+    )
+
+
+def _declared_predecessor_descriptor(
+    package: Traversable,
+    profile: CompatibilityProfile,
+    predecessor_bundle_checksum: str,
+    target_bundle_checksum: str,
+) -> PredecessorDescriptor:
+    if predecessor_bundle_checksum not in profile.direct_predecessor_bundle_checksums:
+        raise UnsupportedCorpusBundleError(
+            "Corpus snapshot is not a declared direct predecessor of the target bundle."
+        )
+    _validate_contract_checksums(package, profile)
+    return _load_predecessor_descriptor(
+        package,
+        predecessor_bundle_checksum,
+        profile.predecessor_descriptor_checksums[predecessor_bundle_checksum],
+        target_bundle_checksum,
+    )
+
+
+def validate_predecessor_manifest(
+    content: bytes,
+    *,
+    target_bundle: ReferenceBundle | None = None,
+) -> tuple[ConsumerManifest, PredecessorDescriptor]:
+    """Validate complete predecessor provenance and ownership before planning."""
+    target = target_bundle or load_reference_bundle()
+    manifest = _parse_consumer_manifest(content, {CONSUMER_MANIFEST_SCHEMA})
+    if manifest.bundle_checksum == target.bundle_checksum:
+        raise UnsupportedCorpusBundleError("Consumer manifest belongs to the target bundle, not a predecessor.")
+    package = resources.files(RESOURCE_PACKAGE)
+    profile = _current_compatibility_profile(package)
+    _validate_bundle_compatibility(package, target, profile)
+    descriptor = _declared_predecessor_descriptor(
+        package, profile, manifest.bundle_checksum, target.bundle_checksum
+    )
+    if descriptor.target_bundle_checksum != target.bundle_checksum:
+        raise UnsupportedCorpusBundleError("Predecessor descriptor does not authorize this target bundle.")
+    _validate_predecessor_manifest(manifest, descriptor)
+    return manifest, descriptor
+
+
 def load_consumer_manifest(
     content: bytes,
     *,
     expected_bundle_checksum: str | None = None,
 ) -> ConsumerManifest:
     """Strictly validate a consumer manifest before it can assert ownership."""
+    manifest = _parse_consumer_manifest(content, {CONSUMER_MANIFEST_SCHEMA})
+    if expected_bundle_checksum is not None and manifest.bundle_checksum != expected_bundle_checksum:
+        raise UnsupportedCorpusBundleError("Consumer manifest uses an unsupported prior corpus bundle.")
+    profile = load_compatibility_profile(manifest.package_version)
+    _validate_manifest_compatibility(manifest, profile)
+    return manifest
+
+
+def _parse_consumer_manifest(content: bytes, accepted_schemas: set[str]) -> ConsumerManifest:
     data = _load_mapping(content, "consumer corpus manifest")
     required = {
         "manifest_schema",
@@ -251,7 +360,8 @@ def load_consumer_manifest(
         "entries",
     }
     _require_fields(data, required, "consumer corpus manifest")
-    if data["manifest_schema"] != CONSUMER_MANIFEST_SCHEMA:
+    manifest_schema = _require_version(data["manifest_schema"], "manifest_schema")
+    if manifest_schema not in accepted_schemas:
         raise CorpusResourceError(f"Unsupported consumer manifest schema: {data['manifest_schema']!r}")
     package_name = _require_text(data["package_name"], "package_name")
     if package_name != PACKAGE_NAME:
@@ -264,8 +374,6 @@ def load_consumer_manifest(
     source_commit = _require_source_commit(data["source_commit"])
     corpus_version = _require_version(data["corpus_version"], "corpus_version")
     bundle_checksum = _require_checksum(data["bundle_checksum"], "bundle_checksum")
-    if expected_bundle_checksum is not None and bundle_checksum != expected_bundle_checksum:
-        raise UnsupportedCorpusBundleError("Consumer manifest uses an unsupported prior corpus bundle.")
     raw_entries = data["entries"]
     if not isinstance(raw_entries, list) or not raw_entries:
         raise CorpusResourceError("Consumer manifest entries must be a non-empty list.")
@@ -275,6 +383,7 @@ def load_consumer_manifest(
     _require_portable_uniqueness(targets, "Consumer manifest targets")
     _require_portable_uniqueness(sources, "Consumer manifest sources")
     manifest = ConsumerManifest(
+        manifest_schema,
         package_name,
         package_version,
         package_source,
@@ -284,8 +393,6 @@ def load_consumer_manifest(
         bundle_checksum,
         entries,
     )
-    profile = load_compatibility_profile(package_version)
-    _validate_manifest_compatibility(manifest, profile)
     return manifest
 
 
@@ -422,6 +529,177 @@ def _load_installed_entry(value: Any, index: int) -> InstalledEntry:
     )
 
 
+def _predecessor_resource(bundle_checksum: str) -> PurePosixPath:
+    checksum = _require_checksum(bundle_checksum, "predecessor bundle checksum")
+    return PREDECESSOR_DIRECTORY / f"sha256-{checksum.removeprefix('sha256:')}.yaml"
+
+
+def _load_predecessor_descriptor(
+    package: Traversable,
+    predecessor_bundle_checksum: str,
+    expected_descriptor_checksum: str,
+    target_bundle_checksum: str,
+) -> PredecessorDescriptor:
+    resource = _predecessor_resource(predecessor_bundle_checksum)
+    content = _read_package_resource(package, resource)
+    if _checksum(content) != expected_descriptor_checksum:
+        raise CorpusResourceError(f"Packaged predecessor descriptor checksum mismatch: {resource}")
+    data = _load_mapping(content, "predecessor descriptor")
+    required = {
+        "predecessor_descriptor_schema",
+        "target_bundle_checksum",
+        "accepted_manifest_schemas",
+        "predecessor_package_version",
+        "bundle_schema",
+        "inventory_schema",
+        "corpus_version",
+        "release_tag",
+        "source_commit",
+        "entries",
+        "bundle_checksum",
+    }
+    _require_fields(data, required, "predecessor descriptor")
+    if data["predecessor_descriptor_schema"] != PREDECESSOR_DESCRIPTOR_SCHEMA:
+        raise CorpusResourceError(
+            f"Unsupported predecessor descriptor schema: {data['predecessor_descriptor_schema']!r}"
+        )
+    authorized_target = _require_checksum(data["target_bundle_checksum"], "target_bundle_checksum")
+    if authorized_target != target_bundle_checksum:
+        raise CorpusResourceError("Predecessor descriptor does not authorize the current target bundle.")
+    if authorized_target == predecessor_bundle_checksum:
+        raise CorpusResourceError("Predecessor descriptor cannot authorize its own bundle.")
+    accepted = data["accepted_manifest_schemas"]
+    if not isinstance(accepted, list) or not accepted or len(accepted) != len(set(accepted)):
+        raise CorpusResourceError("accepted_manifest_schemas must be a non-empty unique list.")
+    accepted_schemas = tuple(
+        _require_version(value, "accepted_manifest_schemas") for value in accepted
+    )
+    if any(schema != CONSUMER_MANIFEST_SCHEMA for schema in accepted_schemas):
+        raise CorpusResourceError("Predecessor descriptor accepts an unsupported manifest schema.")
+    predecessor_package_version = _require_package_version(data["predecessor_package_version"])
+    bundle_schema = _require_version(data["bundle_schema"], "bundle_schema")
+    if bundle_schema != BUNDLE_SCHEMA:
+        raise CorpusResourceError(f"Unsupported predecessor bundle schema: {bundle_schema!r}")
+    inventory_schema = _require_version(data["inventory_schema"], "inventory_schema")
+    corpus_version = _require_version(data["corpus_version"], "corpus_version")
+    release_tag = _require_release_tag(data["release_tag"])
+    if release_tag != _release_tag_for_package_version(predecessor_package_version):
+        raise CorpusResourceError("Predecessor release_tag does not match its package version.")
+    source_commit = _require_source_commit(data["source_commit"])
+    bundle_checksum = _require_checksum(data["bundle_checksum"], "bundle_checksum")
+    if bundle_checksum != predecessor_bundle_checksum:
+        raise CorpusResourceError("Predecessor descriptor checksum does not match its resource name.")
+    raw_entries = data["entries"]
+    if not isinstance(raw_entries, list) or not raw_entries:
+        raise CorpusResourceError("Predecessor descriptor entries must be a non-empty list.")
+    bundle_payload = {
+        "bundle_schema": bundle_schema,
+        "inventory_schema": inventory_schema,
+        "corpus_version": corpus_version,
+        "release_tag": release_tag,
+        "source_commit": source_commit,
+        "entries": raw_entries,
+    }
+    bundle_bytes = yaml.safe_dump(
+        bundle_payload, sort_keys=False, allow_unicode=False, width=120
+    ).encode("utf-8")
+    if _checksum(bundle_bytes) != bundle_checksum:
+        raise CorpusResourceError("Predecessor bundle checksum does not match its descriptor.")
+    entries = tuple(_load_descriptor_entry(value, index) for index, value in enumerate(raw_entries))
+    _require_portable_uniqueness([entry.target for entry in entries], "Predecessor descriptor targets")
+    _require_portable_uniqueness([entry.source for entry in entries], "Predecessor descriptor sources")
+    return PredecessorDescriptor(
+        descriptor_schema=PREDECESSOR_DESCRIPTOR_SCHEMA,
+        target_bundle_checksum=authorized_target,
+        accepted_manifest_schemas=accepted_schemas,
+        predecessor_package_version=predecessor_package_version,
+        bundle_schema=bundle_schema,
+        inventory_schema=inventory_schema,
+        corpus_version=corpus_version,
+        release_tag=release_tag,
+        source_commit=source_commit,
+        bundle_checksum=bundle_checksum,
+        entries=entries,
+    )
+
+
+def _load_descriptor_entry(value: Any, index: int) -> DescriptorEntry:
+    context = f"predecessor descriptor entry {index}"
+    if not isinstance(value, dict):
+        raise CorpusResourceError(f"{context.capitalize()} must be a mapping.")
+    _require_fields(value, ENTRY_FIELDS, context, optional=OPTIONAL_ENTRY_FIELDS)
+    source = _require_safe_path(value["source"], f"{context}.source").as_posix()
+    target = validate_target(value["target"], f"{context}.target")
+    collection = _require_text(value["collection"], f"{context}.collection")
+    classification = _require_text(value["classification"], f"{context}.classification")
+    if type(value["indexable"]) is not bool:
+        raise CorpusResourceError(f"{context}.indexable must be a boolean.")
+    _validate_target_metadata(target, collection, classification, value["indexable"], context)
+    return DescriptorEntry(
+        source=source,
+        target=target,
+        collection=collection,
+        classification=classification,
+        indexable=value["indexable"],
+        checksum=_require_checksum(value["checksum"], f"{context}.checksum"),
+        document_id=(
+            _require_text(value["document_id"], f"{context}.document_id")
+            if "document_id" in value
+            else None
+        ),
+        canonical_id=(
+            _require_text(value["canonical_id"], f"{context}.canonical_id")
+            if "canonical_id" in value
+            else None
+        ),
+        metadata_status=(
+            _require_text(value["metadata_status"], f"{context}.metadata_status")
+            if "metadata_status" in value
+            else None
+        ),
+    )
+
+
+def _validate_predecessor_manifest(
+    manifest: ConsumerManifest,
+    descriptor: PredecessorDescriptor,
+) -> None:
+    provenance = (
+        manifest.manifest_schema,
+        manifest.package_version,
+        manifest.release_tag,
+        manifest.source_commit,
+        manifest.corpus_version,
+        manifest.bundle_checksum,
+    )
+    expected_provenance = (
+        manifest.manifest_schema if manifest.manifest_schema in descriptor.accepted_manifest_schemas else None,
+        descriptor.predecessor_package_version,
+        descriptor.release_tag,
+        descriptor.source_commit,
+        descriptor.corpus_version,
+        descriptor.bundle_checksum,
+    )
+    if provenance != expected_provenance:
+        raise CorpusResourceError("Consumer manifest provenance does not match its predecessor descriptor.")
+    expected_entries = tuple(
+        InstalledEntry(
+            source=entry.source,
+            target=entry.target,
+            collection=entry.collection,
+            classification=entry.classification,
+            distribution="approved",
+            original_checksum=entry.checksum,
+            installed_checksum=entry.checksum,
+            document_id=entry.document_id,
+            canonical_id=entry.canonical_id,
+        )
+        for entry in descriptor.entries
+    )
+    if manifest.entries != expected_entries:
+        raise CorpusResourceError("Consumer manifest entries do not match its predecessor descriptor.")
+
+
 def _load_mapping(content: bytes, context: str) -> dict[str, Any]:
     try:
         text = content.decode("utf-8")
@@ -497,7 +775,7 @@ def _load_compatibility_profile(value: Any, index: int) -> CompatibilityProfile:
         "bundle_checksum",
         "requires_python",
         "platforms",
-        "direct_predecessor_bundle_checksums",
+        "direct_predecessors",
         *CONTRACT_RESOURCES,
     }
     _require_fields(value, required, context)
@@ -509,12 +787,29 @@ def _load_compatibility_profile(value: Any, index: int) -> CompatibilityProfile:
         or len(platforms) != len(set(platforms))
     ):
         raise CorpusResourceError(f"{context}.platforms must contain unique supported platform names.")
-    predecessors = value["direct_predecessor_bundle_checksums"]
-    if not isinstance(predecessors, list) or len(predecessors) != len(set(predecessors)):
-        raise CorpusResourceError(f"{context}.direct_predecessor_bundle_checksums must be a unique list.")
-    predecessor_checksums = tuple(
-        _require_checksum(item, f"{context}.direct_predecessor_bundle_checksums") for item in predecessors
-    )
+    predecessors = value["direct_predecessors"]
+    if not isinstance(predecessors, list):
+        raise CorpusResourceError(f"{context}.direct_predecessors must be a list.")
+    predecessor_pairs: list[tuple[str, str]] = []
+    for predecessor_index, predecessor in enumerate(predecessors):
+        predecessor_context = f"{context}.direct_predecessors[{predecessor_index}]"
+        if not isinstance(predecessor, dict):
+            raise CorpusResourceError(f"{predecessor_context} must be a mapping.")
+        _require_fields(predecessor, {"bundle_checksum", "descriptor_checksum"}, predecessor_context)
+        predecessor_pairs.append(
+            (
+                _require_checksum(predecessor["bundle_checksum"], f"{predecessor_context}.bundle_checksum"),
+                _require_checksum(
+                    predecessor["descriptor_checksum"], f"{predecessor_context}.descriptor_checksum"
+                ),
+            )
+        )
+    predecessor_checksums = tuple(bundle_checksum for bundle_checksum, _ in predecessor_pairs)
+    descriptor_checksums = tuple(descriptor_checksum for _, descriptor_checksum in predecessor_pairs)
+    if len(predecessor_checksums) != len(set(predecessor_checksums)):
+        raise CorpusResourceError(f"{context}.direct_predecessors bundle checksums must be unique.")
+    if len(descriptor_checksums) != len(set(descriptor_checksums)):
+        raise CorpusResourceError(f"{context}.direct_predecessors descriptor checksums must be unique.")
     contract_checksums = {
         field: _require_checksum(value[field], f"{context}.{field}") for field in CONTRACT_RESOURCES
     }
@@ -533,6 +828,7 @@ def _load_compatibility_profile(value: Any, index: int) -> CompatibilityProfile:
         requires_python=_require_text(value["requires_python"], f"{context}.requires_python"),
         platforms=tuple(platforms),
         direct_predecessor_bundle_checksums=predecessor_checksums,
+        predecessor_descriptor_checksums=dict(predecessor_pairs),
         contract_checksums=contract_checksums,
     )
     if profile.release_tag != _release_tag_for_package_version(profile.package_version):
@@ -600,7 +896,7 @@ def _validate_manifest_compatibility(
 ) -> None:
     if (
         manifest.bundle_checksum != profile.bundle_checksum
-        or profile.consumer_manifest_schema != CONSUMER_MANIFEST_SCHEMA
+        or manifest.manifest_schema != profile.consumer_manifest_schema
     ):
         raise UnsupportedCorpusBundleError("Consumer manifest is not supported by the compatibility matrix.")
 

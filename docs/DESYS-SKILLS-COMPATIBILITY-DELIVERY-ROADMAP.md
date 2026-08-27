@@ -60,6 +60,8 @@ Exit gate:
 
 ### PR 2 - Trusted Predecessor Descriptors
 
+Status: COMPLETE
+
 Deliverables:
 
 - immutable predecessor descriptors packaged with the target release;

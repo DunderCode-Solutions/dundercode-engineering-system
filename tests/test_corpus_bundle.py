@@ -58,8 +58,8 @@ def _inventory(entries: list[dict]) -> dict:
     return {
         "inventory_schema": "1.2.0",
         "corpus_version": "0.1.0",
-        "release_tag": "v0.2.0-alpha.1",
-        "source_commit": "1ba18c126dc9adf035f64c0ca6eda75186e73b60",
+        "release_tag": "v0.3.0-alpha.1",
+        "source_commit": "d84693cd117e5b792fe63fcaaa1550acda427c16",
         "entries": entries,
     }
 
@@ -80,8 +80,8 @@ def test_tracked_bundle_is_complete_and_current() -> None:
     validate_or_write_bundle(repository_root / "tools/reference_corpus_data", files, check=True)
 
     approved = [entry for entry in inventory["entries"] if entry["distribution"] == "approved"]
-    assert manifest["release_tag"] == inventory["release_tag"] == "v0.2.0-alpha.1"
-    assert manifest["source_commit"] == inventory["source_commit"] == "1ba18c126dc9adf035f64c0ca6eda75186e73b60"
+    assert manifest["release_tag"] == inventory["release_tag"] == "v0.3.0-alpha.1"
+    assert manifest["source_commit"] == inventory["source_commit"] == "d84693cd117e5b792fe63fcaaa1550acda427c16"
     assert len(manifest["entries"]) == len(approved) == 41
     assert {entry["source"] for entry in manifest["entries"]} == {entry["source"] for entry in approved}
     assert len(files) == 42

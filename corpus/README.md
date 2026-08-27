@@ -50,14 +50,20 @@ manifest, and compatibility matrix are packaged under
 `tools/reference_corpus_data/compatibility.yaml` profile binds the installed
 package version to release provenance, corpus and schema versions, bundle
 checksum, contract checksums, Python support, host platforms, and explicitly
-supported direct predecessors.
+supported direct predecessors. Every direct predecessor declaration binds both
+the historical bundle checksum and the complete packaged descriptor checksum.
+The descriptor records the exact historical entries and provenance, accepted
+manifest schemas, and the single target bundle it authorizes.
 
 JSON Schema validation establishes the portable document shape. Runtime
 validation remains authoritative for semantic invariants that JSON Schema does
 not express, including descriptor checksums, package-resource coverage,
 cross-field provenance, portable path uniqueness, legal-resource coverage, and
-installed package metadata alignment. Tests require supported fixtures to pass
-both layers and unsupported major versions to fail before ownership is trusted.
+installed package metadata alignment. A predecessor manifest is trusted only
+after its complete provenance and ordered ownership entries match the immutable
+descriptor. Planning remains blocked until the cross-snapshot planner is
+implemented. Tests require supported fixtures to pass both layers and
+unsupported major versions to fail before ownership is trusted.
 
 ## Commands
 
