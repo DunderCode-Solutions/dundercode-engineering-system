@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uuid:8dfc7e36-1e0a-4b96-9f13-e98f8187a59a",
+  "title": "DESys Reference Corpus Inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "inventory_schema",
+    "corpus_version",
+    "release_tag",
+    "source_commit",
+    "source_roots",
+    "entries"
+  ],
+  "properties": {
+    "inventory_schema": {
+      "const": "1.2.0"
+    },
+    "corpus_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "release_tag": {
+      "const": "v0.2.0-alpha.1"
+    },
+    "source_commit": {
+      "const": "1ba18c126dc9adf035f64c0ca6eda75186e73b60"
+    },
+    "source_roots": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "foundation",
+          "knowledge",
+          "engineering",
+          "delivery",
+          "skills"
+        ]
+      },
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "const": "LICENSE"
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "const": "THIRD_PARTY_NOTICES.md"
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "target",
+        "collection",
+        "classification",
+        "distribution",
+        "indexable",
+        "review_owner",
+        "review_fingerprint",
+        "checksum"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "pattern": "^(LICENSE|THIRD_PARTY_NOTICES\\.md|(foundation|knowledge|engineering|delivery|skills)/.+)$"
+        },
+        "target": {
+          "type": "string",
+          "pattern": "^docs/desys/(LICENSE|THIRD_PARTY_NOTICES\\.md|reference/(foundation|knowledge|engineering|delivery|skills)/.+)$"
+        },
+        "collection": {
+          "enum": [
+            "foundation",
+            "knowledge",
+            "engineering",
+            "delivery",
+            "skills",
+            "legal"
+          ]
+        },
+        "classification": {
+          "enum": [
+            "document",
+            "navigation",
+            "placeholder",
+            "legal",
+            "schema",
+            "supplemental"
+          ]
+        },
+        "distribution": {
+          "enum": [
+            "approved",
+            "excluded",
+            "pending"
+          ]
+        },
+        "indexable": {
+          "type": "boolean"
+        },
+        "review_owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "review_fingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "checksum": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "document_id": {
+          "type": "string"
+        },
+        "canonical_id": {
+          "type": "string"
+        },
+        "metadata_status": {
+          "type": "string"
+        },
+        "exclusion_reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source": {
+                "const": "LICENSE"
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "const": "docs/desys/LICENSE"
+              },
+              "collection": {
+                "const": "legal"
+              },
+              "classification": {
+                "const": "legal"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "source": {
+                "const": "THIRD_PARTY_NOTICES.md"
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "const": "docs/desys/THIRD_PARTY_NOTICES.md"
+              },
+              "collection": {
+                "const": "legal"
+              },
+              "classification": {
+                "const": "legal"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "collection": {
+                "const": "legal"
+              }
+            },
+            "required": [
+              "collection"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "enum": [
+                  "LICENSE",
+                  "THIRD_PARTY_NOTICES.md"
+                ]
+              },
+              "classification": {
+                "const": "legal"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "classification": {
+                "const": "legal"
+              }
+            },
+            "required": [
+              "classification"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source": {
+                "enum": [
+                  "LICENSE",
+                  "THIRD_PARTY_NOTICES.md"
+                ]
+              },
+              "collection": {
+                "const": "legal"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

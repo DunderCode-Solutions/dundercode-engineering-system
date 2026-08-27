@@ -10,9 +10,9 @@ The **DunderCode Engineering System (DESys)** is an engineering platform that tr
 
 | Attribute | Value |
 |-----------|-------|
-| **Release** | v0.1.0-alpha.2 |
+| **Release** | v0.2.0-alpha.1 |
 | **Status** | Alpha Release |
-| **Phase** | Pilot Validation Complete |
+| **Phase** | Reference Corpus Prerelease Published |
 | **Documentation** | Validated |
 | **Language** | English |
 | **License** | MIT |
@@ -451,13 +451,13 @@ The gate validates canonical metadata, tests the tooling, renders deterministic 
 ## Consumer Project Initialization
 
 Use `desys-project-init` to scaffold DESys documentation tooling in an existing
-Git repository. DESys `v0.1.0-alpha.2` is distributed from the official public
+Git repository. DESys `v0.2.0-alpha.1` is distributed from the official public
 GitHub repository. Resolve the immutable release tag to its full commit SHA
 before initialization so the generated quality gate preserves the same source:
 
 ```bash
 DESYS_REPOSITORY="https://github.com/DunderCode-Solutions/dundercode-engineering-system.git"
-DESYS_RELEASE_TAG="v0.1.0-alpha.2"
+DESYS_RELEASE_TAG="v0.2.0-alpha.1"
 DESYS_RELEASE_COMMIT_SHA="$(
   git ls-remote "$DESYS_REPOSITORY" \
     "refs/tags/$DESYS_RELEASE_TAG" \
@@ -473,6 +473,7 @@ uvx --isolated --no-config --python 3.12 --from "$DESYS_SOURCE" \
   desys-project-init \
   --root /path/to/consumer-project \
   --desys-source "$DESYS_SOURCE" \
+  --with-reference-corpus \
   --dry-run
 ```
 
@@ -482,16 +483,19 @@ Apply the conflict-free plan with:
 uvx --isolated --no-config --python 3.12 --from "$DESYS_SOURCE" \
   desys-project-init \
   --root /path/to/consumer-project \
-  --desys-source "$DESYS_SOURCE"
+  --desys-source "$DESYS_SOURCE" \
+  --with-reference-corpus
 ```
 
-The command creates project documentation collections, deterministic indexer
-configuration, a local quality script, a GitHub Actions workflow, generated
-artifact ignore rules, neutral `AGENTS.md` documentation instructions, and `uv`
-tool-source guidance. DESys executes in an isolated Python 3.12 environment and
-does not modify the consumer project's runtime dependencies, virtual
-environment, or lockfile. It never overwrites divergent files; conflicts abort
-the complete operation before any write.
+The opt-in command creates project documentation collections, installs the
+governed reference corpus and ownership manifest, configures deterministic
+indexing, and adds a local quality script, GitHub Actions workflow, generated
+artifact ignore rules, neutral `AGENTS.md` instructions, and `uv` tool-source
+guidance. Omit `--with-reference-corpus` for the corpus-free compatible scaffold.
+DESys executes in an isolated Python 3.12 environment and does not modify the
+consumer project's runtime dependencies, virtual environment, or lockfile. It
+never overwrites divergent files; conflicts abort the complete operation before
+any write.
 
 Supported hosts and known limitations are published in
 [`SUPPORTED-PLATFORMS.md`](SUPPORTED-PLATFORMS.md). Release scope and validation

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dundercode-engineering-system"
-version = "0.1.0a2"
+version = "0.2.0a1"
 description = "DunderCode Engineering System knowledge platform"
 readme = "README.md"
 license = "MIT"
@@ -21,6 +21,8 @@ Issues = "https://github.com/DunderCode-Solutions/dundercode-engineering-system/
 [project.scripts]
 desys-build-index = "tools.build_index:main"
 desys-check-indexes = "tools.check_generated_artifacts:main"
+desys-corpus-inventory = "tools.build_corpus_inventory:main"
+desys-corpus-bundle = "tools.build_corpus_bundle:main"
 desys-metadata-migrate = "tools.migrate_metadata:main"
 desys-metadata-validate = "tools.validate_metadata:main"
 desys-project-init = "tools.init_project:main"
@@ -37,7 +39,11 @@ dev = [
 packages = [
     "tools",
     "tools.desys_indexer",
+    "tools.reference_corpus_data",
 ]
+
+[tool.setuptools.package-data]
+"tools.reference_corpus_data" = ["bundle.yaml", "corpus-files/**/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

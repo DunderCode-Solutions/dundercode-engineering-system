@@ -144,7 +144,7 @@ class ValidationIssue:
     message: str
 
     def __str__(self) -> str:
-        return f"{self.severity.upper()}: {self.path}: {self.message}"
+        return f"{self.severity.upper()}: {self.path.as_posix()}: {self.message}"
 
 
 @dataclass(frozen=True, slots=True)
@@ -337,8 +337,14 @@ def _validate_repository_identity(documents: list[tuple[Path, dict[str, Any]]]) 
 
     resolvable_ids = set(canonical_ids) | set(aliases)
     for alias, path in aliases.items():
-        if alias in canonical_ids:
-            issues.append(_error(path, f"alias '{alias}' conflicts with a canonical_id"))
+        canonical_owner = canonical_ids.get(alias)
+        if canonical_owner is not None:
+            issues.append(
+                _error(
+                    path,
+                    f"alias '{alias}' conflicts with a canonical_id used by {canonical_owner.as_posix()}",
+                )
+            )
 
     for path, metadata in documents:
         relationships = metadata.get("relationships", [])
@@ -365,7 +371,7 @@ def _record_unique(
         return
     previous = registry.get(value)
     if previous is not None:
-        issues.append(_error(path, f"duplicate {field} '{value}' also used by {previous}"))
+        issues.append(_error(path, f"duplicate {field} '{value}' also used by {previous.as_posix()}"))
     else:
         registry[value] = path
 
