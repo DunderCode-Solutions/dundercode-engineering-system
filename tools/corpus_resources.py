@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import re
 import stat
 from dataclasses import dataclass
 from importlib import resources
+from importlib.metadata import PackageNotFoundError, metadata, version
 from importlib.resources.abc import Traversable
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -19,8 +21,15 @@ from tools.desys_metadata import UniqueKeyLoader
 
 BUNDLE_SCHEMA = "1.1.0"
 CONSUMER_MANIFEST_SCHEMA = "1.1.0"
+COMPATIBILITY_SCHEMA = "1.0.0"
 RESOURCE_PACKAGE = "tools.reference_corpus_data"
 RESOURCE_DIRECTORY = "corpus-files"
+COMPATIBILITY_RESOURCE = PurePosixPath("compatibility.yaml")
+CONTRACT_RESOURCES = {
+    "reference_bundle_schema_checksum": PurePosixPath("contracts/reference-bundle-1.1.0.schema.json"),
+    "consumer_manifest_schema_checksum": PurePosixPath("contracts/consumer-manifest-1.1.0.schema.json"),
+    "compatibility_schema_checksum": PurePosixPath("contracts/compatibility-1.0.0.schema.json"),
+}
 PACKAGE_NAME = "dundercode-engineering-system"
 CHECKSUM_PATTERN = re.compile(r"sha256:[0-9a-f]{64}")
 RELEASE_TAG_PATTERN = re.compile(
@@ -118,6 +127,23 @@ class ConsumerManifest:
     entries: tuple[InstalledEntry, ...]
 
 
+@dataclass(frozen=True, slots=True)
+class CompatibilityProfile:
+    package_version: str
+    release_tag: str
+    source_commit: str
+    corpus_version: str
+    inventory_schema: str
+    bundle_schema: str
+    consumer_manifest_schema: str
+    metadata_schema: str
+    bundle_checksum: str
+    requires_python: str
+    platforms: tuple[str, ...]
+    direct_predecessor_bundle_checksums: tuple[str, ...]
+    contract_checksums: dict[str, str]
+
+
 def load_reference_bundle() -> ReferenceBundle:
     """Load a fully checksum-validated corpus using only importlib resources."""
     package = resources.files(RESOURCE_PACKAGE)
@@ -174,12 +200,14 @@ def load_reference_bundle() -> ReferenceBundle:
         raise CorpusResourceError("Packaged corpus must contain exactly the required legal resources.")
     expected_resources = {
         PurePosixPath("bundle.yaml"),
+        COMPATIBILITY_RESOURCE,
+        *CONTRACT_RESOURCES.values(),
         *(PurePosixPath(RESOURCE_DIRECTORY) / entry.target for entry in entries),
     }
     actual_resources = _collect_package_resources(package)
     if actual_resources != expected_resources:
         raise CorpusResourceError("Packaged corpus resources are missing, stale, or contain unexpected files.")
-    return ReferenceBundle(
+    bundle = ReferenceBundle(
         BUNDLE_SCHEMA,
         inventory_schema,
         corpus_version,
@@ -188,6 +216,20 @@ def load_reference_bundle() -> ReferenceBundle:
         bundle_checksum,
         entries,
     )
+    profile = _current_compatibility_profile(package)
+    _validate_bundle_compatibility(package, bundle, profile)
+    return bundle
+
+
+def load_compatibility_profile(package_version: str | None = None) -> CompatibilityProfile:
+    """Load a checksum-validated compatibility profile from package resources."""
+    package = resources.files(RESOURCE_PACKAGE)
+    if package_version is None:
+        profile = _current_compatibility_profile(package)
+    else:
+        profile = _select_compatibility_profile(package, package_version)
+    _validate_contract_checksums(package, profile)
+    return profile
 
 
 def load_consumer_manifest(
@@ -232,7 +274,7 @@ def load_consumer_manifest(
     sources = [entry.source for entry in entries]
     _require_portable_uniqueness(targets, "Consumer manifest targets")
     _require_portable_uniqueness(sources, "Consumer manifest sources")
-    return ConsumerManifest(
+    manifest = ConsumerManifest(
         package_name,
         package_version,
         package_source,
@@ -242,6 +284,9 @@ def load_consumer_manifest(
         bundle_checksum,
         entries,
     )
+    profile = load_compatibility_profile(package_version)
+    _validate_manifest_compatibility(manifest, profile)
+    return manifest
 
 
 def render_consumer_manifest(
@@ -252,8 +297,12 @@ def render_consumer_manifest(
     package_source: str,
 ) -> bytes:
     """Render canonical ownership and provenance for installed corpus files."""
+    if package_name != PACKAGE_NAME:
+        raise CorpusResourceError(f"package_name must be {PACKAGE_NAME!r}.")
     if bundle.release_tag != _release_tag_for_package_version(package_version):
         raise CorpusResourceError("Packaged release_tag does not match package_version.")
+    profile = load_compatibility_profile(package_version)
+    _validate_bundle_compatibility(resources.files(RESOURCE_PACKAGE), bundle, profile)
     payload: dict[str, Any] = {
         "manifest_schema": CONSUMER_MANIFEST_SCHEMA,
         "package_name": package_name,
@@ -382,6 +431,178 @@ def _load_mapping(content: bytes, context: str) -> dict[str, Any]:
     if not isinstance(data, dict) or any(not isinstance(key, str) for key in data):
         raise CorpusResourceError(f"{context.capitalize()} must be a string-keyed mapping.")
     return data
+
+
+def _current_compatibility_profile(package: Traversable) -> CompatibilityProfile:
+    installed_version, requires_python = _installed_package_contract()
+    profile = _select_compatibility_profile(package, installed_version)
+    if profile.requires_python != requires_python:
+        raise CorpusResourceError("Compatibility profile requires_python does not match package metadata.")
+    return profile
+
+
+def _installed_package_contract() -> tuple[str, str]:
+    try:
+        installed_version = version(PACKAGE_NAME)
+        requires_python = metadata(PACKAGE_NAME).get("Requires-Python")
+    except PackageNotFoundError as error:
+        raise CorpusResourceError("DESys package metadata is unavailable.") from error
+    if requires_python is None:
+        raise CorpusResourceError("DESys package metadata has no Requires-Python contract.")
+    return installed_version, requires_python
+
+
+def _select_compatibility_profile(package: Traversable, package_version: str) -> CompatibilityProfile:
+    matrix = _load_mapping(
+        _read_package_resource(package, COMPATIBILITY_RESOURCE),
+        "distribution compatibility matrix",
+    )
+    _require_fields(
+        matrix,
+        {"compatibility_schema", "package_name", "profiles"},
+        "distribution compatibility matrix",
+    )
+    if matrix["compatibility_schema"] != COMPATIBILITY_SCHEMA:
+        raise CorpusResourceError(f"Unsupported compatibility schema: {matrix['compatibility_schema']!r}")
+    if matrix["package_name"] != PACKAGE_NAME:
+        raise CorpusResourceError(f"Compatibility package_name must be {PACKAGE_NAME!r}.")
+    raw_profiles = matrix["profiles"]
+    if not isinstance(raw_profiles, list) or not raw_profiles:
+        raise CorpusResourceError("Compatibility profiles must be a non-empty list.")
+    profiles = tuple(_load_compatibility_profile(item, index) for index, item in enumerate(raw_profiles))
+    versions = [profile.package_version for profile in profiles]
+    if len(versions) != len(set(versions)):
+        raise CorpusResourceError("Compatibility profile package versions must be unique.")
+    selected = [profile for profile in profiles if profile.package_version == package_version]
+    if not selected:
+        raise UnsupportedCorpusBundleError(
+            f"No compatibility profile exists for package version {package_version!r}."
+        )
+    return selected[0]
+
+
+def _load_compatibility_profile(value: Any, index: int) -> CompatibilityProfile:
+    context = f"compatibility profile {index}"
+    if not isinstance(value, dict):
+        raise CorpusResourceError(f"{context.capitalize()} must be a mapping.")
+    required = {
+        "package_version",
+        "release_tag",
+        "source_commit",
+        "corpus_version",
+        "inventory_schema",
+        "bundle_schema",
+        "consumer_manifest_schema",
+        "metadata_schema",
+        "bundle_checksum",
+        "requires_python",
+        "platforms",
+        "direct_predecessor_bundle_checksums",
+        *CONTRACT_RESOURCES,
+    }
+    _require_fields(value, required, context)
+    platforms = value["platforms"]
+    if (
+        not isinstance(platforms, list)
+        or not platforms
+        or any(platform not in {"linux", "macos", "windows"} for platform in platforms)
+        or len(platforms) != len(set(platforms))
+    ):
+        raise CorpusResourceError(f"{context}.platforms must contain unique supported platform names.")
+    predecessors = value["direct_predecessor_bundle_checksums"]
+    if not isinstance(predecessors, list) or len(predecessors) != len(set(predecessors)):
+        raise CorpusResourceError(f"{context}.direct_predecessor_bundle_checksums must be a unique list.")
+    predecessor_checksums = tuple(
+        _require_checksum(item, f"{context}.direct_predecessor_bundle_checksums") for item in predecessors
+    )
+    contract_checksums = {
+        field: _require_checksum(value[field], f"{context}.{field}") for field in CONTRACT_RESOURCES
+    }
+    profile = CompatibilityProfile(
+        package_version=_require_package_version(value["package_version"]),
+        release_tag=_require_release_tag(value["release_tag"]),
+        source_commit=_require_source_commit(value["source_commit"]),
+        corpus_version=_require_version(value["corpus_version"], f"{context}.corpus_version"),
+        inventory_schema=_require_version(value["inventory_schema"], f"{context}.inventory_schema"),
+        bundle_schema=_require_version(value["bundle_schema"], f"{context}.bundle_schema"),
+        consumer_manifest_schema=_require_version(
+            value["consumer_manifest_schema"], f"{context}.consumer_manifest_schema"
+        ),
+        metadata_schema=_require_version(value["metadata_schema"], f"{context}.metadata_schema"),
+        bundle_checksum=_require_checksum(value["bundle_checksum"], f"{context}.bundle_checksum"),
+        requires_python=_require_text(value["requires_python"], f"{context}.requires_python"),
+        platforms=tuple(platforms),
+        direct_predecessor_bundle_checksums=predecessor_checksums,
+        contract_checksums=contract_checksums,
+    )
+    if profile.release_tag != _release_tag_for_package_version(profile.package_version):
+        raise CorpusResourceError(f"{context}.release_tag does not match its package_version.")
+    if profile.bundle_checksum in profile.direct_predecessor_bundle_checksums:
+        raise CorpusResourceError(f"{context} cannot list its own bundle as a direct predecessor.")
+    return profile
+
+
+def _validate_bundle_compatibility(
+    package: Traversable,
+    bundle: ReferenceBundle,
+    profile: CompatibilityProfile,
+) -> None:
+    actual = (
+        bundle.release_tag,
+        bundle.source_commit,
+        bundle.corpus_version,
+        bundle.inventory_schema,
+        bundle.bundle_schema,
+        bundle.bundle_checksum,
+    )
+    expected = (
+        profile.release_tag,
+        profile.source_commit,
+        profile.corpus_version,
+        profile.inventory_schema,
+        profile.bundle_schema,
+        profile.bundle_checksum,
+    )
+    if actual != expected:
+        raise CorpusResourceError("Reference bundle does not match its compatibility profile.")
+    if profile.consumer_manifest_schema != CONSUMER_MANIFEST_SCHEMA:
+        raise CorpusResourceError("Compatibility profile does not match the supported consumer manifest schema.")
+    _validate_contract_checksums(package, profile)
+    metadata_entries = [
+        entry
+        for entry in bundle.entries
+        if entry.target.as_posix()
+        == "docs/desys/reference/knowledge/architecture/metadata/desys-metadata.schema.json"
+    ]
+    if len(metadata_entries) != 1:
+        raise CorpusResourceError("Reference bundle must contain exactly one metadata schema resource.")
+    try:
+        metadata_schema = json.loads(metadata_entries[0].content)
+        metadata_version = metadata_schema["properties"]["metadata_schema"]["const"]
+    except (KeyError, TypeError, ValueError) as error:
+        raise CorpusResourceError("Packaged metadata schema has no valid version contract.") from error
+    if metadata_version != profile.metadata_schema:
+        raise CorpusResourceError("Packaged metadata schema does not match its compatibility profile.")
+
+
+def _validate_contract_checksums(
+    package: Traversable,
+    profile: CompatibilityProfile,
+) -> None:
+    for field, path in CONTRACT_RESOURCES.items():
+        if _checksum(_read_package_resource(package, path)) != profile.contract_checksums[field]:
+            raise CorpusResourceError(f"Packaged contract checksum mismatch: {path}")
+
+
+def _validate_manifest_compatibility(
+    manifest: ConsumerManifest,
+    profile: CompatibilityProfile,
+) -> None:
+    if (
+        manifest.bundle_checksum != profile.bundle_checksum
+        or profile.consumer_manifest_schema != CONSUMER_MANIFEST_SCHEMA
+    ):
+        raise UnsupportedCorpusBundleError("Consumer manifest is not supported by the compatibility matrix.")
 
 
 def _require_fields(

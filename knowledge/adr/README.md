@@ -121,6 +121,8 @@ Continue according to your objective.
 
 | If you want to... | Read |
 |-------------------|------|
+| Understand reference corpus ownership | [ADR-0001 - Reference Corpus Layout and Authority](ADR-0001-reference-corpus-layout-and-authority.md) |
+| Plan corpus upgrades and future Skills | [ADR-0002 - Cross-Snapshot Migration and Skill Boundaries](ADR-0002-cross-snapshot-migration-and-skill-boundaries.md) |
 | Understand the platform architecture | Architecture Domain |
 | Review engineering quality assessments | DAR Domain |
 | Explore engineering proposals | RFC Domain |

@@ -29,6 +29,7 @@ desys-project-init = "tools.init_project:main"
 
 [dependency-groups]
 dev = [
+    "jsonschema==4.25.1",
     "pytest==9.1.1",
     "ruff==0.16.2",
     "setuptools==80.9.0",
@@ -40,10 +41,12 @@ packages = [
     "tools",
     "tools.desys_indexer",
     "tools.reference_corpus_data",
+    "tools.reference_corpus_data.contracts",
 ]
 
 [tool.setuptools.package-data]
-"tools.reference_corpus_data" = ["bundle.yaml", "corpus-files/**/*"]
+"tools.reference_corpus_data" = ["bundle.yaml", "compatibility.yaml", "corpus-files/**/*"]
+"tools.reference_corpus_data.contracts" = ["*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

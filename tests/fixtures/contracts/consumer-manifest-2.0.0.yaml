@@ -1,0 +1,16 @@
+manifest_schema: 2.0.0
+package_name: dundercode-engineering-system
+package_version: 0.2.0a1
+package_source: dundercode-engineering-system==0.2.0a1
+release_tag: v0.2.0-alpha.1
+source_commit: 1ba18c126dc9adf035f64c0ca6eda75186e73b60
+corpus_version: 0.1.0
+bundle_checksum: sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a
+entries:
+- source: LICENSE
+  target: docs/desys/LICENSE
+  collection: legal
+  classification: legal
+  distribution: approved
+  original_checksum: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  installed_checksum: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

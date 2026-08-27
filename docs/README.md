@@ -17,9 +17,9 @@ bash scripts/quality.sh
 
 The latest verified result is:
 
-- 280 documents validated;
+- 281 documents validated;
 - 0 metadata errors and 127 governed legacy warnings;
-- 123 native pytest tests passing;
+- 134 native pytest tests passing;
 - 5 deterministic index artifacts generated and cross-validated;
 - source distribution and derived wheel built and smoke-tested in an isolated
   environment;
@@ -62,9 +62,15 @@ The implemented scope covers:
 ## Next Milestone
 
 Cross-platform candidate validation, both consumer corpus pilots, anonymous
-public-tag verification, and final engineering-owner approval are complete.
-Post-release monitoring and trusted cross-snapshot reconciliation remain future
-work.
+public-tag verification, and final engineering-owner approval are complete. The
+next milestone implements trusted cross-snapshot reconciliation and the safety
+boundaries required before Reference Skills or Active Skills can ship.
+
+The approved architecture decision is
+[`ADR-0002`](../knowledge/adr/ADR-0002-cross-snapshot-migration-and-skill-boundaries.md).
+The ordered implementation PRs, compatibility gates, and SaaS adoption protocol
+are defined in
+[`DESYS-SKILLS-COMPATIBILITY-DELIVERY-ROADMAP.md`](DESYS-SKILLS-COMPATIBILITY-DELIVERY-ROADMAP.md).
 
 The current corpus-pilot evidence, scenarios, and staged go/no-go criteria are
 defined in
@@ -95,7 +101,8 @@ and the final AI scenario archive is in
 
 ## Next Work
 
-Monitor `v0.2.0-alpha.1` adoption and design trusted cross-snapshot corpus
-reconciliation without weakening the fail-closed ownership model. Completed
-release evidence is recorded in [`SUPPORTED-PLATFORMS.md`](../SUPPORTED-PLATFORMS.md)
-and [`RELEASE_NOTES.md`](../RELEASE_NOTES.md).
+Monitor `v0.2.0-alpha.1` adoption and execute the Skills compatibility roadmap in
+small, independently reviewed PRs without weakening the fail-closed ownership
+model. Completed release evidence is recorded in
+[`SUPPORTED-PLATFORMS.md`](../SUPPORTED-PLATFORMS.md) and
+[`RELEASE_NOTES.md`](../RELEASE_NOTES.md).

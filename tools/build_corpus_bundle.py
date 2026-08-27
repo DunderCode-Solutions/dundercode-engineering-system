@@ -28,6 +28,12 @@ from tools.desys_metadata import FrontMatterError, parse_front_matter
 BUNDLE_SCHEMA = "1.1.0"
 DEFAULT_PACKAGE_ROOT = Path("tools/reference_corpus_data")
 RESOURCE_DIRECTORY = "corpus-files"
+STATIC_PACKAGE_RESOURCES = {
+    "compatibility.yaml",
+    "contracts/compatibility-1.0.0.schema.json",
+    "contracts/consumer-manifest-1.1.0.schema.json",
+    "contracts/reference-bundle-1.1.0.schema.json",
+}
 FENCE_PATTERN = re.compile(r"^[ ]{0,3}(`{3,}|~{3,})")
 REFERENCE_DEFINITION_PATTERN = re.compile(r"^[ ]{0,3}\[([^]\n]+)\]:[ \t]*(.*)$")
 REFERENCE_USE_PATTERN = re.compile(r"!?\[([^]\n]+)\]\[([^]\n]*)\]")
@@ -100,7 +106,9 @@ def validate_or_write_bundle(package_root: Path, files: dict[PurePosixPath, byte
         raise BundleError(f"Generated files root is a symlink: {files_root}")
     if check:
         actual = _read_package_files(package_root)
-        if actual != expected:
+        generated = {path: content for path, content in actual.items() if path not in STATIC_PACKAGE_RESOURCES}
+        unexpected_static = set(actual) - set(expected) - STATIC_PACKAGE_RESOURCES
+        if generated != expected or unexpected_static:
             raise BundleError("Packaged corpus resources are missing, stale, or contain unexpected files.")
         return
 

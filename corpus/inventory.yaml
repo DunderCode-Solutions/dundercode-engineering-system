@@ -584,6 +584,18 @@ entries:
   document_id: ADR-0001
   canonical_id: adr.corpus.layout-and-authority
   metadata_status: approved
+- source: knowledge/adr/ADR-0002-cross-snapshot-migration-and-skill-boundaries.md
+  target: docs/desys/reference/knowledge/adr/ADR-0002-cross-snapshot-migration-and-skill-boundaries.md
+  collection: knowledge
+  classification: document
+  distribution: pending
+  indexable: true
+  review_owner: DunderCode Engineering
+  review_fingerprint: sha256:92d27a3c56be110b26694cf9f4d97877f37cb5edbf0331872820fbc4634af72b
+  checksum: sha256:72c35a4ca2a3a2e3198d1cc50531f9b840c49b520854097788c977e1e3c667d1
+  document_id: ADR-0002
+  canonical_id: adr.corpus.cross-snapshot-and-skill-boundaries
+  metadata_status: approved
 - source: knowledge/adr/README.md
   target: docs/desys/reference/knowledge/adr/README.md
   collection: knowledge
@@ -591,8 +603,8 @@ entries:
   distribution: pending
   indexable: false
   review_owner: DunderCode Engineering
-  review_fingerprint: sha256:7c4ad7722b36568dbff5f501e0571a446c8aa0a58bd69d504995d6158b383946
-  checksum: sha256:82b4918aaea302c1ee9c9a50307fdd2cb44719c946723b130ed9fcfbb4d5571b
+  review_fingerprint: sha256:da5f65a6d198447db8e3af9ca7570cf96367c6550af1479f251281fa0e9d7141
+  checksum: sha256:2d7c5102c36c3f294329369878f65a3a63d1374e37c17d7bb9f087d7162c8f6e
 - source: knowledge/architecture/README.md
   target: docs/desys/reference/knowledge/architecture/README.md
   collection: knowledge
