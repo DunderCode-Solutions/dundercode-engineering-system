@@ -33,8 +33,8 @@ The latest verified result is:
 - approved 41-entry reference bundle checksum
   `sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a`.
 
-The tagged candidate uses PEP 440 package version `0.2.0a1` and public release
-label `v0.2.0-alpha.1`. A GitHub Release and PyPI package are not published.
+The published prerelease uses PEP 440 package version `0.2.0a1` and public
+release label `v0.2.0-alpha.1`. No PyPI package is published.
 
 ## Completed Milestone
 
@@ -61,9 +61,10 @@ The implemented scope covers:
 
 ## Next Milestone
 
-Cross-platform candidate validation, both consumer corpus pilots, and anonymous
-public-tag verification are complete. The remaining milestone is the final
-engineering-owner release decision.
+Cross-platform candidate validation, both consumer corpus pilots, anonymous
+public-tag verification, and final engineering-owner approval are complete.
+Post-release monitoring and trusted cross-snapshot reconciliation remain future
+work.
 
 The current corpus-pilot evidence, scenarios, and staged go/no-go criteria are
 defined in
@@ -92,9 +93,9 @@ The final Pilot A report is in [`pilot/PILOT-REPORT.md`](pilot/PILOT-REPORT.md),
 and the final AI scenario archive is in
 [`pilot/AI-VALIDATION-FINAL.md`](pilot/AI-VALIDATION-FINAL.md).
 
-## Resume Point
+## Next Work
 
-Resume by recording the remaining `v0.2.0-alpha.1` consumer-pilot and
-release-approval evidence. The completed host-validation evidence is recorded in
-[`SUPPORTED-PLATFORMS.md`](../SUPPORTED-PLATFORMS.md) and
-[`RELEASE_NOTES.md`](../RELEASE_NOTES.md).
+Monitor `v0.2.0-alpha.1` adoption and design trusted cross-snapshot corpus
+reconciliation without weakening the fail-closed ownership model. Completed
+release evidence is recorded in [`SUPPORTED-PLATFORMS.md`](../SUPPORTED-PLATFORMS.md)
+and [`RELEASE_NOTES.md`](../RELEASE_NOTES.md).

@@ -1,8 +1,8 @@
-# DESys v0.2.0-alpha.1 Tagged Candidate Release Notes
+# DESys v0.2.0-alpha.1 Release Notes
 
 DESys `v0.2.0-alpha.1` introduces an opt-in, governed reference corpus while
 preserving consumer documentation as the authoritative project evidence. The
-immutable tag exists; a GitHub Release and PyPI package are not published.
+immutable tag and GitHub prerelease are published; no PyPI package is published.
 
 ## Reference Corpus
 
@@ -57,7 +57,7 @@ immutable tag exists; a GitHub Release and PyPI package are not published.
 The immutable candidate tag is available from the public
 [DunderCode-Solutions/dundercode-engineering-system](https://github.com/DunderCode-Solutions/dundercode-engineering-system)
 repository and resolves to commit `d736b028b285a3c4f4d22b685ddd5a0903c9822d`.
-Final GitHub Release approval is pending. It is not published to PyPI.
+The GitHub prerelease is published from that tag. It is not published to PyPI.
 
 ## Compatibility And Limitations
 

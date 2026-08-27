@@ -1,7 +1,6 @@
 # Supported Platforms And Known Limitations
 
-This document applies to the tagged but unpublished DESys `v0.2.0-alpha.1`
-candidate.
+This document applies to the published DESys `v0.2.0-alpha.1` prerelease.
 
 ## Supported Tool Host
 

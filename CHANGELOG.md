@@ -2,7 +2,7 @@
 
 All notable changes to DESys are documented in this file.
 
-## [0.2.0-alpha.1] - Unreleased
+## [0.2.0-alpha.1] - 2026-08-26
 
 ### Added
 

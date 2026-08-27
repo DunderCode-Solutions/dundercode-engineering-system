@@ -1,6 +1,6 @@
 # DESys v0.2 Consumer Corpus Pilot Validation Plan
 
-Status: `TAG-001` PASS; final approval pending
+Status: FINAL GO
 
 Plan date: 2026-08-26
 
@@ -122,12 +122,12 @@ tag under anonymous conditions and the signed decision below is complete.
 | Pilot A tester | OpenCode automated execution | PASS | 2026-08-26 |
 | Pilot B tester | OpenCode automated execution | PASS | 2026-08-26 |
 | DESys maintainer | Joilton | PRE-TAG GO | 2026-08-26 |
-| Engineering owner | Pending | FINAL GO / NO-GO | Pending |
+| Engineering owner | Joilton | FINAL GO | 2026-08-26 |
 
-Final decision: RELEASE EVIDENCE COMPLETE; FINAL APPROVAL PENDING
+Final decision: FINAL GO
 
 Pre-tag approval was granted for the exact immutable candidate after all
 automated gates and consumer pilots passed without a blocking defect.
 
-Required final action: Record the engineering owner's FINAL GO or NO-GO before
-publishing the GitHub Release.
+GitHub prerelease publication from immutable tag `v0.2.0-alpha.1` is approved.
+PyPI publication remains outside this release.
