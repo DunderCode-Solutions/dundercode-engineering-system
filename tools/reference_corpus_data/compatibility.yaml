@@ -1,0 +1,21 @@
+compatibility_schema: 1.0.0
+package_name: dundercode-engineering-system
+profiles:
+- package_version: 0.2.0a1
+  release_tag: v0.2.0-alpha.1
+  source_commit: 1ba18c126dc9adf035f64c0ca6eda75186e73b60
+  corpus_version: 0.1.0
+  inventory_schema: 1.2.0
+  bundle_schema: 1.1.0
+  consumer_manifest_schema: 1.1.0
+  metadata_schema: 1.0.0
+  bundle_checksum: sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a
+  reference_bundle_schema_checksum: sha256:6cb3297d1fdd4a91fefe27af8c1233c87955e3737375769ddc1a02f892c1bab2
+  consumer_manifest_schema_checksum: sha256:dd1cc5e5a84205f4627c3a71489568eaa1953c578db48e3f1a9f74f57aaae125
+  compatibility_schema_checksum: sha256:a6bc49b574e3dd2f7a72ab10f164e4906d7373680858d93b2704d16c98891ba0
+  requires_python: <3.13,>=3.12
+  platforms:
+  - linux
+  - macos
+  - windows
+  direct_predecessor_bundle_checksums: []

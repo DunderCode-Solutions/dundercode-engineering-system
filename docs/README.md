@@ -19,7 +19,7 @@ The latest verified result is:
 
 - 281 documents validated;
 - 0 metadata errors and 127 governed legacy warnings;
-- 123 native pytest tests passing;
+- 134 native pytest tests passing;
 - 5 deterministic index artifacts generated and cross-validated;
 - source distribution and derived wheel built and smoke-tested in an isolated
   environment;

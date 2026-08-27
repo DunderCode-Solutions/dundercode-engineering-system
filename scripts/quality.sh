@@ -44,9 +44,13 @@ with zipfile.ZipFile(sys.argv[1]) as wheel:
     expected = {
         f"{prefix}__init__.py",
         f"{prefix}bundle.yaml",
+        f"{prefix}compatibility.yaml",
+        f"{prefix}contracts/compatibility-1.0.0.schema.json",
+        f"{prefix}contracts/consumer-manifest-1.1.0.schema.json",
+        f"{prefix}contracts/reference-bundle-1.1.0.schema.json",
         *(f"{prefix}corpus-files/{entry['target']}" for entry in entries),
     }
-    assert len(entries) + 2 == len(expected), "Corpus bundle contains duplicate targets."
+    assert len(entries) + 6 == len(expected), "Corpus bundle contains duplicate targets."
     assert names == expected, f"Wheel corpus resources differ: missing={sorted(expected - names)}, extra={sorted(names - expected)}"
 
     descriptor = {
