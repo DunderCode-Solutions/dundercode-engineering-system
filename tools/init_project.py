@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 import re
+import stat
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -12,6 +14,16 @@ from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as distribution_version
 from pathlib import Path, PurePosixPath
 from tempfile import NamedTemporaryFile
+
+from tools.corpus_resources import (
+    ConsumerManifest,
+    CorpusResourceError,
+    ReferenceBundle,
+    UnsupportedCorpusBundleError,
+    load_consumer_manifest,
+    load_reference_bundle,
+    render_consumer_manifest,
+)
 
 PACKAGE_NAME = "dundercode-engineering-system"
 REGISTRY_SOURCE_PATTERN = re.compile(
@@ -104,6 +116,23 @@ When engineering behavior changes:
 <!-- END DESys documentation instructions -->
 """
 AGENTS_BLOCK_LINES = tuple(AGENTS_BLOCK.encode("utf-8").splitlines())
+AGENTS_CORPUS_BLOCK = AGENTS_BLOCK.replace(
+    "### Change Discipline\n",
+    """### Installed Reference Corpus
+
+Documents under `docs/desys/reference/` are reusable, reference-only guidance.
+They do not override consumer code, policies, ADRs, PRDs, RFCs, or operational
+documentation. Report contradictions and follow the consumer project's evidence.
+`docs/desys/corpus-manifest.yaml` defines DESys ownership of vendored files; do
+not treat generated indexes as ownership or authority evidence.
+
+### Change Discipline
+""",
+)
+AGENTS_CORPUS_BLOCK_LINES = tuple(AGENTS_CORPUS_BLOCK.encode("utf-8").splitlines())
+
+CORPUS_MANIFEST_PATH = PurePosixPath("docs/desys/corpus-manifest.yaml")
+REFERENCE_ROOT = PurePosixPath("docs/desys/reference")
 
 INDEXER_CONFIG = """version: 1
 
@@ -251,6 +280,7 @@ class PlannedOperation:
     content: bytes | None = None
     reason: str | None = None
     is_directory: bool = False
+    expected_checksum: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -283,6 +313,11 @@ def parse_arguments() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--with-reference-corpus",
+        action="store_true",
+        help="Install and index the checksum-verified DESys reference corpus.",
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version=f"%(prog)s {_installed_version()}",
@@ -297,6 +332,7 @@ def main() -> int:
             arguments.root,
             dry_run=arguments.dry_run,
             desys_source=arguments.desys_source,
+            with_reference_corpus=arguments.with_reference_corpus,
         )
     except ProjectInitializationError as error:
         print(f"ERROR: {error}", file=sys.stderr)
@@ -312,7 +348,7 @@ def main() -> int:
     if arguments.dry_run:
         print("Dry run completed; no files were written.")
     else:
-        changed = sum(operation.action in {"CREATE", "UPDATE"} for operation in plan.operations)
+        changed = sum(operation.action in {"CREATE", "UPDATE", "DELETE"} for operation in plan.operations)
         print(f"DESys project integration initialized ({changed} path(s) changed).")
     return 0
 
@@ -323,6 +359,7 @@ def initialize_project(
     dry_run: bool = False,
     version: str | None = None,
     desys_source: str | None = None,
+    with_reference_corpus: bool = False,
 ) -> InitializationPlan:
     """Plan and optionally apply a safe DESys consumer scaffold."""
     root = _validate_repository_root(root)
@@ -336,39 +373,84 @@ def initialize_project(
         desys_source if desys_source is not None else f"{PACKAGE_NAME}=={resolved_version}",
         resolved_version,
     )
-    files = _render_project_files(resolved_version, resolved_source)
+    manifest_destination = root / CORPUS_MANIFEST_PATH
+    corpus_remains_enabled = manifest_destination.exists() or manifest_destination.is_symlink()
+    bundle: ReferenceBundle | None = None
+    if with_reference_corpus or corpus_remains_enabled:
+        try:
+            bundle = load_reference_bundle()
+        except CorpusResourceError as error:
+            raise ProjectInitializationError(f"Unable to load reference corpus: {error}") from error
+    render_with_corpus = with_reference_corpus or corpus_remains_enabled
+    reference_sources = bundle.source_roots if render_with_corpus and bundle is not None else ()
+    files = _render_project_files(resolved_version, resolved_source, reference_sources)
+    legacy_files = _render_project_files(resolved_version, resolved_source, ())
     operations = [
         _classify_directory(root, path)
         for path in MANAGED_DIRECTORIES
     ]
     operations.extend(
-        _classify_file(root, path, content)
+        _classify_file(
+            root,
+            path,
+            content,
+            previous=(legacy_files[path],) if render_with_corpus and path in _corpus_transition_paths() else (),
+        )
         for path, content in files.items()
     )
-    operations.append(_classify_agents(root))
+    operations.append(_classify_agents(root, with_reference_corpus=render_with_corpus))
     operations.append(_classify_gitignore(root))
+    if render_with_corpus:
+        if bundle is None:
+            raise ProjectInitializationError("Reference corpus was not loaded.")
+        operations.extend(_plan_corpus(root, bundle, resolved_version, resolved_source))
     plan = InitializationPlan(tuple(sorted(operations, key=lambda operation: operation.path.as_posix())))
 
     if plan.has_conflicts or dry_run:
         return plan
 
     try:
+        _validate_plan_safety(root, plan)
         for operation in sorted(
             (item for item in plan.operations if item.action == "CREATE" and item.is_directory),
             key=lambda item: (len(item.path.parts), item.path.as_posix()),
         ):
+            unsafe_ancestor = _unsafe_ancestor(root, operation.path)
+            if unsafe_ancestor is not None:
+                raise ProjectInitializationError(f"Managed directory became unsafe: {unsafe_ancestor}")
             (root / operation.path).mkdir()
-        for operation in plan.operations:
-            if operation.is_directory or operation.action not in {"CREATE", "UPDATE"}:
+        file_operations = [operation for operation in plan.operations if not operation.is_directory]
+        file_operations.sort(key=lambda item: (item.path == CORPUS_MANIFEST_PATH, item.path.as_posix()))
+        for operation in file_operations:
+            if operation.action not in {"CREATE", "UPDATE", "DELETE"}:
                 continue
             destination = root / operation.path
+            unsafe_ancestor = _unsafe_ancestor(root, operation.path)
+            if unsafe_ancestor is not None:
+                raise ProjectInitializationError(f"Managed file became unsafe: {unsafe_ancestor}")
+            if operation.action == "DELETE":
+                if operation.expected_checksum is None:
+                    raise ProjectInitializationError(f"No expected checksum for {operation.path}")
+                _delete_file(
+                    destination,
+                    operation.expected_checksum,
+                    reject_hardlinks=_is_corpus_path(operation.path),
+                )
+                continue
             if operation.content is None:
                 raise ProjectInitializationError(f"No rendered content for {operation.path}")
             if operation.action == "CREATE":
                 with destination.open("xb") as stream:
                     stream.write(operation.content)
             else:
-                _replace_file(destination, operation.content)
+                if operation.expected_checksum is None:
+                    raise ProjectInitializationError(f"No expected checksum for {operation.path}")
+                _replace_file(
+                    destination,
+                    operation.content,
+                    operation.expected_checksum,
+                    reject_hardlinks=_is_corpus_path(operation.path),
+                )
     except OSError as error:
         raise ProjectInitializationError(f"Unable to apply initialization plan: {error}") from error
 
@@ -422,7 +504,13 @@ def _classify_directory(root: Path, relative: PurePosixPath) -> PlannedOperation
     return PlannedOperation("UNCHANGED", relative, is_directory=True)
 
 
-def _classify_file(root: Path, relative: PurePosixPath, content: bytes) -> PlannedOperation:
+def _classify_file(
+    root: Path,
+    relative: PurePosixPath,
+    content: bytes,
+    *,
+    previous: tuple[bytes, ...] = (),
+) -> PlannedOperation:
     destination = root / relative
     unsafe_ancestor = _unsafe_ancestor(root, relative)
     if unsafe_ancestor is not None:
@@ -438,8 +526,242 @@ def _classify_file(root: Path, relative: PurePosixPath, content: bytes) -> Plann
     except OSError as error:
         return PlannedOperation("CONFLICT", relative, reason=f"cannot read managed file: {error}")
     if current == content:
-        return PlannedOperation("UNCHANGED", relative)
+        return PlannedOperation("UNCHANGED", relative, expected_checksum=_content_checksum(current))
+    if current in previous:
+        return PlannedOperation(
+            "UPDATE",
+            relative,
+            content=content,
+            reason="upgrade known DESys scaffold",
+            expected_checksum=_content_checksum(current),
+        )
     return PlannedOperation("CONFLICT", relative, reason="existing content differs")
+
+
+def _plan_corpus(
+    root: Path,
+    bundle: ReferenceBundle,
+    package_version: str,
+    package_source: str,
+) -> list[PlannedOperation]:
+    directory_paths = {
+        parent
+        for entry in bundle.entries
+        for parent in entry.target.parents
+        if parent != PurePosixPath(".") and parent not in MANAGED_DIRECTORIES
+    }
+    operations = [_classify_directory(root, path) for path in directory_paths]
+    manifest_destination = root / CORPUS_MANIFEST_PATH
+    old_manifest: ConsumerManifest | None = None
+    old_manifest_content: bytes | None = None
+    manifest_conflict: str | None = _unsafe_ancestor(root, CORPUS_MANIFEST_PATH)
+    if manifest_conflict is None and manifest_destination.is_symlink():
+        manifest_conflict = "corpus manifest is a symlink"
+    elif manifest_conflict is None and manifest_destination.exists():
+        if not manifest_destination.is_file():
+            manifest_conflict = "expected a file"
+        else:
+            try:
+                status = manifest_destination.stat()
+                if status.st_nlink != 1:
+                    manifest_conflict = "corpus manifest has multiple hard links"
+                elif status.st_mode & 0o111:
+                    manifest_conflict = "corpus manifest is executable"
+                else:
+                    old_manifest_content = manifest_destination.read_bytes()
+                    old_manifest = load_consumer_manifest(
+                        old_manifest_content,
+                        expected_bundle_checksum=bundle.bundle_checksum,
+                    )
+            except UnsupportedCorpusBundleError:
+                manifest_conflict = "unsupported prior corpus bundle"
+            except (CorpusResourceError, OSError) as error:
+                manifest_conflict = f"invalid corpus ownership manifest: {error}"
+
+    if manifest_conflict is None and old_manifest is not None:
+        if old_manifest.bundle_checksum != bundle.bundle_checksum:
+            manifest_conflict = "unsupported prior corpus bundle"
+        elif any(entry.installed_checksum != entry.original_checksum for entry in old_manifest.entries):
+            manifest_conflict = "corpus manifest installed checksums are inconsistent"
+        else:
+            manifest_conflict = _same_bundle_inconsistency(old_manifest, bundle, package_version, package_source)
+
+    if manifest_conflict is not None:
+        operations.append(PlannedOperation("CONFLICT", CORPUS_MANIFEST_PATH, reason=manifest_conflict))
+        return operations
+
+    namespace_conflict = _reference_namespace_conflict(root, bundle)
+    if namespace_conflict is not None:
+        operations.append(namespace_conflict)
+        return operations
+
+    if old_manifest is None:
+        operations.extend(_classify_new_corpus_file(root, entry.target, entry.content) for entry in bundle.entries)
+        manifest_content = render_consumer_manifest(
+            bundle,
+            package_name=PACKAGE_NAME,
+            package_version=package_version,
+            package_source=package_source,
+        )
+        operations.append(PlannedOperation("CREATE", CORPUS_MANIFEST_PATH, content=manifest_content))
+        return operations
+
+    old_by_target = {entry.target: entry for entry in old_manifest.entries}
+    for entry in bundle.entries:
+        target = entry.target
+        old_entry = old_by_target[target]
+        state = _inspect_owned_corpus_file(root, target, old_entry.installed_checksum)
+        if isinstance(state, PlannedOperation):
+            operations.append(state)
+        elif state == entry.content:
+            operations.append(
+                PlannedOperation("UNCHANGED", target, expected_checksum=old_entry.installed_checksum)
+            )
+        else:
+            operations.append(
+                PlannedOperation(
+                    "UPDATE",
+                    target,
+                    content=entry.content,
+                    reason="restore checksum-matched corpus content",
+                    expected_checksum=old_entry.installed_checksum,
+                )
+            )
+
+    if old_manifest_content is None:
+        raise ProjectInitializationError("Validated corpus manifest content is unavailable.")
+    operations.append(
+        PlannedOperation(
+            "UNCHANGED",
+            CORPUS_MANIFEST_PATH,
+            expected_checksum=_content_checksum(old_manifest_content),
+        )
+    )
+    return operations
+
+
+def _reference_namespace_conflict(root: Path, bundle: ReferenceBundle) -> PlannedOperation | None:
+    expected_files = {
+        entry.target for entry in bundle.entries if entry.target.is_relative_to(REFERENCE_ROOT)
+    }
+    expected_directories = {
+        parent
+        for target in expected_files
+        for parent in target.parents
+        if parent.is_relative_to(REFERENCE_ROOT)
+    }
+    expected_paths = expected_files | expected_directories
+    unexpected = _unmanaged_reference_path(root, expected_paths)
+    if unexpected is not None:
+        return PlannedOperation(
+            "CONFLICT",
+            unexpected,
+            reason="unmanaged path inside the DESys reference namespace",
+        )
+    return None
+
+
+def _unmanaged_reference_path(
+    root: Path,
+    expected_paths: set[PurePosixPath],
+) -> PurePosixPath | None:
+    namespace = root / REFERENCE_ROOT
+    if namespace.is_symlink():
+        return REFERENCE_ROOT
+    if not namespace.exists():
+        return None
+    if not namespace.is_dir():
+        return REFERENCE_ROOT
+    for directory, directory_names, file_names in namespace.walk(follow_symlinks=False):
+        for name in sorted((*directory_names, *file_names)):
+            relative = PurePosixPath((directory / name).relative_to(root).as_posix())
+            if relative not in expected_paths:
+                return relative
+    return None
+
+
+def _classify_new_corpus_file(root: Path, relative: PurePosixPath, content: bytes) -> PlannedOperation:
+    destination = root / relative
+    unsafe_ancestor = _unsafe_ancestor(root, relative)
+    if unsafe_ancestor is not None:
+        return PlannedOperation("CONFLICT", relative, reason=unsafe_ancestor)
+    if destination.is_symlink():
+        return PlannedOperation("CONFLICT", relative, reason="corpus target is a symlink")
+    if destination.exists():
+        return PlannedOperation("CONFLICT", relative, reason="existing corpus target is unmanaged")
+    return PlannedOperation("CREATE", relative, content=content)
+
+
+def _inspect_owned_corpus_file(
+    root: Path,
+    relative: PurePosixPath,
+    expected_checksum: str,
+) -> bytes | PlannedOperation:
+    destination = root / relative
+    unsafe_ancestor = _unsafe_ancestor(root, relative)
+    if unsafe_ancestor is not None:
+        return PlannedOperation("CONFLICT", relative, reason=unsafe_ancestor)
+    if destination.is_symlink():
+        return PlannedOperation("CONFLICT", relative, reason="managed corpus file is a symlink")
+    if not destination.exists():
+        return PlannedOperation("CONFLICT", relative, reason="managed corpus file was deleted locally")
+    if not destination.is_file():
+        return PlannedOperation("CONFLICT", relative, reason="expected a managed corpus file")
+    try:
+        status = destination.stat()
+        if status.st_nlink != 1:
+            return PlannedOperation("CONFLICT", relative, reason="managed corpus file has multiple hard links")
+        if status.st_mode & 0o111:
+            return PlannedOperation("CONFLICT", relative, reason="managed corpus file is executable")
+        current = destination.read_bytes()
+    except OSError as error:
+        return PlannedOperation("CONFLICT", relative, reason=f"cannot read managed corpus file: {error}")
+    if _content_checksum(current) != expected_checksum:
+        return PlannedOperation("CONFLICT", relative, reason="managed corpus file was modified locally")
+    return current
+
+
+def _same_bundle_inconsistency(
+    manifest: ConsumerManifest,
+    bundle: ReferenceBundle,
+    package_version: str,
+    package_source: str,
+) -> str | None:
+    if manifest.package_name != PACKAGE_NAME:
+        return "corpus manifest package name is inconsistent"
+    if manifest.package_version != package_version or manifest.package_source != package_source:
+        return "corpus manifest package provenance is inconsistent"
+    if manifest.release_tag != bundle.release_tag or manifest.source_commit != bundle.source_commit:
+        return "corpus manifest release provenance is inconsistent"
+    if manifest.corpus_version != bundle.corpus_version:
+        return "corpus manifest version is inconsistent with its bundle checksum"
+    expected = {
+        entry.target: (
+            entry.source,
+            entry.collection,
+            entry.classification,
+            entry.checksum,
+            entry.document_id,
+            entry.canonical_id,
+        )
+        for entry in bundle.entries
+    }
+    actual = {
+        entry.target: (
+            entry.source,
+            entry.collection,
+            entry.classification,
+            entry.original_checksum,
+            entry.document_id,
+            entry.canonical_id,
+        )
+        for entry in manifest.entries
+    }
+    if actual != expected:
+        return "corpus manifest entries are inconsistent with the installed bundle"
+    if any(entry.installed_checksum != entry.original_checksum for entry in manifest.entries):
+        return "corpus manifest installed checksums are inconsistent"
+    return None
 
 
 def _classify_gitignore(root: Path) -> PlannedOperation:
@@ -464,11 +786,11 @@ def _classify_gitignore(root: Path) -> PlannedOperation:
     ]
     contains_marker = IGNORE_BEGIN in current or IGNORE_END in current
     if len(block_positions) == 1 and lines.count(IGNORE_BEGIN) == 1 and lines.count(IGNORE_END) == 1:
-        return PlannedOperation("UNCHANGED", IGNORE_PATH)
+        return PlannedOperation("UNCHANGED", IGNORE_PATH, expected_checksum=_content_checksum(current))
     if contains_marker:
         return PlannedOperation("CONFLICT", IGNORE_PATH, reason="DESys ignore markers are malformed")
     if any(line.strip() == IGNORE_RULE for line in lines):
-        return PlannedOperation("UNCHANGED", IGNORE_PATH)
+        return PlannedOperation("UNCHANGED", IGNORE_PATH, expected_checksum=_content_checksum(current))
 
     newline = b"\r\n" if b"\r\n" in current else b"\n"
     if not current:
@@ -479,15 +801,18 @@ def _classify_gitignore(root: Path) -> PlannedOperation:
         updated = current + newline + _ignore_block(newline)
     else:
         updated = current + newline * 2 + _ignore_block(newline)
-    return PlannedOperation("UPDATE", IGNORE_PATH, content=updated)
+    return PlannedOperation("UPDATE", IGNORE_PATH, content=updated, expected_checksum=_content_checksum(current))
 
 
-def _classify_agents(root: Path) -> PlannedOperation:
+def _classify_agents(root: Path, *, with_reference_corpus: bool = False) -> PlannedOperation:
     destination = root / AGENTS_PATH
     if destination.is_symlink():
         return PlannedOperation("CONFLICT", AGENTS_PATH, reason="managed file is a symlink")
+    desired_block = AGENTS_CORPUS_BLOCK if with_reference_corpus else AGENTS_BLOCK
+    desired_lines = AGENTS_CORPUS_BLOCK_LINES if with_reference_corpus else AGENTS_BLOCK_LINES
+    alternate_lines = AGENTS_BLOCK_LINES if with_reference_corpus else AGENTS_CORPUS_BLOCK_LINES
     if not destination.exists():
-        return PlannedOperation("CREATE", AGENTS_PATH, content=AGENTS_BLOCK.encode("utf-8"))
+        return PlannedOperation("CREATE", AGENTS_PATH, content=desired_block.encode("utf-8"))
     if not destination.is_file():
         return PlannedOperation("CONFLICT", AGENTS_PATH, reason="expected a file")
     try:
@@ -496,20 +821,37 @@ def _classify_agents(root: Path) -> PlannedOperation:
         return PlannedOperation("CONFLICT", AGENTS_PATH, reason=f"cannot read managed file: {error}")
 
     lines = current.splitlines()
-    block_size = len(AGENTS_BLOCK_LINES)
+    block_size = len(desired_lines)
     block_positions = [
         index
         for index in range(max(0, len(lines) - block_size + 1))
-        if tuple(lines[index : index + block_size]) == AGENTS_BLOCK_LINES
+        if tuple(lines[index : index + block_size]) == desired_lines
     ]
     contains_marker = AGENTS_BEGIN in current or AGENTS_END in current
     if len(block_positions) == 1 and lines.count(AGENTS_BEGIN) == 1 and lines.count(AGENTS_END) == 1:
-        return PlannedOperation("UNCHANGED", AGENTS_PATH)
+        return PlannedOperation("UNCHANGED", AGENTS_PATH, expected_checksum=_content_checksum(current))
+    alternate_size = len(alternate_lines)
+    alternate_positions = [
+        index
+        for index in range(max(0, len(lines) - alternate_size + 1))
+        if tuple(lines[index : index + alternate_size]) == alternate_lines
+    ]
+    if len(alternate_positions) == 1 and lines.count(AGENTS_BEGIN) == 1 and lines.count(AGENTS_END) == 1:
+        newline = b"\r\n" if b"\r\n" in current else b"\n"
+        old_block = newline.join(alternate_lines)
+        new_block = newline.join(desired_lines)
+        return PlannedOperation(
+            "UPDATE",
+            AGENTS_PATH,
+            content=current.replace(old_block, new_block, 1),
+            reason="upgrade known DESys agent instructions",
+            expected_checksum=_content_checksum(current),
+        )
     if contains_marker:
         return PlannedOperation("CONFLICT", AGENTS_PATH, reason="DESys agent instruction markers are malformed")
 
     newline = b"\r\n" if b"\r\n" in current else b"\n"
-    block = newline.join(AGENTS_BLOCK_LINES) + newline
+    block = newline.join(desired_lines) + newline
     if not current:
         updated = block
     elif current.endswith(newline * 2):
@@ -518,7 +860,7 @@ def _classify_agents(root: Path) -> PlannedOperation:
         updated = current + newline + block
     else:
         updated = current + newline * 2 + block
-    return PlannedOperation("UPDATE", AGENTS_PATH, content=updated)
+    return PlannedOperation("UPDATE", AGENTS_PATH, content=updated, expected_checksum=_content_checksum(current))
 
 
 def _unsafe_ancestor(root: Path, relative: PurePosixPath) -> str | None:
@@ -532,14 +874,81 @@ def _unsafe_ancestor(root: Path, relative: PurePosixPath) -> str | None:
     return None
 
 
+def _validate_plan_safety(root: Path, plan: InitializationPlan) -> None:
+    """Repeat the complete planned-state check immediately before mutations."""
+    for operation in plan.operations:
+        unsafe_ancestor = _unsafe_ancestor(root, operation.path)
+        if unsafe_ancestor is not None:
+            raise ProjectInitializationError(f"Managed path changed after planning: {unsafe_ancestor}")
+        destination = root / operation.path
+        if operation.is_directory:
+            if operation.action == "CREATE":
+                if destination.exists() or destination.is_symlink():
+                    raise ProjectInitializationError(
+                        f"Managed directory changed after planning: {operation.path}"
+                    )
+            elif destination.is_symlink() or not destination.is_dir():
+                raise ProjectInitializationError(
+                    f"Managed directory changed after planning: {operation.path}"
+                )
+            continue
+        if operation.action == "CREATE":
+            if destination.exists() or destination.is_symlink():
+                raise ProjectInitializationError(f"Managed file changed after planning: {operation.path}")
+            continue
+        if operation.action not in {"UNCHANGED", "UPDATE", "DELETE"}:
+            continue
+        if operation.expected_checksum is None:
+            raise ProjectInitializationError(f"No expected checksum for {operation.path}")
+        _verify_file_checksum(
+            destination,
+            operation.expected_checksum,
+            reject_hardlinks=_is_corpus_path(operation.path),
+            context=f"Managed file changed after planning: {operation.path}",
+        )
+    expected_reference_paths = {
+        PurePosixPath(operation.path.as_posix())
+        for operation in plan.operations
+        if PurePosixPath(operation.path.as_posix()).is_relative_to(REFERENCE_ROOT)
+    }
+    if expected_reference_paths:
+        unexpected = _unmanaged_reference_path(root, expected_reference_paths)
+        if unexpected is not None:
+            raise ProjectInitializationError(
+                f"Reference namespace changed after planning: unmanaged path {unexpected}"
+            )
+
+
+def _is_corpus_path(relative: PurePosixPath) -> bool:
+    return (
+        relative == CORPUS_MANIFEST_PATH
+        or relative in {
+            PurePosixPath("docs/desys/LICENSE"),
+            PurePosixPath("docs/desys/THIRD_PARTY_NOTICES.md"),
+        }
+        or relative.is_relative_to(PurePosixPath("docs/desys/reference"))
+    )
+
+
 def _ignore_block(newline: bytes) -> bytes:
     return newline.join(IGNORE_BLOCK_LINES) + newline
 
 
-def _replace_file(destination: Path, content: bytes) -> None:
+def _replace_file(
+    destination: Path,
+    content: bytes,
+    expected_checksum: str,
+    *,
+    reject_hardlinks: bool = False,
+) -> None:
     """Atomically replace a managed file while preserving its permission mode."""
     temporary_path: Path | None = None
-    mode = destination.stat().st_mode
+    mode = _verify_file_checksum(
+        destination,
+        expected_checksum,
+        reject_hardlinks=reject_hardlinks,
+        context=f"Managed file changed before update: {destination}",
+    )
     try:
         with NamedTemporaryFile(mode="wb", dir=destination.parent, prefix=f".{destination.name}.", delete=False) as stream:
             stream.write(content)
@@ -552,6 +961,53 @@ def _replace_file(destination: Path, content: bytes) -> None:
     finally:
         if temporary_path is not None:
             temporary_path.unlink(missing_ok=True)
+
+
+def _delete_file(destination: Path, expected_checksum: str, *, reject_hardlinks: bool = False) -> None:
+    """Delete an unchanged managed corpus file after a final safety check."""
+    _verify_file_checksum(
+        destination,
+        expected_checksum,
+        reject_hardlinks=reject_hardlinks,
+        context=f"Managed corpus file changed before deletion: {destination}",
+    )
+    destination.unlink()
+
+
+def _verify_file_checksum(
+    destination: Path,
+    expected_checksum: str,
+    *,
+    reject_hardlinks: bool,
+    context: str,
+) -> int:
+    if destination.is_symlink():
+        raise ProjectInitializationError(context)
+    descriptor = -1
+    try:
+        descriptor = os.open(destination, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
+        status = os.fstat(descriptor)
+        if not stat.S_ISREG(status.st_mode):
+            raise ProjectInitializationError(context)
+        if reject_hardlinks and status.st_nlink != 1:
+            raise ProjectInitializationError(context)
+        if reject_hardlinks and status.st_mode & 0o111:
+            raise ProjectInitializationError(context)
+        with os.fdopen(descriptor, "rb") as stream:
+            descriptor = -1
+            current = stream.read()
+    except OSError as error:
+        raise ProjectInitializationError(f"{context}: {error}") from error
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
+    if _content_checksum(current) != expected_checksum:
+        raise ProjectInitializationError(context)
+    return status.st_mode
+
+
+def _content_checksum(content: bytes) -> str:
+    return f"sha256:{hashlib.sha256(content).hexdigest()}"
 
 
 def _installed_version() -> str:
@@ -599,18 +1055,22 @@ def _validate_desys_source(root: Path, source: str, version: str) -> str:
     return source
 
 
-def _render_project_files(version: str, desys_source: str) -> dict[PurePosixPath, bytes]:
+def _render_project_files(
+    version: str,
+    desys_source: str,
+    reference_sources: tuple[PurePosixPath, ...] = (),
+) -> dict[PurePosixPath, bytes]:
     if not version.strip():
         raise ProjectInitializationError("DESys version must not be empty.")
     text_files = {
         PurePosixPath(".github/workflows/desys-docs-quality.yml"): QUALITY_WORKFLOW,
         PurePosixPath("docs/adr/README.md"): _collection_readme("Architecture Decisions", "ADR"),
-        PurePosixPath("docs/desys/README.md"): _integration_readme(version),
+        PurePosixPath("docs/desys/README.md"): _integration_readme(version, bool(reference_sources)),
         PurePosixPath("docs/prd/README.md"): _collection_readme("Product Requirements", "PRD"),
         PurePosixPath("docs/rfc/README.md"): _collection_readme("Engineering Proposals", "RFC"),
         PurePosixPath("scripts/desys-docs-quality.sh"): QUALITY_SCRIPT,
         PurePosixPath("tools/desys-source.txt"): f"{desys_source}\n",
-        PurePosixPath("tools/desys_indexer.yaml"): INDEXER_CONFIG,
+        PurePosixPath("tools/desys_indexer.yaml"): _indexer_config(reference_sources),
     }
     return {
         path: content.encode("utf-8")
@@ -631,8 +1091,8 @@ This `README.md` is a navigation surface and is not indexed as a DEKG node.
 """
 
 
-def _integration_readme(version: str) -> str:
-    return f"""# DESys Project Integration
+def _integration_readme(version: str, with_reference_corpus: bool = False) -> str:
+    content = f"""# DESys Project Integration
 
 This project scaffold was generated with DESys `{version}`. DESys tooling runs
 in an isolated Python 3.12 environment managed by `uvx`; it does not constrain
@@ -677,6 +1137,38 @@ The root `AGENTS.md` provides vendor-neutral instructions for AI agents to
 discover and respect this documentation. It does not install or activate DESys
 skills.
 """
+    if not with_reference_corpus:
+        return content
+    return content + """
+
+## Installed Reference Corpus
+
+`docs/desys/reference/` contains vendored DESys guidance for reuse and discovery.
+It is reference-only: consumer code, policies, ADRs, PRDs, RFCs, and maintained
+operational documentation remain authoritative for this project. Contradictions
+must be reported rather than resolved in favor of the reference corpus.
+
+`docs/desys/corpus-manifest.yaml` records package and corpus provenance and is
+the ownership boundary for installed reference and legal files. Local changes or
+deletions to those files cause a conflict on reconciliation. Generated indexes
+are derived discovery artifacts and do not establish ownership or authority.
+"""
+
+
+def _indexer_config(reference_sources: tuple[PurePosixPath, ...]) -> str:
+    if not reference_sources:
+        return INDEXER_CONFIG
+    rendered_sources = "".join(f"  - {path.as_posix()}\n" for path in reference_sources)
+    return INDEXER_CONFIG.replace("  - docs/rfc\n", f"  - docs/rfc\n{rendered_sources}", 1)
+
+
+def _corpus_transition_paths() -> frozenset[PurePosixPath]:
+    return frozenset(
+        {
+            PurePosixPath("docs/desys/README.md"),
+            PurePosixPath("tools/desys_indexer.yaml"),
+        }
+    )
 
 
 if __name__ == "__main__":

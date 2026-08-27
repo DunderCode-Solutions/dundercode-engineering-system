@@ -1,0 +1,18 @@
+version: 1
+
+assets:
+- source: LICENSE
+  target: docs/desys/LICENSE
+  collection: legal
+  classification: legal
+  review_owner: DunderCode Engineering
+- source: THIRD_PARTY_NOTICES.md
+  target: docs/desys/THIRD_PARTY_NOTICES.md
+  collection: legal
+  classification: legal
+  review_owner: DunderCode Engineering
+- source: knowledge/architecture/metadata/desys-metadata.schema.json
+  target: docs/desys/reference/knowledge/architecture/metadata/desys-metadata.schema.json
+  collection: knowledge
+  classification: schema
+  review_owner: DunderCode Engineering

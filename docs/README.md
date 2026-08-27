@@ -1,6 +1,6 @@
 # DESys Development Checkpoint
 
-Last updated: 2026-08-24
+Last updated: 2026-08-25
 
 ## Current State
 
@@ -17,15 +17,24 @@ bash scripts/quality.sh
 
 The latest verified result is:
 
-- 278 canonical documents validated;
+- 280 documents validated;
 - 0 metadata errors and 127 governed legacy warnings;
-- 40 native pytest tests passing;
+- 123 native pytest tests passing;
 - 5 deterministic index artifacts generated and cross-validated;
-- Python wheel built and smoke-tested in an isolated environment;
-- build ID `sha256:c0df150d39a2c9f12f74fe5a92267d54364ebe2be5bf8b1b01507e8875f104c6`.
+- source distribution and derived wheel built and smoke-tested in an isolated
+  environment;
+- native GitHub Actions gates passed on `ubuntu-latest`, `macos-latest`, and
+  `windows-latest`, including installed-package smoke tests on macOS and Windows;
+- both v0.2 consumer corpus pilots passed every required pre-tag scenario on
+  immutable candidate `e7db715635e8611f08144ef27c7f803daa468a49`;
+- anonymous installation from public tag `v0.2.0-alpha.1` and its Linux, macOS,
+  and Windows gates passed on tagged commit
+  `d736b028b285a3c4f4d22b685ddd5a0903c9822d`;
+- approved 41-entry reference bundle checksum
+  `sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a`.
 
-The current corrective release uses PEP 440 package version `0.1.0a2` and public
-release label `v0.1.0-alpha.2`.
+The published prerelease uses PEP 440 package version `0.2.0a1` and public
+release label `v0.2.0-alpha.1`. No PyPI package is published.
 
 ## Completed Milestone
 
@@ -46,15 +55,29 @@ The implemented scope covers:
 - deterministic and idempotent generation;
 - dry-run support;
 - built-wheel consumer smoke testing.
+- opt-in governed reference-corpus installation;
+- manifest-backed ownership and same-snapshot reconciliation;
+- consumer-authority preservation and fail-closed conflict handling.
 
 ## Next Milestone
 
-Pilot A and Pilot B are complete, and `v0.1.0-alpha.1` was published. The current
-milestone is to publish `v0.1.0-alpha.2` with the restored MIT License text,
-verify public installation from its immutable tag, and supersede the previous
-alpha for new consumers.
+Cross-platform candidate validation, both consumer corpus pilots, anonymous
+public-tag verification, and final engineering-owner approval are complete.
+Post-release monitoring and trusted cross-snapshot reconciliation remain future
+work.
 
-The required evidence, scenarios, and go/no-go criteria are defined in
+The current corpus-pilot evidence, scenarios, and staged go/no-go criteria are
+defined in
+[`DESYS-V0.2-CONSUMER-CORPUS-PILOT-VALIDATION-PLAN.md`](DESYS-V0.2-CONSUMER-CORPUS-PILOT-VALIDATION-PLAN.md).
+The executed evidence is recorded in
+[`pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md`](pilot/PILOT-A-V0.2-CONSUMER-CORPUS-EVIDENCE.md)
+and
+[`pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md`](pilot/PILOT-B-V0.2-CONSUMER-CORPUS-EVIDENCE.md).
+Anonymous public-tag evidence is recorded in
+[`pilot/TAG-001-V0.2-ANONYMOUS-PUBLIC-TAG-EVIDENCE.md`](pilot/TAG-001-V0.2-ANONYMOUS-PUBLIC-TAG-EVIDENCE.md).
+
+The v0.1 adoption evidence remains available as historical compatibility proof.
+Its validation plan is
 [`DESYS-V0.1-PILOT-VALIDATION-PLAN.md`](DESYS-V0.1-PILOT-VALIDATION-PLAN.md).
 The first AI validation findings and mandatory regression scenarios are in
 [`pilot/AI-VALIDATION-ROUND-1.md`](pilot/AI-VALIDATION-ROUND-1.md).
@@ -70,7 +93,9 @@ The final Pilot A report is in [`pilot/PILOT-REPORT.md`](pilot/PILOT-REPORT.md),
 and the final AI scenario archive is in
 [`pilot/AI-VALIDATION-FINAL.md`](pilot/AI-VALIDATION-FINAL.md).
 
-## Resume Point
+## Next Work
 
-Resume by completing the release-preparation checklist in
-[`DESYS-V0.1-PILOT-VALIDATION-PLAN.md`](DESYS-V0.1-PILOT-VALIDATION-PLAN.md).
+Monitor `v0.2.0-alpha.1` adoption and design trusted cross-snapshot corpus
+reconciliation without weakening the fail-closed ownership model. Completed
+release evidence is recorded in [`SUPPORTED-PLATFORMS.md`](../SUPPORTED-PLATFORMS.md)
+and [`RELEASE_NOTES.md`](../RELEASE_NOTES.md).
