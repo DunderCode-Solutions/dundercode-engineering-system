@@ -41,10 +41,12 @@ packages = [
     "tools",
     "tools.desys_indexer",
     "tools.reference_corpus_data",
+    "tools.reference_corpus_data.contracts",
 ]
 
 [tool.setuptools.package-data]
-"tools.reference_corpus_data" = ["bundle.yaml", "compatibility.yaml", "contracts/*.json", "corpus-files/**/*"]
+"tools.reference_corpus_data" = ["bundle.yaml", "compatibility.yaml", "corpus-files/**/*"]
+"tools.reference_corpus_data.contracts" = ["*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
