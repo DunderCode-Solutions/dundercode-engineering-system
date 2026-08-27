@@ -49,7 +49,7 @@ immutable tag and GitHub prerelease are published; no PyPI package is published.
   required pre-tag scenario.
 - Anonymous installation and initialization from public tag
   [`v0.2.0-alpha.1`](https://github.com/DunderCode-Solutions/dundercode-engineering-system/tree/v0.2.0-alpha.1)
-  passes [`TAG-001`](docs/pilot/TAG-001-V0.2-ANONYMOUS-PUBLIC-TAG-EVIDENCE.md),
+  passes [`TAG-001`](https://github.com/DunderCode-Solutions/dundercode-engineering-system/blob/c94add9bea3b42ff2f632d5a7c3a1066d0fc59cc/docs/pilot/TAG-001-V0.2-ANONYMOUS-PUBLIC-TAG-EVIDENCE.md),
   including tag-triggered Linux, macOS, and Windows gates.
 
 ## Distribution
