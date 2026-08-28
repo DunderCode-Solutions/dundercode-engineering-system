@@ -12,6 +12,7 @@ from tools.build_corpus_inventory import (
     build_inventory,
     load_asset_config,
     load_inventory,
+    portable_path_key,
     render_inventory,
     validate_inventory,
     validate_portable_target,
@@ -30,6 +31,13 @@ def _config(root: Path) -> IndexerConfig:
         exclude=(),
         artifacts=("index.yaml",),
     )
+
+
+def test_portable_path_key_normalizes_case_and_unicode() -> None:
+    composed = PurePosixPath("docs/desys/r\N{LATIN SMALL LETTER E WITH ACUTE}sum\N{LATIN SMALL LETTER E WITH ACUTE}.md")
+    decomposed_uppercase = PurePosixPath("DOCS/DESYS/RE\N{COMBINING ACUTE ACCENT}SUME\N{COMBINING ACUTE ACCENT}.MD")
+
+    assert portable_path_key(composed) == portable_path_key(decomposed_uppercase)
 
 
 def _write_document(path: Path, body: str = "Body.\n") -> None:

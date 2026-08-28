@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import sys
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -166,10 +167,10 @@ def load_asset_config(
             target.is_absolute()
             or ".." in target.parts
             or target.parts[:2] != ("docs", "desys")
-            or _portable_path_key(target) == _portable_path_key(PurePosixPath("docs/desys/corpus-manifest.yaml"))
+            or portable_path_key(target) == portable_path_key(PurePosixPath("docs/desys/corpus-manifest.yaml"))
         ):
             raise InventoryError(f"Configured asset target must remain inside docs/desys: {target_value}")
-        target_key = _portable_path_key(target)
+        target_key = portable_path_key(target)
         if target_key in seen_targets:
             raise InventoryError(f"Duplicate configured asset target: {target_value}")
         collection = value["collection"]
@@ -321,9 +322,9 @@ def render_inventory(payload: dict[str, Any]) -> str:
     return yaml.safe_dump(payload, sort_keys=False, allow_unicode=False, width=120)
 
 
-def _portable_path_key(path: PurePosixPath) -> str:
-    """Return a case-insensitive key for paths copied across supported platforms."""
-    return "/".join(part.casefold() for part in path.parts)
+def portable_path_key(path: PurePosixPath) -> str:
+    """Return a case-insensitive Unicode-normalized key for portable paths."""
+    return "/".join(unicodedata.normalize("NFC", part.casefold()) for part in path.parts)
 
 
 def validate_portable_target(path: PurePosixPath) -> None:
@@ -489,7 +490,7 @@ def _validate_entry(
         validate_portable_target(target_path)
     except InventoryError as error:
         raise InventoryError(f"Inventory target is not portable: {entry['target']}: {error}") from error
-    target_key = _portable_path_key(target_path)
+    target_key = portable_path_key(target_path)
     if target_key in seen_targets:
         raise InventoryError(f"Duplicate inventory target: {entry['target']}")
     seen_targets.add(target_key)

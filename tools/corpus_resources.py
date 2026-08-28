@@ -16,7 +16,7 @@ from typing import Any
 
 import yaml
 
-from tools.build_corpus_inventory import InventoryError, validate_portable_target
+from tools.build_corpus_inventory import InventoryError, portable_path_key, validate_portable_target
 from tools.desys_metadata import UniqueKeyLoader
 
 BUNDLE_SCHEMA = "1.1.0"
@@ -934,14 +934,9 @@ def _require_safe_path(value: Any, field: str) -> PurePosixPath:
 
 
 def _require_portable_uniqueness(values: list[str | PurePosixPath], context: str) -> None:
-    keys = [_portable_path_key(value) for value in values]
+    keys = [portable_path_key(value if isinstance(value, PurePosixPath) else PurePosixPath(value)) for value in values]
     if len(keys) != len(set(keys)):
         raise CorpusResourceError(f"{context} must be unique across supported filesystems.")
-
-
-def _portable_path_key(value: str | PurePosixPath) -> str:
-    path = value if isinstance(value, PurePosixPath) else PurePosixPath(value)
-    return "/".join(part.casefold() for part in path.parts)
 
 
 def _read_package_resource(package: Traversable, relative: PurePosixPath) -> bytes:

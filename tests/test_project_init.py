@@ -6,14 +6,23 @@ import shutil
 import subprocess
 import sys
 import time
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 import pytest
 import yaml
 
 from tools import init_project as init_project_module
 from tools.check_generated_artifacts import validate_generated_artifacts
-from tools.corpus_resources import load_predecessor_descriptor, load_reference_bundle, render_consumer_manifest
+from tools.corpus_resources import (
+    BundleEntry,
+    ConsumerManifest,
+    DescriptorEntry,
+    PredecessorDescriptor,
+    ReferenceBundle,
+    load_predecessor_descriptor,
+    load_reference_bundle,
+    render_consumer_manifest,
+)
 from tools.desys_indexer.config import SUPPORTED_ARTIFACTS, load_config
 from tools.desys_indexer.parser import parse_documents
 from tools.desys_indexer.scanner import scan_markdown_documents
@@ -557,9 +566,339 @@ def test_trusted_v02_predecessor_is_validated_without_planning_writes(tmp_path: 
     plan = initialize_project(root, version=TEST_VERSION)
 
     operation = next(item for item in plan.operations if item.path == init_project_module.CORPUS_MANIFEST_PATH)
-    assert plan.has_conflicts
-    assert operation.reason == "trusted predecessor validated; cross-snapshot planning is not implemented"
+    assert not plan.has_conflicts
+    assert plan.cross_snapshot
+    assert operation.action == "UPDATE"
+    assert operation.reason == (
+        f"commit migration from {V02_BUNDLE_CHECKSUM} to {load_reference_bundle().bundle_checksum}"
+    )
+    corpus_actions = {
+        item.action
+        for item in plan.operations
+        if item.path.is_relative_to(init_project_module.REFERENCE_ROOT)
+        or item.path.name in {"LICENSE", "THIRD_PARTY_NOTICES.md"}
+    }
+    assert corpus_actions == {"UNCHANGED"}
     assert manifest_path.is_file()
+    assert {
+        path: (path.read_bytes(), path.stat().st_mtime_ns)
+        for path in root.rglob("*")
+        if path.is_file() and ".git" not in path.parts
+    } == before
+
+
+def test_cross_snapshot_dry_run_and_apply_return_the_same_zero_write_plan(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    write_v02_predecessor_manifest(root)
+    before = {
+        path: (path.read_bytes(), path.stat().st_mtime_ns)
+        for path in root.rglob("*")
+        if path.is_file() and ".git" not in path.parts
+    }
+
+    dry_run = initialize_project(root, dry_run=True, version=TEST_VERSION)
+    apply = initialize_project(root, version=TEST_VERSION)
+
+    assert dry_run == apply
+    assert init_project_module.render_plan(dry_run) == init_project_module.render_plan(apply)
+    assert {
+        path: (path.read_bytes(), path.stat().st_mtime_ns)
+        for path in root.rglob("*")
+        if path.is_file() and ".git" not in path.parts
+    } == before
+
+
+@pytest.mark.parametrize(
+    ("change", "reason"),
+    [
+        ("modify", "managed corpus file was modified locally"),
+        ("delete", "managed corpus file was deleted locally"),
+    ],
+)
+def test_cross_snapshot_rejects_local_predecessor_changes(
+    tmp_path: Path,
+    change: str,
+    reason: str,
+) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    write_v02_predecessor_manifest(root)
+    target = root / load_reference_bundle().entries[0].target
+    if change == "modify":
+        target.write_bytes(b"consumer change\n")
+    else:
+        target.unlink()
+
+    plan = initialize_project(root, version=TEST_VERSION)
+
+    conflict = next(operation for operation in plan.operations if operation.path == target.relative_to(root))
+    assert plan.has_conflicts
+    assert conflict.action == "CONFLICT"
+    assert conflict.reason == reason
+
+
+def test_cross_snapshot_identity_conflict_names_consumer_and_target(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    write_v02_predecessor_manifest(root)
+    entry = next(item for item in load_reference_bundle().entries if item.indexable)
+    consumer_path = root / "docs/adr" / entry.target.name
+    consumer_path.write_bytes(entry.content)
+
+    plan = initialize_project(root, version=TEST_VERSION)
+
+    conflicts = [
+        operation
+        for operation in plan.operations
+        if operation.action == "CONFLICT" and "owned by consumer" in (operation.reason or "")
+    ]
+    assert plan.has_conflicts
+    assert conflicts
+    assert all(consumer_path.relative_to(root).as_posix() in (operation.reason or "") for operation in conflicts)
+    assert all(operation.path == entry.target for operation in conflicts)
+
+
+def test_cross_snapshot_identity_preflight_ignores_excluded_source_trees(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    write_v02_predecessor_manifest(root)
+    entry = next(item for item in load_reference_bundle().entries if item.indexable)
+    excluded_path = root / "docs/adr/node_modules/package" / entry.target.name
+    excluded_path.parent.mkdir(parents=True)
+    excluded_path.write_bytes(entry.content)
+
+    plan = initialize_project(root, version=TEST_VERSION)
+
+    assert not plan.has_conflicts
+
+
+def test_cross_snapshot_alias_collision_preserves_consumer_authority(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    write_v02_predecessor_manifest(root)
+    entry = next(item for item in load_reference_bundle().entries if item.indexable)
+    metadata, body = init_project_module.parse_front_matter(entry.content.decode("utf-8"))
+    metadata["document_id"] = "ADR-9999"
+    metadata["canonical_id"] = "adr.consumer.local"
+    metadata["aliases"] = [entry.canonical_id]
+    consumer_path = root / "docs/adr/ADR-9999-consumer.md"
+    consumer_path.write_text(
+        f"---\n{yaml.safe_dump(metadata, sort_keys=False)}---\n{body}",
+        encoding="utf-8",
+    )
+
+    plan = initialize_project(root, version=TEST_VERSION)
+
+    conflict = next(
+        operation
+        for operation in plan.operations
+        if operation.path == entry.target and "conflicts with alias owned by consumer" in (operation.reason or "")
+    )
+    assert plan.has_conflicts
+    assert consumer_path.relative_to(root).as_posix() in (conflict.reason or "")
+
+
+def test_cross_snapshot_rejects_portable_path_collision(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    write_v02_predecessor_manifest(root)
+    target = PurePosixPath("docs/desys/LICENSE")
+    collision = root / "DOCS/DESYS/LICENSE"
+    collision.parent.mkdir(parents=True)
+    collision.write_bytes(b"consumer path\n")
+
+    plan = initialize_project(root, version=TEST_VERSION)
+
+    conflict = next(
+        operation
+        for operation in plan.operations
+        if operation.path == target and "portable path collides" in (operation.reason or "")
+    )
+    assert plan.has_conflicts
+    assert collision.relative_to(root).as_posix() in (conflict.reason or "")
+    assert any(
+        operation.path == PurePosixPath("docs")
+        and "existing path DOCS" in (operation.reason or "")
+        for operation in plan.operations
+    )
+
+
+def test_future_skill_identifier_namespace_uses_shared_collision_preflight() -> None:
+    consumer = init_project_module.IdentityRecord(
+        "skill_id",
+        "skill.example",
+        PurePosixPath(".agents/skills/example/SKILL.md"),
+        "consumer",
+    )
+    target = init_project_module.IdentityRecord(
+        "skill_id",
+        "skill.example",
+        PurePosixPath("docs/desys/reference/skills/DSK-001-example.md"),
+        "target corpus",
+    )
+
+    conflicts = init_project_module._identity_conflicts([target, consumer])
+
+    assert len(conflicts) == 1
+    assert conflicts[0].path == target.path
+    assert consumer.path.as_posix() in (conflicts[0].reason or "")
+    assert "owned by consumer" in (conflicts[0].reason or "")
+
+
+def test_cross_snapshot_planner_emits_every_non_conflict_operation(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root = make_repository(tmp_path / "repository")
+    reference = PurePosixPath("docs/desys/reference/test")
+    old_contents = {
+        reference / "same.txt": b"same\n",
+        reference / "update.txt": b"old\n",
+        reference / "rename-old.txt": b"rename\n",
+    }
+    new_contents = {
+        reference / "same.txt": b"same\n",
+        reference / "update.txt": b"new\n",
+        reference / "rename-new.txt": b"rename\n",
+    }
+    for target, content in old_contents.items():
+        destination = root / target
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(content)
+
+    def checksum(content: bytes) -> str:
+        return f"sha256:{hashlib.sha256(content).hexdigest()}"
+
+    descriptor_entries = tuple(
+        DescriptorEntry(
+            source=target.name,
+            target=target,
+            collection="test",
+            classification="navigation",
+            indexable=False,
+            checksum=checksum(content),
+        )
+        for target, content in sorted(old_contents.items(), key=lambda item: item[0].as_posix())
+    )
+    bundle_entries = tuple(
+        BundleEntry(
+            source=target.name,
+            target=target,
+            collection="test",
+            classification="navigation",
+            indexable=False,
+            checksum=checksum(content),
+            content=content,
+        )
+        for target, content in sorted(new_contents.items(), key=lambda item: item[0].as_posix())
+    )
+    predecessor_checksum = f"sha256:{'1' * 64}"
+    target_checksum = f"sha256:{'2' * 64}"
+    descriptor = PredecessorDescriptor(
+        descriptor_schema="1.0.0",
+        target_bundle_checksum=target_checksum,
+        accepted_manifest_schemas=("1.1.0",),
+        predecessor_package_version="0.2.0a1",
+        bundle_schema="1.1.0",
+        inventory_schema="1.0.0",
+        corpus_version="0.2.0-alpha.1",
+        release_tag="v0.2.0-alpha.1",
+        source_commit="1" * 40,
+        bundle_checksum=predecessor_checksum,
+        entries=descriptor_entries,
+    )
+    bundle = ReferenceBundle(
+        bundle_schema="1.1.0",
+        inventory_schema="1.0.0",
+        corpus_version="0.3.0-alpha.1",
+        release_tag="v0.3.0-alpha.1",
+        source_commit="2" * 40,
+        bundle_checksum=target_checksum,
+        entries=bundle_entries,
+    )
+    manifest = ConsumerManifest(
+        manifest_schema="1.1.0",
+        package_name="dundercode-engineering-system",
+        package_version="0.2.0a1",
+        package_source="dundercode-engineering-system==0.2.0a1",
+        release_tag="v0.2.0-alpha.1",
+        source_commit="1" * 40,
+        corpus_version="0.2.0-alpha.1",
+        bundle_checksum=predecessor_checksum,
+        entries=(),
+    )
+    monkeypatch.setattr(init_project_module, "render_consumer_manifest", lambda *args, **kwargs: b"target manifest\n")
+
+    first = init_project_module._plan_cross_snapshot_corpus(
+        root,
+        bundle,
+        manifest,
+        descriptor,
+        TEST_VERSION,
+        f"dundercode-engineering-system=={TEST_VERSION}",
+        b"predecessor manifest\n",
+    )
+    second = init_project_module._plan_cross_snapshot_corpus(
+        root,
+        bundle,
+        manifest,
+        descriptor,
+        TEST_VERSION,
+        f"dundercode-engineering-system=={TEST_VERSION}",
+        b"predecessor manifest\n",
+    )
+
+    actions = {operation.path.name: operation.action for operation in first}
+    assert actions == {
+        "corpus-manifest.yaml": "UPDATE",
+        "rename-new.txt": "ADD",
+        "rename-old.txt": "REMOVE",
+        "same.txt": "UNCHANGED",
+        "update.txt": "UPDATE",
+    }
+    assert first == second
+    rename_add = next(operation for operation in first if operation.path.name == "rename-new.txt")
+    rename_remove = next(operation for operation in first if operation.path.name == "rename-old.txt")
+    assert rename_add.target_checksum == rename_remove.expected_checksum
+
+    manifest_path = root / init_project_module.CORPUS_MANIFEST_PATH
+    manifest_path.write_bytes(b"predecessor manifest\n")
+    monkeypatch.setattr(init_project_module, "load_reference_bundle", lambda: bundle)
+
+    def unsupported_predecessor(*args, **kwargs):
+        raise init_project_module.UnsupportedCorpusBundleError("synthetic predecessor")
+
+    monkeypatch.setattr(init_project_module, "load_consumer_manifest", unsupported_predecessor)
+    monkeypatch.setattr(
+        init_project_module,
+        "validate_predecessor_manifest",
+        lambda *args, **kwargs: (manifest, descriptor),
+    )
+    before = {
+        path: (path.read_bytes(), path.stat().st_mtime_ns)
+        for path in root.rglob("*")
+        if path.is_file() and ".git" not in path.parts
+    }
+
+    dry_run = initialize_project(root, dry_run=True, version=TEST_VERSION)
+    apply = initialize_project(root, version=TEST_VERSION)
+
+    assert dry_run == apply
+    assert not dry_run.has_conflicts
+    assert dry_run.cross_snapshot
+    integrated_actions = {
+        operation.path.name: operation.action
+        for operation in dry_run.operations
+        if operation.path.parent == reference
+    }
+    assert integrated_actions == {
+        "rename-new.txt": "ADD",
+        "rename-old.txt": "REMOVE",
+        "same.txt": "UNCHANGED",
+        "update.txt": "UPDATE",
+    }
+    assert init_project_module.render_plan(dry_run) == init_project_module.render_plan(apply)
     assert {
         path: (path.read_bytes(), path.stat().st_mtime_ns)
         for path in root.rglob("*")
