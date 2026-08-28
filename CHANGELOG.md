@@ -2,6 +2,23 @@
 
 All notable changes to DESys are documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- A checksum-bound compatibility profile for the `v0.3.0-alpha.1` development
+  target and its direct `v0.2.0-alpha.1` predecessor.
+- An immutable predecessor descriptor containing the complete v0.2 bundle,
+  provenance, accepted manifest schema, and authorized target bundle.
+- Complete predecessor manifest validation before any ownership entry can be
+  used for cross-snapshot planning.
+
+### Security
+
+- Unknown, skipped, altered, or forged predecessor snapshots fail closed.
+- Cross-snapshot writes remain blocked until the deterministic planner and
+  transactional apply stages are implemented.
+
 ## [0.2.0-alpha.1] - 2026-08-26
 
 ### Added

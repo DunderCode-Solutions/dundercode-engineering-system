@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dundercode-engineering-system"
-version = "0.2.0a1"
+version = "0.3.0a1"
 description = "DunderCode Engineering System knowledge platform"
 readme = "README.md"
 license = "MIT"
@@ -42,11 +42,13 @@ packages = [
     "tools.desys_indexer",
     "tools.reference_corpus_data",
     "tools.reference_corpus_data.contracts",
+    "tools.reference_corpus_data.predecessors",
 ]
 
 [tool.setuptools.package-data]
 "tools.reference_corpus_data" = ["bundle.yaml", "compatibility.yaml", "corpus-files/**/*"]
 "tools.reference_corpus_data.contracts" = ["*.json"]
+"tools.reference_corpus_data.predecessors" = ["*.yaml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

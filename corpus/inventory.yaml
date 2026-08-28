@@ -1,7 +1,7 @@
 inventory_schema: 1.2.0
 corpus_version: 0.1.0
-release_tag: v0.2.0-alpha.1
-source_commit: 1ba18c126dc9adf035f64c0ca6eda75186e73b60
+release_tag: v0.3.0-alpha.1
+source_commit: d84693cd117e5b792fe63fcaaa1550acda427c16
 source_roots:
 - foundation
 - knowledge

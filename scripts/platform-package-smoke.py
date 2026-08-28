@@ -43,12 +43,14 @@ def main() -> None:
         run("uv", "pip", "install", "--python", str(python), str(wheels[0]))
         probe = (
             "from importlib.metadata import version; "
-            "from tools.corpus_resources import load_reference_bundle; "
+            "from tools.corpus_resources import load_predecessor_descriptor, load_reference_bundle; "
             f"assert version({project['name']!r}) == {expected_version!r}; "
             "bundle = load_reference_bundle(); "
-            "assert bundle.release_tag == 'v0.2.0-alpha.1'; "
-            "assert bundle.source_commit == '1ba18c126dc9adf035f64c0ca6eda75186e73b60'; "
-            "assert len(bundle.entries) == 41"
+            "assert bundle.release_tag == 'v0.3.0-alpha.1'; "
+            "assert bundle.source_commit == 'd84693cd117e5b792fe63fcaaa1550acda427c16'; "
+            "assert len(bundle.entries) == 41; "
+            "predecessor = load_predecessor_descriptor('sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a'); "
+            "assert predecessor.target_bundle_checksum == bundle.bundle_checksum"
         )
         run(str(python), "-c", probe, cwd=root)
         executable = environment / (

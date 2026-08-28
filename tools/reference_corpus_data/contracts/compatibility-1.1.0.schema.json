@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dundercode.dev/desys/schemas/compatibility-1.0.0.json",
+  "$id": "https://dundercode.dev/desys/schemas/compatibility-1.1.0.json",
   "title": "DESys Distribution Compatibility Matrix",
   "type": "object",
   "additionalProperties": false,
@@ -11,7 +11,7 @@
   ],
   "properties": {
     "compatibility_schema": {
-      "const": "1.0.0"
+      "const": "1.1.0"
     },
     "package_name": {
       "const": "dundercode-engineering-system"
@@ -49,9 +49,10 @@
         "reference_bundle_schema_checksum",
         "consumer_manifest_schema_checksum",
         "compatibility_schema_checksum",
+        "predecessor_descriptor_schema_checksum",
         "requires_python",
         "platforms",
-        "direct_predecessor_bundle_checksums"
+        "direct_predecessors"
       ],
       "properties": {
         "package_version": {
@@ -93,6 +94,9 @@
         "compatibility_schema_checksum": {
           "$ref": "#/$defs/checksum"
         },
+        "predecessor_descriptor_schema_checksum": {
+          "$ref": "#/$defs/checksum"
+        },
         "requires_python": {
           "type": "string",
           "minLength": 1
@@ -109,10 +113,23 @@
           "minItems": 1,
           "uniqueItems": true
         },
-        "direct_predecessor_bundle_checksums": {
+        "direct_predecessors": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/checksum"
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "bundle_checksum",
+              "descriptor_checksum"
+            ],
+            "properties": {
+              "bundle_checksum": {
+                "$ref": "#/$defs/checksum"
+              },
+              "descriptor_checksum": {
+                "$ref": "#/$defs/checksum"
+              }
+            }
           },
           "uniqueItems": true
         }

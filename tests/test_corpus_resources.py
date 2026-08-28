@@ -20,8 +20,8 @@ def test_packaged_resources_match_all_bundle_checksums() -> None:
 
     assert bundle.bundle_schema == "1.1.0"
     assert bundle.corpus_version == "0.1.0"
-    assert bundle.release_tag == "v0.2.0-alpha.1"
-    assert bundle.source_commit == "1ba18c126dc9adf035f64c0ca6eda75186e73b60"
+    assert bundle.release_tag == "v0.3.0-alpha.1"
+    assert bundle.source_commit == "d84693cd117e5b792fe63fcaaa1550acda427c16"
     assert len(bundle.entries) == 41
     assert {path.as_posix() for path in bundle.source_roots} == {
         "docs/desys/reference/delivery",
@@ -98,10 +98,10 @@ def test_consumer_manifest_rejects_casefold_equivalent_paths() -> None:
     payload = {
         "manifest_schema": "1.1.0",
         "package_name": "dundercode-engineering-system",
-        "package_version": "0.2.0a1",
-        "package_source": "dundercode-engineering-system==0.2.0a1",
-        "release_tag": "v0.2.0-alpha.1",
-        "source_commit": "1ba18c126dc9adf035f64c0ca6eda75186e73b60",
+        "package_version": "0.3.0a1",
+        "package_source": "dundercode-engineering-system==0.3.0a1",
+        "release_tag": "v0.3.0-alpha.1",
+        "source_commit": "d84693cd117e5b792fe63fcaaa1550acda427c16",
         "corpus_version": "0.1.0",
         "bundle_checksum": f"sha256:{'b' * 64}",
         "entries": [entry, {**entry, "source": "knowledge/a.md", "target": "docs/desys/reference/knowledge/a.md"}],
@@ -115,10 +115,10 @@ def test_consumer_manifest_rejects_nested_nonstring_keys() -> None:
     payload = {
         "manifest_schema": "1.1.0",
         "package_name": "dundercode-engineering-system",
-        "package_version": "0.2.0a1",
-        "package_source": "dundercode-engineering-system==0.2.0a1",
-        "release_tag": "v0.2.0-alpha.1",
-        "source_commit": "1ba18c126dc9adf035f64c0ca6eda75186e73b60",
+        "package_version": "0.3.0a1",
+        "package_source": "dundercode-engineering-system==0.3.0a1",
+        "release_tag": "v0.3.0-alpha.1",
+        "source_commit": "d84693cd117e5b792fe63fcaaa1550acda427c16",
         "corpus_version": "0.1.0",
         "bundle_checksum": f"sha256:{'b' * 64}",
         "entries": [
@@ -142,8 +142,8 @@ def test_consumer_manifest_rejects_nested_nonstring_keys() -> None:
 @pytest.mark.parametrize(
     ("field", "value", "message"),
     (
-        ("release_tag", "v0.2.0-beta.1", "does not match package_version"),
-        ("release_tag", "0.2.0-alpha.1", "immutable DESys release tag"),
+        ("release_tag", "v0.3.0-beta.1", "does not match package_version"),
+        ("release_tag", "0.3.0-alpha.1", "immutable DESys release tag"),
         ("source_commit", "1ba18c1", "full lowercase Git commit SHA"),
     ),
 )
@@ -151,10 +151,10 @@ def test_consumer_manifest_rejects_invalid_release_provenance(field: str, value:
     payload = {
         "manifest_schema": "1.1.0",
         "package_name": "dundercode-engineering-system",
-        "package_version": "0.2.0a1",
-        "package_source": "dundercode-engineering-system==0.2.0a1",
-        "release_tag": "v0.2.0-alpha.1",
-        "source_commit": "1ba18c126dc9adf035f64c0ca6eda75186e73b60",
+        "package_version": "0.3.0a1",
+        "package_source": "dundercode-engineering-system==0.3.0a1",
+        "release_tag": "v0.3.0-alpha.1",
+        "source_commit": "d84693cd117e5b792fe63fcaaa1550acda427c16",
         "corpus_version": "0.1.0",
         "bundle_checksum": f"sha256:{'b' * 64}",
         "entries": [
@@ -205,8 +205,8 @@ def test_resource_loader_rejects_filesystem_symlinks(
         "bundle_schema": "1.1.0",
         "inventory_schema": "1.2.0",
         "corpus_version": "0.1.0",
-        "release_tag": "v0.2.0-alpha.1",
-        "source_commit": "1ba18c126dc9adf035f64c0ca6eda75186e73b60",
+        "release_tag": "v0.3.0-alpha.1",
+        "source_commit": "d84693cd117e5b792fe63fcaaa1550acda427c16",
         "entries": entries,
     }
     descriptor_bytes = yaml.safe_dump(descriptor, sort_keys=False, allow_unicode=False, width=120).encode("utf-8")

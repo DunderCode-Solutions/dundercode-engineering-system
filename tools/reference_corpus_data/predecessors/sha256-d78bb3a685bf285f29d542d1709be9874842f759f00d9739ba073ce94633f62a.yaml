@@ -1,8 +1,13 @@
+predecessor_descriptor_schema: 1.0.0
+target_bundle_checksum: sha256:374a986cbcd2bcf8fb66149daa9f7ea54d80e0c7f5fcc981cea7281a9378aa5b
+accepted_manifest_schemas:
+- 1.1.0
+predecessor_package_version: 0.2.0a1
 bundle_schema: 1.1.0
 inventory_schema: 1.2.0
 corpus_version: 0.1.0
-release_tag: v0.3.0-alpha.1
-source_commit: d84693cd117e5b792fe63fcaaa1550acda427c16
+release_tag: v0.2.0-alpha.1
+source_commit: 1ba18c126dc9adf035f64c0ca6eda75186e73b60
 entries:
 - source: LICENSE
   target: docs/desys/LICENSE
@@ -322,4 +327,4 @@ entries:
   document_id: RFC-0001
   canonical_id: rfc.corpus.reference-distribution
   metadata_status: approved
-bundle_checksum: sha256:374a986cbcd2bcf8fb66149daa9f7ea54d80e0c7f5fcc981cea7281a9378aa5b
+bundle_checksum: sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a

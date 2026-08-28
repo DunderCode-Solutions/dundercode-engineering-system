@@ -1,6 +1,6 @@
 # DESys Development Checkpoint
 
-Last updated: 2026-08-25
+Last updated: 2026-08-27
 
 ## Current State
 
@@ -19,7 +19,7 @@ The latest verified result is:
 
 - 281 documents validated;
 - 0 metadata errors and 127 governed legacy warnings;
-- 134 native pytest tests passing;
+- 144 native pytest tests passing;
 - 5 deterministic index artifacts generated and cross-validated;
 - source distribution and derived wheel built and smoke-tested in an isolated
   environment;
@@ -30,11 +30,14 @@ The latest verified result is:
 - anonymous installation from public tag `v0.2.0-alpha.1` and its Linux, macOS,
   and Windows gates passed on tagged commit
   `d736b028b285a3c4f4d22b685ddd5a0903c9822d`;
-- approved 41-entry reference bundle checksum
-  `sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a`.
+- development `v0.3.0-alpha.1` 41-entry target bundle checksum
+  `sha256:374a986cbcd2bcf8fb66149daa9f7ea54d80e0c7f5fcc981cea7281a9378aa5b`,
+  with the published v0.2 bundle retained as its checksum-bound direct
+  predecessor.
 
-The published prerelease uses PEP 440 package version `0.2.0a1` and public
-release label `v0.2.0-alpha.1`. No PyPI package is published.
+The published prerelease remains PEP 440 package version `0.2.0a1` and public
+release label `v0.2.0-alpha.1`. The current development target is `0.3.0a1` /
+`v0.3.0-alpha.1`; it has not been published. No PyPI package is published.
 
 ## Completed Milestone
 
@@ -62,9 +65,10 @@ The implemented scope covers:
 ## Next Milestone
 
 Cross-platform candidate validation, both consumer corpus pilots, anonymous
-public-tag verification, and final engineering-owner approval are complete. The
-next milestone implements trusted cross-snapshot reconciliation and the safety
-boundaries required before Reference Skills or Active Skills can ship.
+public-tag verification, and final engineering-owner approval are complete.
+Trusted predecessor descriptors are now implemented. The next milestone is the
+deterministic cross-snapshot planner and collision preflight required before
+Reference Skills or Active Skills can ship.
 
 The approved architecture decision is
 [`ADR-0002`](../knowledge/adr/ADR-0002-cross-snapshot-migration-and-skill-boundaries.md).

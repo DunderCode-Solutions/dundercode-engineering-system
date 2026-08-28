@@ -23,8 +23,8 @@ from tools.desys_metadata import (
 
 INVENTORY_SCHEMA = "1.2.0"
 CORPUS_VERSION = "0.1.0"
-RELEASE_TAG = "v0.2.0-alpha.1"
-SOURCE_COMMIT = "1ba18c126dc9adf035f64c0ca6eda75186e73b60"
+RELEASE_TAG = "v0.3.0-alpha.1"
+SOURCE_COMMIT = "d84693cd117e5b792fe63fcaaa1550acda427c16"
 DEFAULT_OUTPUT = Path("corpus/inventory.yaml")
 DEFAULT_CONFIG = Path("tools/desys_indexer.yaml")
 DEFAULT_ASSETS = Path("corpus/assets.yaml")

@@ -30,9 +30,11 @@ DEFAULT_PACKAGE_ROOT = Path("tools/reference_corpus_data")
 RESOURCE_DIRECTORY = "corpus-files"
 STATIC_PACKAGE_RESOURCES = {
     "compatibility.yaml",
-    "contracts/compatibility-1.0.0.schema.json",
+    "contracts/compatibility-1.1.0.schema.json",
     "contracts/consumer-manifest-1.1.0.schema.json",
+    "contracts/predecessor-descriptor-1.0.0.schema.json",
     "contracts/reference-bundle-1.1.0.schema.json",
+    "predecessors/sha256-d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a.yaml",
 }
 FENCE_PATTERN = re.compile(r"^[ ]{0,3}(`{3,}|~{3,})")
 REFERENCE_DEFINITION_PATTERN = re.compile(r"^[ ]{0,3}\[([^]\n]+)\]:[ \t]*(.*)$")
