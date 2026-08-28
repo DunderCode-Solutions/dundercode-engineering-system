@@ -632,7 +632,8 @@ def test_cross_snapshot_rejects_local_predecessor_changes(
 
     plan = initialize_project(root, version=TEST_VERSION)
 
-    conflict = next(operation for operation in plan.operations if operation.path == target.relative_to(root))
+    relative_target = PurePosixPath(target.relative_to(root).as_posix())
+    conflict = next(operation for operation in plan.operations if operation.path == relative_target)
     assert plan.has_conflicts
     assert conflict.action == "CONFLICT"
     assert conflict.reason == reason
@@ -701,6 +702,10 @@ def test_cross_snapshot_alias_collision_preserves_consumer_authority(tmp_path: P
 
 def test_cross_snapshot_rejects_portable_path_collision(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
+    case_probe = root / "case-sensitive-probe"
+    case_probe.mkdir()
+    if (root / "CASE-SENSITIVE-PROBE").exists():
+        pytest.skip("requires a case-sensitive filesystem to materialize the collision")
     initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
     write_v02_predecessor_manifest(root)
     target = PurePosixPath("docs/desys/LICENSE")
