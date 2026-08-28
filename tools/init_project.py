@@ -15,15 +15,23 @@ from importlib.metadata import version as distribution_version
 from pathlib import Path, PurePosixPath
 from tempfile import NamedTemporaryFile
 
+from tools.build_corpus_inventory import portable_path_key
 from tools.corpus_resources import (
     ConsumerManifest,
     CorpusResourceError,
+    PredecessorDescriptor,
     ReferenceBundle,
     UnsupportedCorpusBundleError,
     load_consumer_manifest,
     load_reference_bundle,
     render_consumer_manifest,
     validate_predecessor_manifest,
+)
+from tools.desys_metadata import (
+    FrontMatterError,
+    managed_documents,
+    parse_front_matter,
+    validate_document_metadata,
 )
 
 PACKAGE_NAME = "dundercode-engineering-system"
@@ -134,6 +142,12 @@ AGENTS_CORPUS_BLOCK_LINES = tuple(AGENTS_CORPUS_BLOCK.encode("utf-8").splitlines
 
 CORPUS_MANIFEST_PATH = PurePosixPath("docs/desys/corpus-manifest.yaml")
 REFERENCE_ROOT = PurePosixPath("docs/desys/reference")
+CONSUMER_SOURCE_ROOTS = (
+    PurePosixPath("docs/adr"),
+    PurePosixPath("docs/prd"),
+    PurePosixPath("docs/rfc"),
+)
+INDEX_EXCLUDED_SEGMENTS = {".git", ".venv", "__pycache__", "node_modules", "build", "dist", "site"}
 
 INDEXER_CONFIG = """version: 1
 
@@ -282,15 +296,25 @@ class PlannedOperation:
     reason: str | None = None
     is_directory: bool = False
     expected_checksum: str | None = None
+    target_checksum: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
 class InitializationPlan:
     operations: tuple[PlannedOperation, ...]
+    cross_snapshot: bool = False
 
     @property
     def has_conflicts(self) -> bool:
         return any(operation.action == "CONFLICT" for operation in self.operations)
+
+
+@dataclass(frozen=True, slots=True)
+class IdentityRecord:
+    namespace: str
+    value: str
+    path: PurePosixPath
+    owner: str
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -339,12 +363,16 @@ def main() -> int:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
 
-    for operation in plan.operations:
-        suffix = f" ({operation.reason})" if operation.reason else ""
-        print(f"{operation.action:<9} {operation.path.as_posix()}{suffix}")
+    print(render_plan(plan), end="")
 
     if plan.has_conflicts:
         print("Initialization aborted because managed paths conflict.", file=sys.stderr)
+        return 1
+    if plan.cross_snapshot and not arguments.dry_run:
+        print(
+            "Cross-snapshot plan is valid, but apply is disabled until transactional migration is implemented.",
+            file=sys.stderr,
+        )
         return 1
     if arguments.dry_run:
         print("Dry run completed; no files were written.")
@@ -352,6 +380,15 @@ def main() -> int:
         changed = sum(operation.action in {"CREATE", "UPDATE", "DELETE"} for operation in plan.operations)
         print(f"DESys project integration initialized ({changed} path(s) changed).")
     return 0
+
+
+def render_plan(plan: InitializationPlan) -> str:
+    """Render a migration plan deterministically for CLI output and review."""
+    return "".join(
+        f"{operation.action:<9} {operation.path.as_posix()}"
+        f"{f' ({operation.reason})' if operation.reason else ''}\n"
+        for operation in plan.operations
+    )
 
 
 def initialize_project(
@@ -401,13 +438,29 @@ def initialize_project(
     )
     operations.append(_classify_agents(root, with_reference_corpus=render_with_corpus))
     operations.append(_classify_gitignore(root))
+    cross_snapshot = False
     if render_with_corpus:
         if bundle is None:
             raise ProjectInitializationError("Reference corpus was not loaded.")
-        operations.extend(_plan_corpus(root, bundle, resolved_version, resolved_source))
-    plan = InitializationPlan(tuple(sorted(operations, key=lambda operation: operation.path.as_posix())))
+        corpus_operations, cross_snapshot = _plan_corpus(
+            root, bundle, resolved_version, resolved_source
+        )
+        operations.extend(corpus_operations)
+    plan = InitializationPlan(
+        tuple(
+            sorted(
+                operations,
+                key=lambda operation: (
+                    operation.path.as_posix(),
+                    operation.action,
+                    operation.reason or "",
+                ),
+            )
+        ),
+        cross_snapshot=cross_snapshot,
+    )
 
-    if plan.has_conflicts or dry_run:
+    if plan.has_conflicts or dry_run or plan.cross_snapshot:
         return plan
 
     try:
@@ -544,7 +597,7 @@ def _plan_corpus(
     bundle: ReferenceBundle,
     package_version: str,
     package_source: str,
-) -> list[PlannedOperation]:
+) -> tuple[list[PlannedOperation], bool]:
     directory_paths = {
         parent
         for entry in bundle.entries
@@ -554,6 +607,8 @@ def _plan_corpus(
     operations = [_classify_directory(root, path) for path in directory_paths]
     manifest_destination = root / CORPUS_MANIFEST_PATH
     old_manifest: ConsumerManifest | None = None
+    predecessor_manifest: ConsumerManifest | None = None
+    predecessor_descriptor: PredecessorDescriptor | None = None
     old_manifest_content: bytes | None = None
     manifest_conflict: str | None = _unsafe_ancestor(root, CORPUS_MANIFEST_PATH)
     if manifest_conflict is None and manifest_destination.is_symlink():
@@ -576,15 +631,13 @@ def _plan_corpus(
                     )
             except UnsupportedCorpusBundleError:
                 try:
-                    validate_predecessor_manifest(old_manifest_content, target_bundle=bundle)
+                    predecessor_manifest, predecessor_descriptor = validate_predecessor_manifest(
+                        old_manifest_content, target_bundle=bundle
+                    )
                 except UnsupportedCorpusBundleError:
                     manifest_conflict = "unsupported prior corpus bundle"
                 except CorpusResourceError as error:
                     manifest_conflict = f"invalid predecessor corpus manifest: {error}"
-                else:
-                    manifest_conflict = (
-                        "trusted predecessor validated; cross-snapshot planning is not implemented"
-                    )
             except (CorpusResourceError, OSError) as error:
                 manifest_conflict = f"invalid corpus ownership manifest: {error}"
 
@@ -598,12 +651,28 @@ def _plan_corpus(
 
     if manifest_conflict is not None:
         operations.append(PlannedOperation("CONFLICT", CORPUS_MANIFEST_PATH, reason=manifest_conflict))
-        return operations
+        return operations, False
+
+    if predecessor_manifest is not None and predecessor_descriptor is not None:
+        if old_manifest_content is None:
+            raise ProjectInitializationError("Validated predecessor manifest content is unavailable.")
+        operations.extend(
+            _plan_cross_snapshot_corpus(
+                root,
+                bundle,
+                predecessor_manifest,
+                predecessor_descriptor,
+                package_version,
+                package_source,
+                old_manifest_content,
+            )
+        )
+        return operations, True
 
     namespace_conflict = _reference_namespace_conflict(root, bundle)
     if namespace_conflict is not None:
         operations.append(namespace_conflict)
-        return operations
+        return operations, False
 
     if old_manifest is None:
         operations.extend(_classify_new_corpus_file(root, entry.target, entry.content) for entry in bundle.entries)
@@ -614,7 +683,7 @@ def _plan_corpus(
             package_source=package_source,
         )
         operations.append(PlannedOperation("CREATE", CORPUS_MANIFEST_PATH, content=manifest_content))
-        return operations
+        return operations, False
 
     old_by_target = {entry.target: entry for entry in old_manifest.entries}
     for entry in bundle.entries:
@@ -647,7 +716,303 @@ def _plan_corpus(
             expected_checksum=_content_checksum(old_manifest_content),
         )
     )
+    return operations, False
+
+
+def _plan_cross_snapshot_corpus(
+    root: Path,
+    bundle: ReferenceBundle,
+    manifest: ConsumerManifest,
+    descriptor: PredecessorDescriptor,
+    package_version: str,
+    package_source: str,
+    manifest_content: bytes,
+) -> list[PlannedOperation]:
+    operations: list[PlannedOperation] = []
+    old_by_target = {entry.target: entry for entry in descriptor.entries}
+    new_by_target = {entry.target: entry for entry in bundle.entries}
+    targets = sorted(set(old_by_target) | set(new_by_target), key=PurePosixPath.as_posix)
+
+    for target in targets:
+        old_entry = old_by_target.get(target)
+        new_entry = new_by_target.get(target)
+        if old_entry is None:
+            if new_entry is None:
+                raise ProjectInitializationError(f"Migration target has no descriptor entry: {target}")
+            classified = _classify_new_corpus_file(root, target, new_entry.content)
+            if classified.action == "CREATE":
+                classified = PlannedOperation(
+                    "ADD",
+                    target,
+                    content=new_entry.content,
+                    target_checksum=new_entry.checksum,
+                )
+            operations.append(classified)
+            continue
+
+        state = _inspect_owned_corpus_file(root, target, old_entry.checksum)
+        if isinstance(state, PlannedOperation):
+            operations.append(state)
+            continue
+        if new_entry is None:
+            operations.append(
+                PlannedOperation("REMOVE", target, expected_checksum=old_entry.checksum)
+            )
+        elif new_entry.checksum == old_entry.checksum:
+            operations.append(
+                PlannedOperation(
+                    "UNCHANGED",
+                    target,
+                    expected_checksum=old_entry.checksum,
+                    target_checksum=new_entry.checksum,
+                )
+            )
+        else:
+            operations.append(
+                PlannedOperation(
+                    "UPDATE",
+                    target,
+                    content=new_entry.content,
+                    reason="approved corpus content changed",
+                    expected_checksum=old_entry.checksum,
+                    target_checksum=new_entry.checksum,
+                )
+            )
+
+    operations.extend(_cross_snapshot_namespace_conflicts(root, set(old_by_target), set(new_by_target)))
+    operations.extend(_portable_path_conflicts(root, set(old_by_target), set(new_by_target)))
+    operations.extend(_identity_preflight(root, bundle, set(old_by_target)))
+    target_manifest = render_consumer_manifest(
+        bundle,
+        package_name=PACKAGE_NAME,
+        package_version=package_version,
+        package_source=package_source,
+    )
+    operations.append(
+        PlannedOperation(
+            "UPDATE",
+            CORPUS_MANIFEST_PATH,
+            content=target_manifest,
+            reason=(
+                f"commit migration from {manifest.bundle_checksum} to {bundle.bundle_checksum}"
+            ),
+            expected_checksum=_content_checksum(manifest_content),
+            target_checksum=_content_checksum(target_manifest),
+        )
+    )
     return operations
+
+
+def _cross_snapshot_namespace_conflicts(
+    root: Path,
+    predecessor_targets: set[PurePosixPath],
+    target_targets: set[PurePosixPath],
+) -> list[PlannedOperation]:
+    expected_files = {
+        path for path in predecessor_targets | target_targets if path.is_relative_to(REFERENCE_ROOT)
+    }
+    expected_directories = {
+        parent
+        for target in expected_files
+        for parent in target.parents
+        if parent.is_relative_to(REFERENCE_ROOT)
+    }
+    return [
+        PlannedOperation(
+            "CONFLICT",
+            path,
+            reason="unmanaged path inside the DESys reference namespace",
+        )
+        for path in _unmanaged_reference_paths(root, expected_files | expected_directories)
+    ]
+
+
+def _portable_path_conflicts(
+    root: Path,
+    predecessor_targets: set[PurePosixPath],
+    target_targets: set[PurePosixPath],
+) -> list[PlannedOperation]:
+    conflicts: list[PlannedOperation] = []
+    managed_targets = predecessor_targets | target_targets
+    managed = managed_targets | {
+        parent
+        for target in managed_targets
+        for parent in target.parents
+        if parent != PurePosixPath(".")
+    }
+    managed_by_key: dict[str, PurePosixPath] = {}
+    for path in sorted(managed, key=PurePosixPath.as_posix):
+        key = portable_path_key(path)
+        previous = managed_by_key.get(key)
+        if previous is not None and previous != path:
+            conflicts.append(
+                PlannedOperation(
+                    "CONFLICT",
+                    path,
+                    reason=f"portable path collides with managed path {previous.as_posix()}",
+                )
+            )
+        else:
+            managed_by_key[key] = path
+
+    for path in _repository_paths(root):
+        key = portable_path_key(path)
+        managed_path = managed_by_key.get(key)
+        if managed_path is not None and path != managed_path:
+            conflicts.append(
+                PlannedOperation(
+                    "CONFLICT",
+                    managed_path,
+                    reason=f"portable path collides with existing path {path.as_posix()}",
+                )
+            )
+    return conflicts
+
+
+def _repository_paths(root: Path) -> tuple[PurePosixPath, ...]:
+    paths: list[PurePosixPath] = []
+    for directory, directory_names, file_names in root.walk(follow_symlinks=False):
+        relative_directory = PurePosixPath(directory.relative_to(root).as_posix())
+        directory_names[:] = sorted(
+            name
+            for name in directory_names
+            if not (
+                relative_directory == PurePosixPath(".") and name in {".git", ".venv"}
+            )
+        )
+        for name in sorted((*directory_names, *file_names)):
+            relative = PurePosixPath((directory / name).relative_to(root).as_posix())
+            if relative.is_relative_to(PurePosixPath("docs/generated")):
+                continue
+            paths.append(relative)
+    return tuple(paths)
+
+
+def _identity_preflight(
+    root: Path,
+    bundle: ReferenceBundle,
+    predecessor_targets: set[PurePosixPath],
+) -> list[PlannedOperation]:
+    records: list[IdentityRecord] = []
+    conflicts: list[PlannedOperation] = []
+
+    for entry in sorted(bundle.entries, key=lambda item: item.target.as_posix()):
+        if not entry.indexable:
+            continue
+        try:
+            metadata, _ = parse_front_matter(entry.content.decode("utf-8"))
+        except (UnicodeError, FrontMatterError) as error:
+            conflicts.append(
+                PlannedOperation("CONFLICT", entry.target, reason=f"invalid target corpus metadata: {error}")
+            )
+            continue
+        issues = [
+            issue
+            for issue in validate_document_metadata(metadata, Path(entry.target))
+            if issue.severity == "error"
+        ]
+        if issues:
+            conflicts.extend(
+                PlannedOperation("CONFLICT", entry.target, reason=f"invalid target corpus metadata: {issue.message}")
+                for issue in issues
+            )
+            continue
+        if metadata.get("document_id") != entry.document_id or metadata.get("canonical_id") != entry.canonical_id:
+            conflicts.append(
+                PlannedOperation(
+                    "CONFLICT",
+                    entry.target,
+                    reason="target corpus descriptor identity does not match its content",
+                )
+            )
+            continue
+        records.extend(_metadata_identity_records(metadata, entry.target, "target corpus"))
+
+    resolved_root = root.resolve()
+    predecessor_files = {(root / path).resolve() for path in predecessor_targets}
+
+    def excluded(path: Path) -> bool:
+        relative = path.relative_to(resolved_root)
+        return (
+            path in predecessor_files
+            or any(part in INDEX_EXCLUDED_SEGMENTS for part in relative.parts)
+            or relative.is_relative_to(Path("docs/generated"))
+        )
+
+    consumer_sources = tuple(root / source for source in CONSUMER_SOURCE_ROOTS if (root / source).is_dir())
+    consumer_documents = (
+        managed_documents(root, sources=consumer_sources, is_excluded=excluded)
+        if consumer_sources
+        else ()
+    )
+    for path in consumer_documents:
+        relative = PurePosixPath(path.relative_to(resolved_root).as_posix())
+        try:
+            metadata, _ = parse_front_matter(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, FrontMatterError) as error:
+            conflicts.append(
+                PlannedOperation("CONFLICT", relative, reason=f"invalid consumer metadata: {error}")
+            )
+            continue
+        issues = [issue for issue in validate_document_metadata(metadata, Path(relative)) if issue.severity == "error"]
+        if issues:
+            conflicts.extend(
+                PlannedOperation("CONFLICT", relative, reason=f"invalid consumer metadata: {issue.message}")
+                for issue in issues
+            )
+            continue
+        records.extend(_metadata_identity_records(metadata, relative, "consumer"))
+
+    conflicts.extend(_identity_conflicts(records))
+    return conflicts
+
+
+def _metadata_identity_records(
+    metadata: dict,
+    path: PurePosixPath,
+    owner: str,
+) -> list[IdentityRecord]:
+    records = [
+        IdentityRecord("document_id", metadata["document_id"], path, owner),
+        IdentityRecord("canonical_id", metadata["canonical_id"], path, owner),
+    ]
+    records.extend(
+        IdentityRecord("alias", alias, path, owner)
+        for alias in metadata.get("aliases", [])
+    )
+    return records
+
+
+def _identity_conflicts(records: list[IdentityRecord]) -> list[PlannedOperation]:
+    registries: dict[str, dict[str, IdentityRecord]] = {}
+    conflicts: list[PlannedOperation] = []
+    for record in sorted(
+        records,
+        key=lambda item: (
+            "resolvable_id" if item.namespace in {"canonical_id", "alias"} else item.namespace,
+            item.value,
+            0 if item.owner == "consumer" else 1,
+            item.namespace,
+            item.path.as_posix(),
+        ),
+    ):
+        registry_name = "resolvable_id" if record.namespace in {"canonical_id", "alias"} else record.namespace
+        registry = registries.setdefault(registry_name, {})
+        previous = registry.get(record.value)
+        if previous is None:
+            registry[record.value] = record
+            continue
+        conflicts.append(
+            PlannedOperation(
+                "CONFLICT",
+                record.path,
+                reason=(
+                    f"{record.namespace} '{record.value}' owned by {record.owner} conflicts with "
+                    f"{previous.namespace} owned by {previous.owner} at {previous.path.as_posix()}"
+                ),
+            )
+        )
+    return conflicts
 
 
 def _reference_namespace_conflict(root: Path, bundle: ReferenceBundle) -> PlannedOperation | None:
@@ -675,19 +1040,28 @@ def _unmanaged_reference_path(
     root: Path,
     expected_paths: set[PurePosixPath],
 ) -> PurePosixPath | None:
+    paths = _unmanaged_reference_paths(root, expected_paths)
+    return paths[0] if paths else None
+
+
+def _unmanaged_reference_paths(
+    root: Path,
+    expected_paths: set[PurePosixPath],
+) -> tuple[PurePosixPath, ...]:
     namespace = root / REFERENCE_ROOT
     if namespace.is_symlink():
-        return REFERENCE_ROOT
+        return (REFERENCE_ROOT,)
     if not namespace.exists():
-        return None
+        return ()
     if not namespace.is_dir():
-        return REFERENCE_ROOT
+        return (REFERENCE_ROOT,)
+    unexpected: list[PurePosixPath] = []
     for directory, directory_names, file_names in namespace.walk(follow_symlinks=False):
         for name in sorted((*directory_names, *file_names)):
             relative = PurePosixPath((directory / name).relative_to(root).as_posix())
             if relative not in expected_paths:
-                return relative
-    return None
+                unexpected.append(relative)
+    return tuple(unexpected)
 
 
 def _classify_new_corpus_file(root: Path, relative: PurePosixPath, content: bytes) -> PlannedOperation:
