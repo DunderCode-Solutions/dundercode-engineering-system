@@ -591,8 +591,8 @@ entries:
   distribution: pending
   indexable: true
   review_owner: DunderCode Engineering
-  review_fingerprint: sha256:92d27a3c56be110b26694cf9f4d97877f37cb5edbf0331872820fbc4634af72b
-  checksum: sha256:72c35a4ca2a3a2e3198d1cc50531f9b840c49b520854097788c977e1e3c667d1
+  review_fingerprint: sha256:648ec945a4c1f20de54ba24602a31a4cb2b0bd96a7f7160cd875d43f2929d9a7
+  checksum: sha256:e53dcdecaf7c77b5d9c4ff74f29ddc9e3f433865e34f55829701cd43386478f4
   document_id: ADR-0002
   canonical_id: adr.corpus.cross-snapshot-and-skill-boundaries
   metadata_status: approved

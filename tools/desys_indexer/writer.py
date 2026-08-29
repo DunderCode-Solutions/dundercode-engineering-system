@@ -14,6 +14,7 @@ import yaml
 
 from tools.desys_indexer.config import SUPPORTED_ARTIFACTS
 from tools.desys_indexer.models import IndexedDocument, RenderedIndexes
+from tools.project_transaction import guard_operation
 
 ARTIFACT_SCHEMA_VERSION = 1
 
@@ -45,6 +46,7 @@ def render_indexes(documents: list[IndexedDocument], artifacts: tuple[str, ...])
 
 def write_indexes(*, rendered: RenderedIndexes, output_dir: Path, verbose: bool = False) -> None:
     """Write all rendered artifacts using same-directory atomic replacements."""
+    guard_operation(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     temporary_files: dict[str, Path] = {}
     try:

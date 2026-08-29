@@ -24,6 +24,7 @@ from tools.build_corpus_inventory import (
 )
 from tools.desys_indexer.config import load_config
 from tools.desys_metadata import FrontMatterError, parse_front_matter
+from tools.project_transaction import TransactionError, guard_operation
 
 BUNDLE_SCHEMA = "1.1.0"
 DEFAULT_PACKAGE_ROOT = Path("tools/reference_corpus_data")
@@ -425,6 +426,7 @@ def main() -> int:
     args = _parse_args()
     try:
         config = load_config(args.config)
+        guard_operation(config.repository_root)
         assets_path = args.assets if args.assets.is_absolute() else config.repository_root / args.assets
         inventory_path = args.inventory if args.inventory.is_absolute() else config.repository_root / args.inventory
         package_root = args.package_root if args.package_root.is_absolute() else config.repository_root / args.package_root
@@ -435,7 +437,15 @@ def main() -> int:
         validate_inventory(inventory, config, assets)
         manifest, files = build_bundle(inventory, config.repository_root)
         validate_or_write_bundle(package_root, files, check=args.check)
-    except (BundleError, FileNotFoundError, InventoryError, OSError, UnicodeError, yaml.YAMLError) as error:
+    except (
+        BundleError,
+        FileNotFoundError,
+        InventoryError,
+        OSError,
+        TransactionError,
+        UnicodeError,
+        yaml.YAMLError,
+    ) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
     action = "Validated" if args.check else "Wrote"

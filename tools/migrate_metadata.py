@@ -21,6 +21,7 @@ from tools.desys_metadata import (
     parse_front_matter,
     validate_document_metadata,
 )
+from tools.project_transaction import TransactionError, guard_operation
 
 FIELD_PATTERN = re.compile(
     r"^\s*(?:\*\*)?([A-Za-z][A-Za-z ]+?):(?:\*\*)?\s*(.*?)\s*$"
@@ -70,6 +71,11 @@ def parse_arguments() -> argparse.Namespace:
 def main() -> int:
     arguments = parse_arguments()
     root = arguments.root.resolve()
+    try:
+        guard_operation(root)
+    except TransactionError as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return 1
     migrated: list[Path] = []
     skipped_placeholders: list[Path] = []
     updates: list[tuple[Path, str]] = []

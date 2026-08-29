@@ -21,6 +21,7 @@ from tools.desys_metadata import (
     parse_front_matter,
     validate_document_metadata,
 )
+from tools.project_transaction import TransactionError, guard_operation
 
 INVENTORY_SCHEMA = "1.2.0"
 CORPUS_VERSION = "0.1.0"
@@ -556,6 +557,7 @@ def main() -> int:
     args = _parse_args()
     try:
         config = load_config(args.config)
+        guard_operation(config.repository_root)
         asset_config = args.assets if args.assets.is_absolute() else config.repository_root / args.assets
         assets = load_asset_config(asset_config, config.repository_root, config.sources)
         output = args.output if args.output.is_absolute() else config.repository_root / args.output
@@ -571,7 +573,7 @@ def main() -> int:
         output.write_text(rendered, encoding="utf-8")
         print(f"Wrote corpus inventory with {len(payload['entries'])} entries to {output}.")
         return 0
-    except (FileNotFoundError, InventoryError, UnicodeDecodeError) as error:
+    except (FileNotFoundError, InventoryError, UnicodeDecodeError, TransactionError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
 

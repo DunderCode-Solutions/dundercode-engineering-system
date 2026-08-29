@@ -19,6 +19,7 @@ if __package__ in (None, ""):
 
 from tools.desys_indexer.config import SUPPORTED_ARTIFACTS, load_config
 from tools.desys_metadata import UniqueKeyLoader, managed_documents
+from tools.project_transaction import TransactionError, guard_operation
 
 BUILD_ID_PATTERN = re.compile(r"^sha256:[0-9a-f]{64}$")
 
@@ -38,7 +39,7 @@ def main() -> int:
     arguments = parse_arguments()
     try:
         summary = validate_generated_artifacts(arguments.output)
-    except (OSError, ValueError, json.JSONDecodeError, yaml.YAMLError) as error:
+    except (OSError, ValueError, json.JSONDecodeError, yaml.YAMLError, TransactionError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
 
@@ -51,6 +52,7 @@ def main() -> int:
 
 def validate_generated_artifacts(output: Path) -> dict[str, Any]:
     """Validate generated files and return a compact summary."""
+    guard_operation(output)
     output = output.resolve()
     _require(output.is_dir(), f"Artifact directory does not exist: {output}")
 

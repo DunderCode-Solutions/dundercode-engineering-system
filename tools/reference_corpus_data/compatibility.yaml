@@ -18,7 +18,6 @@ profiles:
   platforms:
   - linux
   - macos
-  - windows
   direct_predecessors:
   - bundle_checksum: sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a
     descriptor_checksum: sha256:6b445dabbf018a8a80ffbf782cca1e9480b1830fdb6a4df5d05b9c9c6e0743c3

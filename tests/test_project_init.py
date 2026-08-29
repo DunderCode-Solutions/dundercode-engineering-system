@@ -28,10 +28,12 @@ from tools.desys_indexer.parser import parse_documents
 from tools.desys_indexer.scanner import scan_markdown_documents
 from tools.desys_indexer.writer import render_indexes, write_indexes
 from tools.desys_metadata import validate_repository
-from tools.init_project import ProjectInitializationError, initialize_project
+from tools.init_project import ProjectInitializationError, initialize_project, recover_project
+from tools.project_transaction import STATE_DIRECTORY
 
 TEST_VERSION = "0.3.0a1"
 V02_BUNDLE_CHECKSUM = "sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a"
+POSIX_TRANSACTION = pytest.mark.skipif(os.name != "posix", reason="transaction mutation protocol requires POSIX")
 
 
 def make_repository(directory: Path) -> Path:
@@ -43,6 +45,27 @@ def make_repository(directory: Path) -> Path:
         text=True,
     )
     return directory
+
+
+@pytest.mark.parametrize(
+    ("outcome", "message"),
+    [
+        ("restored", "restored and verified the exact predecessor state"),
+        ("committed", "already committed; authenticated terminal cleanup completed"),
+    ],
+)
+def test_recovery_cli_reports_actual_outcome(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    outcome: str,
+    message: str,
+) -> None:
+    monkeypatch.setattr(sys, "argv", ["desys-project-init", "--root", str(tmp_path), "--recover"])
+    monkeypatch.setattr(init_project_module, "recover_project", lambda root: outcome)
+
+    assert init_project_module.main() == 0
+    assert message in capsys.readouterr().out
 
 
 def write_v02_predecessor_manifest(root: Path) -> Path:
@@ -192,7 +215,7 @@ def test_second_run_is_idempotent(tmp_path: Path) -> None:
     )
     before = {path: (path.read_bytes(), path.stat().st_mtime_ns) for path in files}
 
-    plan = initialize_project(root, version=TEST_VERSION)
+    plan = initialize_project(root, dry_run=True, version=TEST_VERSION)
 
     assert not plan.has_conflicts
     assert all(operation.action == "UNCHANGED" for operation in plan.operations)
@@ -553,16 +576,11 @@ def test_forged_predecessor_manifest_cannot_authorize_overwrite(tmp_path: Path) 
     )
 
 
-def test_trusted_v02_predecessor_is_validated_without_planning_writes(tmp_path: Path) -> None:
+@POSIX_TRANSACTION
+def test_trusted_v02_predecessor_is_applied_transactionally(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
     initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
     manifest_path = write_v02_predecessor_manifest(root)
-    before = {
-        path: (path.read_bytes(), path.stat().st_mtime_ns)
-        for path in root.rglob("*")
-        if path.is_file() and ".git" not in path.parts
-    }
-
     plan = initialize_project(root, version=TEST_VERSION)
 
     operation = next(item for item in plan.operations if item.path == init_project_module.CORPUS_MANIFEST_PATH)
@@ -580,33 +598,81 @@ def test_trusted_v02_predecessor_is_validated_without_planning_writes(tmp_path: 
     }
     assert corpus_actions == {"UNCHANGED"}
     assert manifest_path.is_file()
-    assert {
-        path: (path.read_bytes(), path.stat().st_mtime_ns)
-        for path in root.rglob("*")
-        if path.is_file() and ".git" not in path.parts
-    } == before
+    assert not (root / STATE_DIRECTORY).exists()
+    assert yaml.safe_load((root / init_project_module.CORPUS_MANIFEST_PATH).read_bytes())["bundle_checksum"] == (
+        load_reference_bundle().bundle_checksum
+    )
 
 
-def test_cross_snapshot_dry_run_and_apply_return_the_same_zero_write_plan(tmp_path: Path) -> None:
+@POSIX_TRANSACTION
+def test_cross_snapshot_dry_run_and_apply_return_the_same_plan(tmp_path: Path) -> None:
     root = make_repository(tmp_path / "repository")
     initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
     write_v02_predecessor_manifest(root)
-    before = {
-        path: (path.read_bytes(), path.stat().st_mtime_ns)
-        for path in root.rglob("*")
-        if path.is_file() and ".git" not in path.parts
-    }
-
     dry_run = initialize_project(root, dry_run=True, version=TEST_VERSION)
     apply = initialize_project(root, version=TEST_VERSION)
 
     assert dry_run == apply
     assert init_project_module.render_plan(dry_run) == init_project_module.render_plan(apply)
-    assert {
-        path: (path.read_bytes(), path.stat().st_mtime_ns)
-        for path in root.rglob("*")
-        if path.is_file() and ".git" not in path.parts
-    } == before
+    assert yaml.safe_load((root / init_project_module.CORPUS_MANIFEST_PATH).read_bytes())["bundle_checksum"] == (
+        load_reference_bundle().bundle_checksum
+    )
+
+
+@POSIX_TRANSACTION
+def test_explicit_recovery_uses_trusted_predecessor_evidence(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    manifest_path = write_v02_predecessor_manifest(root)
+    predecessor_manifest = manifest_path.read_bytes()
+
+    def interrupt(boundary: str, path: PurePosixPath) -> None:
+        if boundary == "after_apply" and path == init_project_module.CORPUS_MANIFEST_PATH:
+            raise RuntimeError("apply failure")
+        if boundary == "before_rollback" and path == init_project_module.CORPUS_MANIFEST_PATH:
+            raise RuntimeError("rollback interruption")
+
+    with pytest.raises(ProjectInitializationError, match="explicit recovery is required"):
+        initialize_project(root, version=TEST_VERSION, _failure_injector=interrupt)
+
+    with pytest.raises(ProjectInitializationError, match="Pending DESys recovery"):
+        initialize_project(root, dry_run=True, version=TEST_VERSION)
+    recover_project(root)
+
+    assert manifest_path.read_bytes() == predecessor_manifest
+    assert not (root / STATE_DIRECTORY).exists()
+
+
+@POSIX_TRANSACTION
+def test_cross_snapshot_accepts_only_exact_packaged_predecessor_scaffold(tmp_path: Path) -> None:
+    root = make_repository(tmp_path / "repository")
+    initialize_project(root, version=TEST_VERSION, with_reference_corpus=True)
+    manifest_path = write_v02_predecessor_manifest(root)
+    manifest, descriptor = init_project_module.validate_predecessor_manifest(manifest_path.read_bytes())
+    roots = {
+        init_project_module.REFERENCE_ROOT / entry.collection
+        for entry in descriptor.entries
+        if entry.target.is_relative_to(init_project_module.REFERENCE_ROOT)
+    }
+    predecessor = init_project_module._trusted_predecessor_scaffold(manifest, descriptor, roots)
+    for relative, content in predecessor.items():
+        (root / relative).write_bytes(content)
+
+    plan = initialize_project(root, version=TEST_VERSION)
+
+    actions = {operation.path: operation.action for operation in plan.operations}
+    assert actions[PurePosixPath("docs/desys/README.md")] == "UPDATE"
+    assert actions[PurePosixPath("tools/desys-source.txt")] == "UPDATE"
+    assert (root / "docs/desys/README.md").read_bytes() == init_project_module._render_project_files(
+        TEST_VERSION,
+        f"dundercode-engineering-system=={TEST_VERSION}",
+        load_reference_bundle().source_roots,
+    )[PurePosixPath("docs/desys/README.md")]
+
+    write_v02_predecessor_manifest(root)
+    (root / "docs/desys/README.md").write_bytes(b"forged predecessor scaffold\n")
+    refused = initialize_project(root, dry_run=True, version=TEST_VERSION)
+    assert refused.has_conflicts
 
 
 @pytest.mark.parametrize(
@@ -751,6 +817,7 @@ def test_future_skill_identifier_namespace_uses_shared_collision_preflight() -> 
     assert "owned by consumer" in (conflicts[0].reason or "")
 
 
+@POSIX_TRANSACTION
 def test_cross_snapshot_planner_emits_every_non_conflict_operation(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -880,12 +947,27 @@ def test_cross_snapshot_planner_emits_every_non_conflict_operation(
         "validate_predecessor_manifest",
         lambda *args, **kwargs: (manifest, descriptor),
     )
-    before = {
-        path: (path.read_bytes(), path.stat().st_mtime_ns)
-        for path in root.rglob("*")
-        if path.is_file() and ".git" not in path.parts
-    }
-
+    monkeypatch.setattr(
+        init_project_module,
+        "_trusted_predecessor_scaffold",
+        lambda manifest, descriptor, roots: init_project_module._render_project_files(
+            descriptor.predecessor_package_version,
+            manifest.package_source,
+            tuple(sorted(roots, key=PurePosixPath.as_posix)),
+        ),
+    )
+    monkeypatch.setattr(
+        init_project_module,
+        "_authenticate_migration_record",
+        lambda root, predecessor, target, entries, **kwargs: [
+            {
+                "path": entry["path"],
+                "before_checksum": entry["before_checksum"],
+                "after_checksum": entry["after_checksum"],
+            }
+            for entry in sorted(entries, key=lambda item: item["path"])
+        ],
+    )
     dry_run = initialize_project(root, dry_run=True, version=TEST_VERSION)
     apply = initialize_project(root, version=TEST_VERSION)
 
@@ -904,11 +986,11 @@ def test_cross_snapshot_planner_emits_every_non_conflict_operation(
         "update.txt": "UPDATE",
     }
     assert init_project_module.render_plan(dry_run) == init_project_module.render_plan(apply)
-    assert {
-        path: (path.read_bytes(), path.stat().st_mtime_ns)
-        for path in root.rglob("*")
-        if path.is_file() and ".git" not in path.parts
-    } == before
+    assert (root / reference / "same.txt").read_bytes() == b"same\n"
+    assert (root / reference / "update.txt").read_bytes() == b"new\n"
+    assert not (root / reference / "rename-old.txt").exists()
+    assert (root / reference / "rename-new.txt").read_bytes() == b"rename\n"
+    assert manifest_path.read_bytes() == b"target manifest\n"
 
 
 def test_forged_declared_predecessor_manifest_is_rejected_before_ownership(tmp_path: Path) -> None:
