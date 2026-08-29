@@ -735,7 +735,7 @@ def test_cross_snapshot_identity_preflight_ignores_excluded_source_trees(tmp_pat
     excluded_path.parent.mkdir(parents=True)
     excluded_path.write_bytes(entry.content)
 
-    plan = initialize_project(root, version=TEST_VERSION)
+    plan = initialize_project(root, dry_run=True, version=TEST_VERSION)
 
     assert not plan.has_conflicts
 
