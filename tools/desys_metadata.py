@@ -11,6 +11,8 @@ from typing import Any
 import yaml
 from yaml.constructor import ConstructorError
 
+from tools.project_transaction import guard_operation
+
 SCHEMA_VERSION = "1.0.0"
 
 DOCUMENT_ID_PATTERN = re.compile(
@@ -274,6 +276,7 @@ def validate_repository(
 ) -> ValidationReport:
     """Validate all identifier-bearing Markdown documents below root."""
     root = root.resolve()
+    guard_operation(root)
     issues: list[ValidationIssue] = []
     documents: list[tuple[Path, dict[str, Any]]] = []
 

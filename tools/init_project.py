@@ -33,6 +33,13 @@ from tools.desys_metadata import (
     parse_front_matter,
     validate_document_metadata,
 )
+from tools.project_transaction import (
+    FailureInjector,
+    TransactionError,
+    apply_transaction,
+    recover_transaction,
+    require_no_pending_transaction,
+)
 
 PACKAGE_NAME = "dundercode-engineering-system"
 REGISTRY_SOURCE_PATTERN = re.compile(
@@ -148,6 +155,16 @@ CONSUMER_SOURCE_ROOTS = (
     PurePosixPath("docs/rfc"),
 )
 INDEX_EXCLUDED_SEGMENTS = {".git", ".venv", "__pycache__", "node_modules", "build", "dist", "site"}
+V02_BUNDLE_CHECKSUM = "sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a"
+V02_SCAFFOLD_CHECKSUMS = {
+    PurePosixPath(".github/workflows/desys-docs-quality.yml"): "sha256:0073fd94c9ee400e4017915426cda601fae7b45b67472991dd79253119277e09",
+    PurePosixPath("docs/adr/README.md"): "sha256:1668408fee4176f14a8c9c76c6dc594a666bab99fc0b38b0e86aefa172a36aed",
+    PurePosixPath("docs/desys/README.md"): "sha256:aa0e866a467dbc77a4ec03a8e96b7d5bbd985c6f7a764e5f61f887ecc21ef225",
+    PurePosixPath("docs/prd/README.md"): "sha256:3638f7ec6a450d439b618e9d79abfd3c86730212287179bcdf253160fef34129",
+    PurePosixPath("docs/rfc/README.md"): "sha256:b1ffc0e9c12835533bcf487e89e977a81a7c342ac133c5a25c8f56808eca5197",
+    PurePosixPath("scripts/desys-docs-quality.sh"): "sha256:7d2571725abcc2ca03300326fbe6a51fc9d612328b6abed066a6fbdaeb9165da",
+    PurePosixPath("tools/desys_indexer.yaml"): "sha256:9b247c3b458a15991321c790fa132b60ec57b375b98aa7754cad2df8cb74299d",
+}
 
 INDEXER_CONFIG = """version: 1
 
@@ -343,6 +360,11 @@ def parse_arguments() -> argparse.Namespace:
         help="Install and index the checksum-verified DESys reference corpus.",
     )
     parser.add_argument(
+        "--recover",
+        action="store_true",
+        help="Restore an interrupted migration to its exact predecessor state.",
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version=f"%(prog)s {_installed_version()}",
@@ -353,13 +375,22 @@ def parse_arguments() -> argparse.Namespace:
 def main() -> int:
     arguments = parse_arguments()
     try:
+        if arguments.recover:
+            if arguments.dry_run or arguments.with_reference_corpus or arguments.desys_source is not None:
+                raise ProjectInitializationError("--recover cannot be combined with apply or dry-run options.")
+            outcome = recover_project(arguments.root)
+            if outcome == "restored":
+                print("DESys migration recovery restored and verified the exact predecessor state.")
+            else:
+                print("DESys migration was already committed; authenticated terminal cleanup completed.")
+            return 0
         plan = initialize_project(
             arguments.root,
             dry_run=arguments.dry_run,
             desys_source=arguments.desys_source,
             with_reference_corpus=arguments.with_reference_corpus,
         )
-    except ProjectInitializationError as error:
+    except (ProjectInitializationError, TransactionError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
 
@@ -367,12 +398,6 @@ def main() -> int:
 
     if plan.has_conflicts:
         print("Initialization aborted because managed paths conflict.", file=sys.stderr)
-        return 1
-    if plan.cross_snapshot and not arguments.dry_run:
-        print(
-            "Cross-snapshot plan is valid, but apply is disabled until transactional migration is implemented.",
-            file=sys.stderr,
-        )
         return 1
     if arguments.dry_run:
         print("Dry run completed; no files were written.")
@@ -398,9 +423,14 @@ def initialize_project(
     version: str | None = None,
     desys_source: str | None = None,
     with_reference_corpus: bool = False,
+    _failure_injector: FailureInjector | None = None,
 ) -> InitializationPlan:
     """Plan and optionally apply a safe DESys consumer scaffold."""
     root = _validate_repository_root(root)
+    try:
+        require_no_pending_transaction(root)
+    except TransactionError as error:
+        raise ProjectInitializationError(str(error)) from error
     resolved_version = version or _installed_version()
     if resolved_version == "unreleased" and desys_source is None:
         raise ProjectInitializationError(
@@ -446,6 +476,8 @@ def initialize_project(
             root, bundle, resolved_version, resolved_source
         )
         operations.extend(corpus_operations)
+        if cross_snapshot:
+            operations = _authorize_predecessor_scaffold(root, operations, files, bundle)
     plan = InitializationPlan(
         tuple(
             sorted(
@@ -460,7 +492,28 @@ def initialize_project(
         cross_snapshot=cross_snapshot,
     )
 
-    if plan.has_conflicts or dry_run or plan.cross_snapshot:
+    if plan.has_conflicts or dry_run:
+        return plan
+
+    if plan.cross_snapshot:
+        try:
+            _validate_plan_safety(root, plan)
+            apply_transaction(
+                root,
+                plan.operations,
+                authenticate_record=lambda predecessor, target, entries: _authenticate_migration_record(
+                    root,
+                    predecessor,
+                    target,
+                    entries,
+                    expected_version=resolved_version,
+                    expected_source=resolved_source,
+                ),
+                manifest_path=CORPUS_MANIFEST_PATH,
+                failure_injector=_failure_injector,
+            )
+        except (OSError, TransactionError) as error:
+            raise ProjectInitializationError(f"Unable to apply migration transaction: {error}") from error
         return plan
 
     try:
@@ -509,6 +562,152 @@ def initialize_project(
         raise ProjectInitializationError(f"Unable to apply initialization plan: {error}") from error
 
     return plan
+
+
+def recover_project(root: Path, *, _failure_injector: FailureInjector | None = None) -> str:
+    """Explicitly recover an interrupted cross-snapshot migration."""
+    root = _validate_repository_root(root)
+
+    return recover_transaction(
+        root,
+        authenticate_record=lambda predecessor, target, entries: _authenticate_migration_record(
+            root,
+            predecessor,
+            target,
+            entries,
+            expected_version=_installed_version(),
+        ),
+        manifest_path=CORPUS_MANIFEST_PATH,
+        failure_injector=_failure_injector,
+    )
+
+
+def _authenticate_migration_record(
+    root: Path,
+    predecessor_content: bytes,
+    target_content: bytes,
+    entries: list[dict],
+    *,
+    expected_version: str,
+    expected_source: str | None = None,
+) -> list[dict]:
+    try:
+        predecessor, descriptor = validate_predecessor_manifest(predecessor_content)
+        bundle = load_reference_bundle()
+        target = load_consumer_manifest(target_content, expected_bundle_checksum=bundle.bundle_checksum)
+    except CorpusResourceError as error:
+        raise TransactionError(f"Transaction manifest evidence is not trusted: {error}") from error
+    if target.package_name != PACKAGE_NAME or target.package_version != expected_version:
+        raise TransactionError("Transaction target manifest does not identify the installed DESys package.")
+    if expected_source is not None:
+        if target.package_source != expected_source:
+            raise TransactionError("Transaction target source differs from the authorized migration plan.")
+    else:
+        try:
+            _validate_desys_source(root, target.package_source, expected_version)
+        except ProjectInitializationError as error:
+            raise TransactionError(f"Transaction target source is not authorized: {error}") from error
+
+    roots = {
+        REFERENCE_ROOT / entry.collection
+        for entry in descriptor.entries
+        if entry.target.is_relative_to(REFERENCE_ROOT)
+    }
+    predecessor_files = _trusted_predecessor_scaffold(predecessor, descriptor, roots)
+    trusted_before = {entry.target: entry.checksum for entry in descriptor.entries}
+    trusted_before.update({path: _content_checksum(value) for path, value in predecessor_files.items()})
+    trusted_before[AGENTS_PATH] = _content_checksum(AGENTS_CORPUS_BLOCK.encode("utf-8"))
+    trusted_before[CORPUS_MANIFEST_PATH] = _content_checksum(predecessor_content)
+
+    target_files = _render_project_files(target.package_version, target.package_source, bundle.source_roots)
+    trusted_after = {entry.target: entry.checksum for entry in bundle.entries}
+    trusted_after.update({path: _content_checksum(value) for path, value in target_files.items()})
+    trusted_after[AGENTS_PATH] = _content_checksum(AGENTS_CORPUS_BLOCK.encode("utf-8"))
+    trusted_after[CORPUS_MANIFEST_PATH] = _content_checksum(target_content)
+
+    recorded = {
+        entry["path"]: (entry["before_checksum"], entry["after_checksum"])
+        for entry in entries
+    }
+    canonical_paths = trusted_before.keys() | trusted_after.keys()
+    for path_text, transition in recorded.items():
+        path = PurePosixPath(path_text)
+        if path not in canonical_paths or transition != (trusted_before.get(path), trusted_after.get(path)):
+            raise TransactionError("Transaction operation set is not exactly authorized by package evidence.")
+    inventory = []
+    for path in sorted(canonical_paths, key=PurePosixPath.as_posix):
+        target_checksum = trusted_after.get(path)
+        before_checksum = recorded.get(path.as_posix(), (target_checksum, target_checksum))[0]
+        inventory.append(
+            {
+                "path": path.as_posix(),
+                "before_checksum": before_checksum,
+                "after_checksum": target_checksum,
+            }
+        )
+    if set(recorded) != {
+        item["path"]
+        for item in inventory
+        if item["before_checksum"] != item["after_checksum"]
+    }:
+        raise TransactionError("Transaction operation set is incomplete or contains a no-op entry.")
+    return inventory
+
+
+def _authorize_predecessor_scaffold(
+    root: Path,
+    operations: list[PlannedOperation],
+    target_files: dict[PurePosixPath, bytes],
+    bundle: ReferenceBundle,
+) -> list[PlannedOperation]:
+    """Authorize scaffold changes only from bytes derived from a trusted manifest."""
+    manifest_path = root / CORPUS_MANIFEST_PATH
+    try:
+        manifest, descriptor = validate_predecessor_manifest(manifest_path.read_bytes(), target_bundle=bundle)
+    except (CorpusResourceError, OSError) as error:
+        raise ProjectInitializationError(f"Unable to derive trusted predecessor scaffold: {error}") from error
+    roots = {
+        PurePosixPath("docs/desys/reference") / entry.collection
+        for entry in descriptor.entries
+        if entry.target.is_relative_to(REFERENCE_ROOT)
+    }
+    predecessor_files = _trusted_predecessor_scaffold(manifest, descriptor, roots)
+    replacements: dict[PurePosixPath, PlannedOperation] = {}
+    for path, target in target_files.items():
+        predecessor = predecessor_files.get(path)
+        if predecessor is None or predecessor == target:
+            continue
+        replacements[path] = _classify_file(root, path, target, previous=(predecessor,))
+    return [replacements.get(operation.path, operation) for operation in operations]
+
+
+def _trusted_predecessor_scaffold(
+    manifest: ConsumerManifest,
+    descriptor: PredecessorDescriptor,
+    roots: set[PurePosixPath],
+) -> dict[PurePosixPath, bytes]:
+    if descriptor.bundle_checksum != V02_BUNDLE_CHECKSUM:
+        raise ProjectInitializationError(
+            "No packaged exact scaffold evidence exists for the trusted predecessor bundle."
+        )
+    files = _render_project_files(
+        descriptor.predecessor_package_version,
+        manifest.package_source,
+        tuple(sorted(roots, key=PurePosixPath.as_posix)),
+    )
+    readme_path = PurePosixPath("docs/desys/README.md")
+    marker = b"\nCross-snapshot upgrades are staged and applied as one recoverable transaction."
+    predecessor_readme, separator, _ = files[readme_path].partition(marker)
+    if not separator:
+        raise ProjectInitializationError("Packaged predecessor scaffold template is unavailable.")
+    files[readme_path] = predecessor_readme + b"\n"
+    for path, expected in V02_SCAFFOLD_CHECKSUMS.items():
+        if path not in files or _content_checksum(files[path]) != expected:
+            raise ProjectInitializationError(f"Packaged predecessor scaffold evidence is inconsistent: {path}")
+    source_path = PurePosixPath("tools/desys-source.txt")
+    if files[source_path] != f"{manifest.package_source}\n".encode():
+        raise ProjectInitializationError("Packaged predecessor source scaffold is inconsistent.")
+    return files
 
 
 def _validate_repository_root(root: Path) -> Path:
@@ -1280,7 +1479,7 @@ def _validate_plan_safety(root: Path, plan: InitializationPlan) -> None:
             if destination.exists() or destination.is_symlink():
                 raise ProjectInitializationError(f"Managed file changed after planning: {operation.path}")
             continue
-        if operation.action not in {"UNCHANGED", "UPDATE", "DELETE"}:
+        if operation.action not in {"UNCHANGED", "UPDATE", "DELETE", "REMOVE"}:
             continue
         if operation.expected_checksum is None:
             raise ProjectInitializationError(f"No expected checksum for {operation.path}")
@@ -1536,6 +1735,13 @@ must be reported rather than resolved in favor of the reference corpus.
 the ownership boundary for installed reference and legal files. Local changes or
 deletions to those files cause a conflict on reconciliation. Generated indexes
 are derived discovery artifacts and do not establish ownership or authority.
+
+Cross-snapshot upgrades are staged and applied as one recoverable transaction.
+If an interrupted rollback leaves `.desys-transaction/`, every DESys command,
+including dry-run commands, fails closed. Inspect the repository and run
+`desys-project-init --root <repository> --recover`; recovery restores and verifies
+the exact trusted predecessor before removing transaction state. Do not edit or
+delete the transaction directory manually.
 """
 
 

@@ -32,6 +32,7 @@ from tools.desys_indexer.parser import IndexingError, parse_documents
 from tools.desys_indexer.scanner import scan_markdown_documents
 from tools.desys_indexer.writer import render_indexes, write_indexes
 from tools.desys_metadata import validate_repository
+from tools.project_transaction import TransactionError, guard_operation
 
 DEFAULT_CONFIG = Path("tools/desys_indexer.yaml")
 
@@ -69,7 +70,8 @@ def main() -> int:
 
     try:
         config = load_config(args.config)
-    except (ConfigurationError, FileNotFoundError) as error:
+        guard_operation(config.repository_root)
+    except (ConfigurationError, FileNotFoundError, TransactionError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
 

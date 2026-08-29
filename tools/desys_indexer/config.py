@@ -9,6 +9,7 @@ from typing import Any
 import yaml
 
 from tools.desys_metadata import UniqueKeyLoader
+from tools.project_transaction import guard_operation
 
 SUPPORTED_SCHEMA_VERSION = 1
 SUPPORTED_ARTIFACTS = (
@@ -49,6 +50,7 @@ class IndexerConfig:
 
 def load_config(path: Path) -> IndexerConfig:
     """Load and validate an indexer YAML configuration."""
+    guard_operation(path)
     path = path.resolve()
     if not path.is_file():
         raise FileNotFoundError(path)

@@ -112,7 +112,7 @@ def test_compatibility_matrix_matches_package_and_distribution_contracts() -> No
     assert profile.package_version == version("dundercode-engineering-system")
     assert profile.package_version == pyproject["project"]["version"]
     assert profile.requires_python == metadata("dundercode-engineering-system")["Requires-Python"]
-    assert set(profile.platforms) == {"linux", "macos", "windows"}
+    assert set(profile.platforms) == {"linux", "macos"}
     assert profile.direct_predecessor_bundle_checksums == (
         "sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a",
     )

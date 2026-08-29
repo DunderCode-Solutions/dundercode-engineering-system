@@ -12,6 +12,7 @@ if __package__ in (None, ""):
 
 from tools.desys_indexer.config import load_config
 from tools.desys_metadata import validate_repository
+from tools.project_transaction import TransactionError, guard_operation
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -42,7 +43,12 @@ def parse_arguments() -> argparse.Namespace:
 
 def main() -> int:
     arguments = parse_arguments()
-    config = load_config(arguments.config) if arguments.config is not None else None
+    try:
+        config = load_config(arguments.config) if arguments.config is not None else None
+        guard_operation(config.repository_root if config is not None else arguments.root)
+    except (OSError, ValueError, TransactionError) as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return 1
     if config is not None and arguments.root.resolve() != config.repository_root:
         print("ERROR: --root must match the configured repository_root.", file=sys.stderr)
         return 1

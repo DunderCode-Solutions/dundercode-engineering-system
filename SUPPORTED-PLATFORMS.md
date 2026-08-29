@@ -1,10 +1,21 @@
 # Supported Platforms And Known Limitations
 
-This document applies to the published DESys `v0.2.0-alpha.1` prerelease.
+This document distinguishes the published DESys `v0.2.0-alpha.1` prerelease
+from the narrower `v0.3.0-alpha.1` compatibility profile.
+
+The `v0.3.0-alpha.1` compatibility profile is intentionally narrower for
+cross-snapshot transactional migration: Linux and macOS are supported when the
+host filesystem provides POSIX descriptor-relative operations, `O_NOFOLLOW`,
+hard-link publication, `flock`, and durable file and directory `fsync`. Windows
+is not in the v0.3 compatibility profile: transactional apply and recovery fail
+closed before mutation. Native Windows CI validates portable tooling and this
+explicit refusal; it is not evidence of v0.3 transactional support. Pending
+transaction state still blocks all DESys commands on Windows and must be
+recovered from a supported host.
 
 ## Supported Tool Host
 
-The alpha is validated on:
+The published v0.2 alpha was validated on:
 
 - Linux x86_64;
 - Pop!_OS 24.04 LTS and GitHub Actions `ubuntu-latest`;
@@ -55,7 +66,8 @@ and
 [macOS/Windows gates](https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/32970276004)
 passed on commit `d736b028b285a3c4f4d22b685ddd5a0903c9822d`.
 
-Support claims are limited to the environments and hosted runner labels above.
+The historical v0.2 support claims are limited to the environments and hosted
+runner labels above. The v0.3 profile remains limited to Linux and macOS.
 They do not imply validation of every operating-system release or hardware
 architecture represented by those platform families.
 

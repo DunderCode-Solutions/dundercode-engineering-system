@@ -211,7 +211,8 @@ Evidence must prove:
 - rollback restores the exact predecessor state;
 - rerunning the target snapshot is idempotent;
 - generated indexes remain deterministic;
-- Linux, macOS, and Windows gates pass.
+- Linux and macOS migration gates pass; the Windows gate passes only when it
+  proves deterministic pre-mutation refusal and portable pending-state guards.
 
 Private SaaS content must not be committed to DESys evidence. The pilot may use a
 sanitized fixture or record only non-sensitive checksums and outcomes.
@@ -270,4 +271,6 @@ demonstrate:
 7. exact-checksum editorial and security approval for selected Skills;
 8. successful upgrade of a realistic v0.2 consumer clone;
 9. anonymous immutable-tag installation and migration;
-10. Linux, macOS, and Windows quality gates on the exact candidate.
+10. Linux and macOS migration quality gates on the exact candidate, plus a
+    Windows gate that proves unsupported transaction apply/recovery refuse
+    before mutation while pending-state guards remain effective.
