@@ -76,6 +76,8 @@ Exit gate:
 
 ### PR 3 - Cross-Snapshot Planner and Preflight
 
+Status: COMPLETE
+
 Deliverables:
 
 - deterministic `ADD`, `UPDATE`, `REMOVE`, `UNCHANGED`, and `CONFLICT` plans;
@@ -91,6 +93,8 @@ Exit gate:
 - repeated planning produces byte-identical output.
 
 ### PR 4 - Transactional Apply and Rollback
+
+Status: COMPLETE
 
 Deliverables:
 
@@ -111,6 +115,8 @@ Exit gate:
 
 ### PR 5 - Compatibility Publication
 
+Status: IN PROGRESS - PENDING CI
+
 Deliverables:
 
 - human-readable compatibility matrix in release documentation;
@@ -123,6 +129,13 @@ Exit gate:
 
 - stale release documentation fails CI;
 - each supported migration path links to automated evidence.
+
+Exit gate state: PENDING. The versioned release-evidence contract and canonical
+documentation checker are implemented locally and wired into
+`scripts/quality.sh`. Completion may be recorded only after this diff is
+committed, passes CI, and merges; the checker cannot recursively prove the
+merged status of its own publication controls. Canonical candidate details are
+in [`DESYS-V0.3-COMPATIBILITY.md`](DESYS-V0.3-COMPATIBILITY.md).
 
 ### PR 6 - Reference Skill Remediation Batches
 
