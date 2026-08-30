@@ -12,12 +12,18 @@ All notable changes to DESys are documented in this file.
   provenance, accepted manifest schema, and authorized target bundle.
 - Complete predecessor manifest validation before any ownership entry can be
   used for cross-snapshot planning.
+- Deterministic cross-snapshot planning, collision preflight, transactional
+  apply, apply-failure rollback, and authenticated interrupted-state recovery.
+- A versioned development-candidate release-evidence contract, canonical
+  compatibility matrix, and stale-publication quality check. Candidate claims
+  remain canonical in
+  [`docs/DESYS-V0.3-COMPATIBILITY.md`](docs/DESYS-V0.3-COMPATIBILITY.md).
 
 ### Security
 
 - Unknown, skipped, altered, or forged predecessor snapshots fail closed.
-- Cross-snapshot writes remain blocked until the deterministic planner and
-  transactional apply stages are implemented.
+- Windows cross-snapshot apply and recovery fail closed before mutation while
+  pending-state guards remain active on every host.
 
 ## [0.2.0-alpha.1] - 2026-08-26
 

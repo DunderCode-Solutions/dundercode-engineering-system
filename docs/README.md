@@ -1,6 +1,6 @@
 # DESys Development Checkpoint
 
-Last updated: 2026-08-27
+Last updated: 2026-08-29
 
 ## Current State
 
@@ -19,7 +19,7 @@ The latest verified result is:
 
 - 281 documents validated;
 - 0 metadata errors and 127 governed legacy warnings;
-- 144 native pytest tests passing;
+- full native pytest suite passing;
 - 5 deterministic index artifacts generated and cross-validated;
 - source distribution and derived wheel built and smoke-tested in an isolated
   environment;
@@ -30,10 +30,7 @@ The latest verified result is:
 - anonymous installation from public tag `v0.2.0-alpha.1` and its Linux, macOS,
   and Windows gates passed on tagged commit
   `d736b028b285a3c4f4d22b685ddd5a0903c9822d`;
-- development `v0.3.0-alpha.1` 41-entry target bundle checksum
-  `sha256:374a986cbcd2bcf8fb66149daa9f7ea54d80e0c7f5fcc981cea7281a9378aa5b`,
-  with the published v0.2 bundle retained as its checksum-bound direct
-  predecessor.
+- development-candidate compatibility publication controls passing locally.
 
 The published prerelease remains PEP 440 package version `0.2.0a1` and public
 release label `v0.2.0-alpha.1`. The current development target is `0.3.0a1` /
@@ -64,17 +61,19 @@ The implemented scope covers:
 
 ## Next Milestone
 
-Cross-platform candidate validation, both consumer corpus pilots, anonymous
-public-tag verification, and final engineering-owner approval are complete.
-Trusted predecessor descriptors are now implemented. The next milestone is the
-deterministic cross-snapshot planner and collision preflight required before
-Reference Skills or Active Skills can ship.
+Roadmap PRs 3 and 4 are complete.
+PR5 is in progress pending committed CI and merge. Local checker success cannot
+establish the completion of its own publication controls. PR6 remains blocked
+until that gate closes. This does not approve any Reference Skill.
+Active Skills remain not implemented.
 
 The approved architecture decision is
 [`ADR-0002`](../knowledge/adr/ADR-0002-cross-snapshot-migration-and-skill-boundaries.md).
 The ordered implementation PRs, compatibility gates, and SaaS adoption protocol
 are defined in
 [`DESYS-SKILLS-COMPATIBILITY-DELIVERY-ROADMAP.md`](DESYS-SKILLS-COMPATIBILITY-DELIVERY-ROADMAP.md).
+The v0.3 development-candidate matrix, evidence links, and operator procedures
+are in [`DESYS-V0.3-COMPATIBILITY.md`](DESYS-V0.3-COMPATIBILITY.md).
 
 The current corpus-pilot evidence, scenarios, and staged go/no-go criteria are
 defined in

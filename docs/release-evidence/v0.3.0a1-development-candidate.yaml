@@ -1,0 +1,150 @@
+release_evidence_schema: 1.0.0
+publication_status: development-candidate
+artifact:
+  kind: git-commit
+  identifier: 33fee4aea9cac80fa57a70f1aa572839047add76
+  url: https://github.com/DunderCode-Solutions/dundercode-engineering-system/commit/33fee4aea9cac80fa57a70f1aa572839047add76
+remote_evidence_verification:
+  method: manual-github-review
+  verified_on: '2026-08-29'
+  checker_limitation: 'The offline checker does not query GitHub or authenticate remote metadata; it validates only the structure and internal bindings of the manually verified values recorded here.'
+candidate:
+  package_name: dundercode-engineering-system
+  package_version: 0.3.0a1
+  release_label: v0.3.0-alpha.1
+  candidate_commit: 33fee4aea9cac80fa57a70f1aa572839047add76
+  corpus_source_commit: d84693cd117e5b792fe63fcaaa1550acda427c16
+  corpus_version: 0.1.0
+  inventory_schema: 1.2.0
+  bundle_schema: 1.1.0
+  consumer_manifest_schema: 1.1.0
+  metadata_schema: 1.0.0
+  compatibility_schema: 1.1.0
+  predecessor_descriptor_schema: 1.0.0
+  bundle_checksum: sha256:374a986cbcd2bcf8fb66149daa9f7ea54d80e0c7f5fcc981cea7281a9378aa5b
+  contract_checksums:
+    reference_bundle_schema: sha256:6cb3297d1fdd4a91fefe27af8c1233c87955e3737375769ddc1a02f892c1bab2
+    consumer_manifest_schema: sha256:dd1cc5e5a84205f4627c3a71489568eaa1953c578db48e3f1a9f74f57aaae125
+    compatibility_schema: sha256:90e80040b28469d76d7e10cbcaa69c6d12717a0bb9662c2d92243f2252fc1a48
+    predecessor_descriptor_schema: sha256:df30cc9e2ea593767065c8bd11791244b0ca1d0ff089135d5fe20784670f8cda
+  python_support: 3.12.x
+  uv_version: 0.12.3
+skills:
+  reference_skills: none
+  active_skills: not-implemented
+hosts:
+- id: ubuntu-24-04-x86-64
+  platform: linux
+  support_level: transaction-support
+  operating_system: Ubuntu 24.04.4 LTS
+  runner_image: ubuntu-24.04
+  runner_image_version: 20260823.283.1
+  architecture: x86_64
+  python_implementation: CPython
+  python_version: 3.12.14
+  uv_version: 0.12.3
+  capabilities:
+  - predecessor-validation
+  - deterministic-planning
+  - transactional-apply
+  - apply-failure-automatic-rollback
+  - interrupted-transaction-recovery
+- id: macos-26-arm64
+  platform: macos
+  support_level: transaction-support
+  operating_system: macOS 26.5.2 build 25F84
+  runner_image: macos-26-arm64
+  runner_image_version: 20260728.0273.1
+  architecture: arm64
+  python_implementation: CPython
+  python_version: 3.12.10
+  uv_version: 0.12.3
+  capabilities:
+  - predecessor-validation
+  - deterministic-planning
+  - transactional-apply
+  - apply-failure-automatic-rollback
+  - interrupted-transaction-recovery
+- id: windows-2025-x86-64
+  platform: windows
+  support_level: refusal-only
+  operating_system: Windows Server 2025 10.0.26100
+  runner_image: windows-2025-vs2026
+  runner_image_version: 20260824.214.3
+  architecture: x86_64
+  python_implementation: CPython
+  python_version: 3.12.10
+  uv_version: 0.12.3
+  capabilities:
+  - transaction-refusal
+  - pending-state-guard
+evidence_runs:
+- id: linux-quality
+  run_id: 33280030965
+  url: https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/33280030965
+  event: push
+  conclusion: success
+  head_sha: 33fee4aea9cac80fa57a70f1aa572839047add76
+  jobs:
+  - job_id: 99173529309
+    url: https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/33280030965/job/99173529309
+    name: Python 3.12
+    conclusion: success
+    host_id: ubuntu-24-04-x86-64
+    capabilities:
+    - predecessor-validation
+    - deterministic-planning
+    - transactional-apply
+    - apply-failure-automatic-rollback
+    - interrupted-transaction-recovery
+- id: platform-compatibility
+  run_id: 33280030951
+  url: https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/33280030951
+  event: push
+  conclusion: success
+  head_sha: 33fee4aea9cac80fa57a70f1aa572839047add76
+  jobs:
+  - job_id: 99173529165
+    url: https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/33280030951/job/99173529165
+    name: Python 3.12 / windows-latest
+    conclusion: success
+    host_id: windows-2025-x86-64
+    capabilities:
+    - transaction-refusal
+    - pending-state-guard
+  - job_id: 99173529445
+    url: https://github.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/33280030951/job/99173529445
+    name: Python 3.12 / macos-latest
+    conclusion: success
+    host_id: macos-26-arm64
+    capabilities:
+    - predecessor-validation
+    - deterministic-planning
+    - transactional-apply
+    - apply-failure-automatic-rollback
+    - interrupted-transaction-recovery
+migration_paths:
+- predecessor_package_version: 0.2.0a1
+  predecessor_release_label: v0.2.0-alpha.1
+  predecessor_release_commit: d736b028b285a3c4f4d22b685ddd5a0903c9822d
+  predecessor_release_url: https://github.com/DunderCode-Solutions/dundercode-engineering-system/tree/v0.2.0-alpha.1
+  predecessor_corpus_source_commit: 1ba18c126dc9adf035f64c0ca6eda75186e73b60
+  predecessor_bundle_checksum: sha256:d78bb3a685bf285f29d542d1709be9874842f759f00d9739ba073ce94633f62a
+  target_package_version: 0.3.0a1
+  target_release_label: v0.3.0-alpha.1
+  target_bundle_checksum: sha256:374a986cbcd2bcf8fb66149daa9f7ea54d80e0c7f5fcc981cea7281a9378aa5b
+  supported_evidence:
+  - host_id: ubuntu-24-04-x86-64
+    evidence_run_id: linux-quality
+    evidence_job_id: 99173529309
+  - host_id: macos-26-arm64
+    evidence_run_id: platform-compatibility
+    evidence_job_id: 99173529445
+  refusal_evidence:
+  - host_id: windows-2025-x86-64
+    evidence_run_id: platform-compatibility
+    evidence_job_id: 99173529165
+release_gate:
+  final_tag_evidence: pending
+  wheel_evidence: pending
+  required_update: Replace development-candidate evidence with evidence for the final immutable tag and wheel before release.

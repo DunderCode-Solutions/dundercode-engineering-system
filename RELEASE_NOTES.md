@@ -1,5 +1,11 @@
 # DESys v0.2.0-alpha.1 Release Notes
 
+## v0.3.0a1 Development Candidate
+
+All development-candidate identity, support, evidence, scope, and release-gate
+claims are canonical only in
+[`docs/DESYS-V0.3-COMPATIBILITY.md`](docs/DESYS-V0.3-COMPATIBILITY.md).
+
 DESys `v0.2.0-alpha.1` introduces an opt-in, governed reference corpus while
 preserving consumer documentation as the authoritative project evidence. The
 immutable tag and GitHub prerelease are published; no PyPI package is published.

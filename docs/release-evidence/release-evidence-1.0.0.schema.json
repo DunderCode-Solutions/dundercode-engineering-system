@@ -1,0 +1,571 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dundercode.dev/desys/schemas/release-evidence-1.0.0.json",
+  "title": "DESys Development Candidate Release Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "release_evidence_schema",
+    "publication_status",
+    "artifact",
+    "remote_evidence_verification",
+    "candidate",
+    "skills",
+    "hosts",
+    "evidence_runs",
+    "migration_paths",
+    "release_gate"
+  ],
+  "properties": {
+    "release_evidence_schema": {
+      "const": "1.0.0"
+    },
+    "publication_status": {
+      "const": "development-candidate"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "identifier", "url"],
+      "properties": {
+        "kind": {
+          "const": "git-commit"
+        },
+        "identifier": {
+          "$ref": "#/$defs/commit"
+        },
+        "url": {
+          "$ref": "#/$defs/commitUrl"
+        }
+      }
+    },
+    "remote_evidence_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "verified_on", "checker_limitation"],
+      "properties": {
+        "method": {
+          "const": "manual-github-review"
+        },
+        "verified_on": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "checker_limitation": {
+          "const": "The offline checker does not query GitHub or authenticate remote metadata; it validates only the structure and internal bindings of the manually verified values recorded here."
+        }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "package_name",
+        "package_version",
+        "release_label",
+        "candidate_commit",
+        "corpus_source_commit",
+        "corpus_version",
+        "inventory_schema",
+        "bundle_schema",
+        "consumer_manifest_schema",
+        "metadata_schema",
+        "compatibility_schema",
+        "predecessor_descriptor_schema",
+        "bundle_checksum",
+        "contract_checksums",
+        "python_support",
+        "uv_version"
+      ],
+      "properties": {
+        "package_name": {
+          "const": "dundercode-engineering-system"
+        },
+        "package_version": {
+          "$ref": "#/$defs/packageVersion"
+        },
+        "release_label": {
+          "type": "string",
+          "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+-alpha\\.[0-9]+$"
+        },
+        "candidate_commit": {
+          "$ref": "#/$defs/commit"
+        },
+        "corpus_source_commit": {
+          "$ref": "#/$defs/commit"
+        },
+        "corpus_version": {
+          "$ref": "#/$defs/version"
+        },
+        "inventory_schema": {
+          "$ref": "#/$defs/version"
+        },
+        "bundle_schema": {
+          "$ref": "#/$defs/version"
+        },
+        "consumer_manifest_schema": {
+          "$ref": "#/$defs/version"
+        },
+        "metadata_schema": {
+          "$ref": "#/$defs/version"
+        },
+        "compatibility_schema": {
+          "$ref": "#/$defs/version"
+        },
+        "predecessor_descriptor_schema": {
+          "$ref": "#/$defs/version"
+        },
+        "bundle_checksum": {
+          "$ref": "#/$defs/checksum"
+        },
+        "contract_checksums": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reference_bundle_schema",
+            "consumer_manifest_schema",
+            "compatibility_schema",
+            "predecessor_descriptor_schema"
+          ],
+          "properties": {
+            "reference_bundle_schema": {
+              "$ref": "#/$defs/checksum"
+            },
+            "consumer_manifest_schema": {
+              "$ref": "#/$defs/checksum"
+            },
+            "compatibility_schema": {
+              "$ref": "#/$defs/checksum"
+            },
+            "predecessor_descriptor_schema": {
+              "$ref": "#/$defs/checksum"
+            }
+          }
+        },
+        "python_support": {
+          "const": "3.12.x"
+        },
+        "uv_version": {
+          "$ref": "#/$defs/version"
+        }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference_skills", "active_skills"],
+      "properties": {
+        "reference_skills": {
+          "const": "none"
+        },
+        "active_skills": {
+          "const": "not-implemented"
+        }
+      }
+    },
+    "hosts": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "platform",
+          "support_level",
+          "operating_system",
+          "runner_image",
+          "runner_image_version",
+          "architecture",
+          "python_implementation",
+          "python_version",
+          "uv_version",
+          "capabilities"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "platform": {
+            "enum": ["linux", "macos", "windows"]
+          },
+          "support_level": {
+            "enum": ["transaction-support", "refusal-only"]
+          },
+          "operating_system": {
+            "type": "string",
+            "minLength": 1
+          },
+          "runner_image": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9.-]*$"
+          },
+          "runner_image_version": {
+            "type": "string",
+            "pattern": "^[0-9]{8}(?:\\.[0-9]+)+$"
+          },
+          "architecture": {
+            "enum": ["x86_64", "arm64"]
+          },
+          "python_implementation": {
+            "const": "CPython"
+          },
+          "python_version": {
+            "type": "string",
+            "pattern": "^3\\.12\\.[0-9]+$"
+          },
+          "uv_version": {
+            "$ref": "#/$defs/version"
+          },
+          "capabilities": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "predecessor-validation",
+                "deterministic-planning",
+                "transactional-apply",
+                "apply-failure-automatic-rollback",
+                "interrupted-transaction-recovery",
+                "transaction-refusal",
+                "pending-state-guard"
+              ]
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "platform": {
+                  "const": "linux"
+                }
+              },
+              "required": ["platform"]
+            },
+            "then": {
+              "properties": {
+                "operating_system": {
+                  "pattern": "^Ubuntu [0-9]+\\.[0-9]+\\.[0-9]+ LTS$"
+                },
+                "runner_image": {
+                  "pattern": "^ubuntu-[0-9]+\\.[0-9]+$"
+                },
+                "architecture": {
+                  "const": "x86_64"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "platform": {
+                  "const": "macos"
+                }
+              },
+              "required": ["platform"]
+            },
+            "then": {
+              "properties": {
+                "operating_system": {
+                  "pattern": "^macOS [0-9]+\\.[0-9]+\\.[0-9]+ build [0-9A-Z]+$"
+                },
+                "runner_image": {
+                  "pattern": "^macos-[0-9]+-arm64$"
+                },
+                "architecture": {
+                  "const": "arm64"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "platform": {
+                  "const": "windows"
+                }
+              },
+              "required": ["platform"]
+            },
+            "then": {
+              "properties": {
+                "operating_system": {
+                  "pattern": "^Windows Server [0-9]+ [0-9]+\\.[0-9]+\\.[0-9]+$"
+                },
+                "runner_image": {
+                  "pattern": "^windows-[0-9]+-vs[0-9]+$"
+                },
+                "architecture": {
+                  "const": "x86_64"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "support_level": {
+                  "const": "transaction-support"
+                }
+              },
+              "required": ["support_level"]
+            },
+            "then": {
+              "properties": {
+                "platform": {
+                  "enum": ["linux", "macos"]
+                },
+                "capabilities": {
+                  "contains": {
+                    "const": "transactional-apply"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "support_level": {
+                  "const": "refusal-only"
+                }
+              },
+              "required": ["support_level"]
+            },
+            "then": {
+              "properties": {
+                "platform": {
+                  "const": "windows"
+                },
+                "capabilities": {
+                  "items": {
+                    "enum": ["transaction-refusal", "pending-state-guard"]
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "evidence_runs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "run_id", "url", "event", "conclusion", "head_sha", "jobs"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "url": {
+            "$ref": "#/$defs/runUrl"
+          },
+          "run_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "event": {
+            "const": "push"
+          },
+          "conclusion": {
+            "const": "success"
+          },
+          "head_sha": {
+            "$ref": "#/$defs/commit"
+          },
+          "jobs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["job_id", "url", "name", "conclusion", "host_id", "capabilities"],
+              "properties": {
+                "job_id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "url": {
+                  "$ref": "#/$defs/jobUrl"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "conclusion": {
+                  "const": "success"
+                },
+                "host_id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]*$"
+                },
+                "capabilities": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "$ref": "#/$defs/capability"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "migration_paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "predecessor_package_version",
+          "predecessor_release_label",
+          "predecessor_release_commit",
+          "predecessor_release_url",
+          "predecessor_corpus_source_commit",
+          "predecessor_bundle_checksum",
+          "target_package_version",
+          "target_release_label",
+          "target_bundle_checksum",
+          "supported_evidence",
+          "refusal_evidence"
+        ],
+        "properties": {
+          "predecessor_package_version": {
+            "$ref": "#/$defs/packageVersion"
+          },
+          "predecessor_release_label": {
+            "type": "string",
+            "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+-alpha\\.[0-9]+$"
+          },
+          "predecessor_release_commit": {
+            "$ref": "#/$defs/commit"
+          },
+          "predecessor_release_url": {
+            "type": "string",
+            "pattern": "^https://github\\.com/DunderCode-Solutions/dundercode-engineering-system/tree/v[0-9]+\\.[0-9]+\\.[0-9]+-alpha\\.[0-9]+$"
+          },
+          "predecessor_corpus_source_commit": {
+            "$ref": "#/$defs/commit"
+          },
+          "predecessor_bundle_checksum": {
+            "$ref": "#/$defs/checksum"
+          },
+          "target_package_version": {
+            "$ref": "#/$defs/packageVersion"
+          },
+          "target_release_label": {
+            "type": "string",
+            "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+-alpha\\.[0-9]+$"
+          },
+          "target_bundle_checksum": {
+            "$ref": "#/$defs/checksum"
+          },
+          "supported_evidence": {
+            "$ref": "#/$defs/evidenceLinks"
+          },
+          "refusal_evidence": {
+            "$ref": "#/$defs/evidenceLinks"
+          }
+        }
+      }
+    },
+    "release_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["final_tag_evidence", "wheel_evidence", "required_update"],
+      "properties": {
+        "final_tag_evidence": {
+          "const": "pending"
+        },
+        "wheel_evidence": {
+          "const": "pending"
+        },
+        "required_update": {
+          "const": "Replace development-candidate evidence with evidence for the final immutable tag and wheel before release."
+        }
+      }
+    }
+  },
+  "$defs": {
+    "checksum": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "commitUrl": {
+      "type": "string",
+      "pattern": "^https://github\\.com/DunderCode-Solutions/dundercode-engineering-system/commit/[0-9a-f]{40}$"
+    },
+    "runUrl": {
+      "type": "string",
+      "pattern": "^https://github\\.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/[1-9][0-9]*$"
+    },
+    "jobUrl": {
+      "type": "string",
+      "pattern": "^https://github\\.com/DunderCode-Solutions/dundercode-engineering-system/actions/runs/[1-9][0-9]*/job/[1-9][0-9]*$"
+    },
+    "capability": {
+      "enum": [
+        "predecessor-validation",
+        "deterministic-planning",
+        "transactional-apply",
+        "apply-failure-automatic-rollback",
+        "interrupted-transaction-recovery",
+        "transaction-refusal",
+        "pending-state-guard"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "packageVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)a[1-9][0-9]*$"
+    },
+    "evidenceLinks": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["host_id", "evidence_run_id", "evidence_job_id"],
+        "properties": {
+          "host_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "evidence_run_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "evidence_job_id": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    }
+  }
+}

@@ -7,6 +7,7 @@ uv sync --locked --group dev
 
 uv run ruff check tools tests scripts/platform-package-smoke.py
 uv run pytest
+uv run python tools/check_compatibility_publication.py
 uv run desys-corpus-inventory --check
 uv run desys-corpus-bundle --check
 uv run desys-metadata-validate --config tools/desys_indexer.yaml --max-warnings 127
