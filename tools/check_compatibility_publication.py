@@ -557,7 +557,7 @@ def check_summary_documents(evidence: dict[str, Any], documents: dict[Path, str]
         f"`{predecessor['predecessor_release_commit']}`" in checkpoint,
         "docs/README.md predecessor release commit summary is stale.",
     )
-    _require("PR5 is in progress pending committed CI and merge" in checkpoint, "docs/README.md PR5 status is stale.")
+    _require("Roadmap PRs 3, 4, and 5 are complete" in checkpoint, "docs/README.md PR5 status is stale.")
     _require(
         f"Active Skills remain {evidence['skills']['active_skills'].replace('-', ' ')}" in checkpoint,
         "docs/README.md Active Skills status is stale.",
@@ -569,9 +569,9 @@ def check_summary_documents(evidence: dict[str, Any], documents: dict[Path, str]
     pr5 = roadmap.split("### PR 5", 1)[1].split("### PR 6", 1)[0]
     _require("Status: COMPLETE" in pr3, "Roadmap PR3 status must remain COMPLETE.")
     _require("Status: COMPLETE" in pr4, "Roadmap PR4 status must remain COMPLETE.")
-    _require("Status: IN PROGRESS - PENDING CI" in pr5, "Roadmap PR5 status must remain pending CI.")
-    _require("Status: COMPLETE" not in pr5, "Roadmap PR5 cannot claim completion before committed CI and merge.")
-    _require("passes CI, and merges" in pr5, "Roadmap PR5 completion condition is missing.")
+    _require("Status: COMPLETE" in pr5, "Roadmap PR5 status must record completed publication gates.")
+    _require("Exit gate state: COMPLETE" in pr5, "Roadmap PR5 exit gate must remain complete.")
+    _require("4d544a8acc5e0c7e249884feb56d4acde29cd86f" in pr5, "Roadmap PR5 merge evidence is stale.")
     roadmap_predecessor_claims = (
         f"`{predecessor['predecessor_release_label']}`. Work is governed by",
         f"| Package | `{predecessor['predecessor_package_version']}` / `{predecessor['predecessor_release_label']}` |",

@@ -13,6 +13,7 @@ from typing import Any
 
 import yaml
 
+from tools.corpus_reviews import ReviewError, load_review_records, validate_dsk_distribution_reviews
 from tools.desys_indexer.config import IndexerConfig, load_config
 from tools.desys_metadata import (
     MANAGED_FILENAME_PATTERN,
@@ -316,6 +317,12 @@ def validate_inventory(
     assets_by_path = {asset.source: asset for asset in assets}
     for entry, path in zip(entries, expected_paths, strict=True):
         _validate_entry(entry, path, config, seen_targets, assets_by_path)
+
+    try:
+        records = load_review_records(config.repository_root / "corpus/reviews")
+        validate_dsk_distribution_reviews(payload, records)
+    except ReviewError as error:
+        raise InventoryError(str(error)) from error
 
 
 def render_inventory(payload: dict[str, Any]) -> str:

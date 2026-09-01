@@ -1,0 +1,613 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:uuid:f26d2097-47aa-4f61-8a28-5c64acc93aa8",
+  "title": "DESys DSK Batch Review Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "review_record_schema",
+    "record_id",
+    "phase",
+    "review_date",
+    "review_owner",
+    "selected_ids",
+    "boundaries",
+    "source_review",
+    "package_review",
+    "open_issues",
+    "approval_instruction"
+  ],
+  "properties": {
+    "review_record_schema": {
+      "const": "1.0.0"
+    },
+    "record_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "phase": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "review_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "review_owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "selected_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^DSK-[0-9]{4}$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected_source_documents",
+        "excluded_changes"
+      ],
+      "properties": {
+        "selected_source_documents": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^skills/dsk/.+\\.md$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "excluded_changes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "source_review": {
+      "$ref": "#/$defs/sourceReview"
+    },
+    "package_review": {
+      "$ref": "#/$defs/packageReview"
+    },
+    "open_issues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/issue"
+      }
+    },
+    "approval_instruction": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "approver",
+        "decided_at",
+        "evidence"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "PENDING",
+            "APPROVED"
+          ]
+        },
+        "approver": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "decided_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "evidence": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PENDING"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "approver": {
+                "type": "null"
+              },
+              "decided_at": {
+                "type": "null"
+              },
+              "evidence": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "APPROVED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "approver": {
+                "type": "string",
+                "minLength": 1
+              },
+              "decided_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "evidence": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issue_id",
+        "description",
+        "disposition",
+        "approver",
+        "decided_at",
+        "evidence",
+        "rationale"
+      ],
+      "properties": {
+        "issue_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "disposition": {
+          "enum": [
+            "OPEN",
+            "RESOLVED",
+            "ACCEPTED_RISK"
+          ]
+        },
+        "approver": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "decided_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "evidence": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rationale": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "disposition": {
+                "const": "OPEN"
+              }
+            },
+            "required": [
+              "disposition"
+            ]
+          },
+          "then": {
+            "properties": {
+              "approver": {
+                "type": "null"
+              },
+              "decided_at": {
+                "type": "null"
+              },
+              "evidence": {
+                "type": "null"
+              },
+              "rationale": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "disposition": {
+                "enum": [
+                  "RESOLVED",
+                  "ACCEPTED_RISK"
+                ]
+              }
+            },
+            "required": [
+              "disposition"
+            ]
+          },
+          "then": {
+            "properties": {
+              "approver": {
+                "type": "string",
+                "minLength": 1
+              },
+              "decided_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "evidence": {
+                "type": "string",
+                "minLength": 1
+              },
+              "rationale": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document_id",
+        "canonical_id",
+        "source",
+        "checksum",
+        "review_fingerprint",
+        "metadata_status"
+      ],
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "pattern": "^DSK-[0-9]{4}$"
+        },
+        "canonical_id": {
+          "type": "string",
+          "pattern": "^dsk(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*){2,}$"
+        },
+        "source": {
+          "type": "string",
+          "pattern": "^skills/dsk/.+\\.md$"
+        },
+        "checksum": {
+          "$ref": "#/$defs/checksum"
+        },
+        "review_fingerprint": {
+          "$ref": "#/$defs/checksum"
+        },
+        "metadata_status": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "sourceReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "artifacts",
+        "dimensions"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "PENDING",
+            "APPROVED"
+          ]
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact"
+          },
+          "minItems": 1
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "security",
+            "privacy",
+            "licensing",
+            "editorial",
+            "links",
+            "identities"
+          ],
+          "properties": {
+            "security": {
+              "$ref": "#/$defs/decision"
+            },
+            "privacy": {
+              "$ref": "#/$defs/decision"
+            },
+            "licensing": {
+              "$ref": "#/$defs/decision"
+            },
+            "editorial": {
+              "$ref": "#/$defs/decision"
+            },
+            "links": {
+              "$ref": "#/$defs/decision"
+            },
+            "identities": {
+              "$ref": "#/$defs/decision"
+            }
+          }
+        }
+      }
+    },
+    "selectedEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "target",
+        "checksum",
+        "review_fingerprint"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "pattern": "^skills/dsk/.+\\.md$"
+        },
+        "target": {
+          "type": "string",
+          "pattern": "^docs/desys/reference/skills/dsk/.+"
+        },
+        "checksum": {
+          "$ref": "#/$defs/checksum"
+        },
+        "review_fingerprint": {
+          "$ref": "#/$defs/checksum"
+        }
+      }
+    },
+    "packagedCopy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "checksum"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^corpus-files/docs/desys/reference/skills/dsk/.+"
+        },
+        "checksum": {
+          "$ref": "#/$defs/checksum"
+        }
+      }
+    },
+    "candidateBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundle_checksum",
+        "entries_checksum",
+        "descriptor",
+        "entry_count",
+        "closure",
+        "selected_entries",
+        "packaged_copies"
+      ],
+      "properties": {
+        "bundle_checksum": {
+          "$ref": "#/$defs/checksum"
+        },
+        "entries_checksum": {
+          "$ref": "#/$defs/checksum"
+        },
+        "descriptor": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "checksum"
+          ],
+          "properties": {
+            "path": {
+              "const": "bundle.yaml"
+            },
+            "checksum": {
+              "$ref": "#/$defs/checksum"
+            }
+          }
+        },
+        "entry_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "closure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "entry_count"
+          ],
+          "properties": {
+            "status": {
+              "const": "VALIDATED"
+            },
+            "entry_count": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "selected_entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selectedEntry"
+          },
+          "minItems": 1
+        },
+        "packaged_copies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/packagedCopy"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "packageReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generation_status",
+        "status",
+        "candidate",
+        "packaged_bytes"
+      ],
+      "properties": {
+        "generation_status": {
+          "enum": [
+            "NOT GENERATED",
+            "GENERATED"
+          ]
+        },
+        "status": {
+          "enum": [
+            "PENDING",
+            "APPROVED"
+          ]
+        },
+        "candidate": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/candidateBinding"
+            }
+          ]
+        },
+        "packaged_bytes": {
+          "$ref": "#/$defs/decision"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "generation_status": {
+                "const": "NOT GENERATED"
+              }
+            },
+            "required": [
+              "generation_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "status": {
+                "const": "PENDING"
+              },
+              "candidate": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "APPROVED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "generation_status": {
+                "const": "GENERATED"
+              },
+              "candidate": {
+                "$ref": "#/$defs/candidateBinding"
+              },
+              "packaged_bytes": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "const": "APPROVED"
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

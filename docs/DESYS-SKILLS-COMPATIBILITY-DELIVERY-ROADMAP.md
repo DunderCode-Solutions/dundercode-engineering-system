@@ -115,7 +115,7 @@ Exit gate:
 
 ### PR 5 - Compatibility Publication
 
-Status: IN PROGRESS - PENDING CI
+Status: COMPLETE
 
 Deliverables:
 
@@ -130,12 +130,11 @@ Exit gate:
 - stale release documentation fails CI;
 - each supported migration path links to automated evidence.
 
-Exit gate state: PENDING. The versioned release-evidence contract and canonical
-documentation checker are implemented locally and wired into
-`scripts/quality.sh`. Completion may be recorded only after this diff is
-committed, passes CI, and merges; the checker cannot recursively prove the
-merged status of its own publication controls. Canonical candidate details are
-in [`DESYS-V0.3-COMPATIBILITY.md`](DESYS-V0.3-COMPATIBILITY.md).
+Exit gate state: COMPLETE. The versioned release-evidence contract and canonical
+documentation checker passed Linux, macOS, and Windows CI and merged through
+[PR #17](https://github.com/DunderCode-Solutions/dundercode-engineering-system/pull/17)
+at `4d544a8acc5e0c7e249884feb56d4acde29cd86f`. Canonical candidate details are in
+[`DESYS-V0.3-COMPATIBILITY.md`](DESYS-V0.3-COMPATIBILITY.md).
 
 ### PR 6 - Reference Skill Remediation Batches
 

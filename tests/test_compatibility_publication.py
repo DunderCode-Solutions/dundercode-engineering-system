@@ -126,9 +126,9 @@ def test_summary_link_mutation_fails(publication: tuple[dict, dict]) -> None:
         (Path("docs/README.md"), "`0.3.0a1`", "`0.3.0a2`", "candidate version summary"),
         (
             Path("docs/DESYS-SKILLS-COMPATIBILITY-DELIVERY-ROADMAP.md"),
-            "Status: IN PROGRESS - PENDING CI",
-            "Status: COMPLETE",
-            "pending CI",
+            "### PR 5 - Compatibility Publication\n\nStatus: COMPLETE",
+            "### PR 5 - Compatibility Publication\n\nStatus: IN PROGRESS - PENDING CI",
+            "completed publication gates",
         ),
     ),
 )

@@ -1,0 +1,114 @@
+review_record_schema: 1.0.0
+record_id: pr6-phase-1-dsk-2010-through-dsk-2014
+phase: 1
+review_date: '2026-08-30'
+review_owner: DunderCode Engineering
+selected_ids:
+- DSK-2010
+- DSK-2011
+- DSK-2012
+- DSK-2013
+- DSK-2014
+boundaries:
+  selected_source_documents:
+  - skills/dsk/02-domain-skills/DSK-2010-domain-analysis.md
+  - skills/dsk/02-domain-skills/DSK-2011-ubiquitous-language.md
+  - skills/dsk/02-domain-skills/DSK-2012-domain-discovery.md
+  - skills/dsk/02-domain-skills/DSK-2013-domain-boundaries.md
+  - skills/dsk/02-domain-skills/DSK-2014-business-capabilities.md
+  excluded_changes:
+  - official packaged bundle and packaged corpus copies
+  - compatibility and release-evidence contracts
+  - predecessor descriptors
+  - Active Skill and runtime files
+  - corpus distribution approvals
+source_review:
+  status: PENDING
+  artifacts:
+  - document_id: DSK-2010
+    canonical_id: dsk.domain.domain-analysis
+    source: skills/dsk/02-domain-skills/DSK-2010-domain-analysis.md
+    checksum: sha256:fc451233ca7f5e14993e61e3cab70c17c7e7ff600a15a17dbea44bed90f2f3c4
+    review_fingerprint: sha256:64d6d018bde22289b53a9975e42df45e7d773289c216c2997ed546241208de79
+    metadata_status: review
+  - document_id: DSK-2011
+    canonical_id: dsk.domain.ubiquitous-language
+    source: skills/dsk/02-domain-skills/DSK-2011-ubiquitous-language.md
+    checksum: sha256:8efec4d72903461daa352fc78a6f4e6c85005b3e2c8d3db6428cd5bcbc2cbe12
+    review_fingerprint: sha256:61347e1a31ba2f01263d4c3da869fe176b5b1212c1935c1df75b29c391b7b875
+    metadata_status: review
+  - document_id: DSK-2012
+    canonical_id: dsk.domain.domain-discovery
+    source: skills/dsk/02-domain-skills/DSK-2012-domain-discovery.md
+    checksum: sha256:9edf6c3b45edcc770dfacf93cf7ce5803aa186ba2855acacd3c621e97f95ea91
+    review_fingerprint: sha256:d1efcef8476bc57e7e15c4cc6d84a2e144b7e46e1e63949b265da3ab96008324
+    metadata_status: review
+  - document_id: DSK-2013
+    canonical_id: dsk.domain.domain-boundaries
+    source: skills/dsk/02-domain-skills/DSK-2013-domain-boundaries.md
+    checksum: sha256:c419d8c982699b58632e93341e82ed1c641efd374be5b8cf7c57bf8ec9d13b81
+    review_fingerprint: sha256:726286b8f38b7af19431113c8ec95a26a42c62fa22812aeb05e33e13818f2a9a
+    metadata_status: review
+  - document_id: DSK-2014
+    canonical_id: dsk.domain.business-capabilities
+    source: skills/dsk/02-domain-skills/DSK-2014-business-capabilities.md
+    checksum: sha256:62bc647ee3a21f0f7d8f492698aa60ba7c566c11b1c4d0a0f619a75cbe67a0f7
+    review_fingerprint: sha256:747b9dd837c6e1f1262138c77ef2974354e3c20870822e7898589efb033736ac
+    metadata_status: review
+  dimensions:
+    security:
+      status: PENDING
+      approver: null
+      decided_at: null
+      evidence: null
+    privacy:
+      status: PENDING
+      approver: null
+      decided_at: null
+      evidence: null
+    licensing:
+      status: PENDING
+      approver: null
+      decided_at: null
+      evidence: null
+    editorial:
+      status: PENDING
+      approver: null
+      decided_at: null
+      evidence: null
+    links:
+      status: PENDING
+      approver: null
+      decided_at: null
+      evidence: null
+    identities:
+      status: PENDING
+      approver: null
+      decided_at: null
+      evidence: null
+package_review:
+  generation_status: NOT GENERATED
+  status: PENDING
+  candidate: null
+  packaged_bytes:
+    status: PENDING
+    approver: null
+    decided_at: null
+    evidence: null
+open_issues:
+- issue_id: deterministic-package-candidate
+  description: No deterministic review candidate has been generated; package bindings remain unavailable.
+  disposition: OPEN
+  approver: null
+  decided_at: null
+  evidence: null
+  rationale: null
+approval_instruction: >-
+  This phase-1 record approves nothing. Source approval alone cannot authorize
+  distribution. Authorized humans must complete all source dimensions, generate
+  and inspect a deterministic candidate outside the repository, bind the package
+  review to its exact bundle and descriptor checksums, closure count, selected
+  targets and checksums, and packaged copies, and approve packaged_bytes with
+  identifiable evidence. Only a later distribution-only change may then approve
+  these exact review fingerprints. Any changed checksum or fingerprint resets the
+  applicable source to pending and the stale record cannot authorize it.
