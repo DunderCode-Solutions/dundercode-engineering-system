@@ -61,10 +61,10 @@ The implemented scope covers:
 
 ## Next Milestone
 
-Roadmap PRs 3 and 4 are complete.
-PR5 is in progress pending committed CI and merge. Local checker success cannot
-establish the completion of its own publication controls. PR6 remains blocked
-until that gate closes. This does not approve any Reference Skill.
+Roadmap PRs 3, 4, and 5 are complete. PR5 publication controls passed committed
+CI and merged through PR #17. PR6 Reference Skill remediation is the next
+milestone; completion of compatibility publication does not approve any
+Reference Skill.
 Active Skills remain not implemented.
 
 The approved architecture decision is

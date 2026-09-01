@@ -2521,11 +2521,11 @@ entries:
   distribution: pending
   indexable: true
   review_owner: DunderCode Engineering
-  review_fingerprint: sha256:891face8a76df6fb60febaa6a2829d2e860e20898d44a7c1b23a30448b67df3f
-  checksum: sha256:949c8214a8028c6a84bc9edacd5380171ce6ecc2e8f7eb8ada5324c3e3828b42
+  review_fingerprint: sha256:64d6d018bde22289b53a9975e42df45e7d773289c216c2997ed546241208de79
+  checksum: sha256:fc451233ca7f5e14993e61e3cab70c17c7e7ff600a15a17dbea44bed90f2f3c4
   document_id: DSK-2010
   canonical_id: dsk.domain.domain-analysis
-  metadata_status: draft
+  metadata_status: review
 - source: skills/dsk/02-domain-skills/DSK-2011-ubiquitous-language.md
   target: docs/desys/reference/skills/dsk/02-domain-skills/DSK-2011-ubiquitous-language.md
   collection: skills
@@ -2533,11 +2533,11 @@ entries:
   distribution: pending
   indexable: true
   review_owner: DunderCode Engineering
-  review_fingerprint: sha256:48bf8f977ead23fdc39b7be5dc0a824ac60a17f3cb3321d3e160e903d56ec793
-  checksum: sha256:5b6257c1bad3770f344e7d6157d2156c4e62462fc4c052d73bbf8eb9b948e075
+  review_fingerprint: sha256:61347e1a31ba2f01263d4c3da869fe176b5b1212c1935c1df75b29c391b7b875
+  checksum: sha256:8efec4d72903461daa352fc78a6f4e6c85005b3e2c8d3db6428cd5bcbc2cbe12
   document_id: DSK-2011
   canonical_id: dsk.domain.ubiquitous-language
-  metadata_status: draft
+  metadata_status: review
 - source: skills/dsk/02-domain-skills/DSK-2012-domain-discovery.md
   target: docs/desys/reference/skills/dsk/02-domain-skills/DSK-2012-domain-discovery.md
   collection: skills
@@ -2545,11 +2545,11 @@ entries:
   distribution: pending
   indexable: true
   review_owner: DunderCode Engineering
-  review_fingerprint: sha256:f3cbb817275f68ff850acdaf9e5873425458d487e6894dfff3f07cb21e412a4d
-  checksum: sha256:fc5bf40528e2114095170d900a621212715a6516d83c4f00ca398b8a4459433b
+  review_fingerprint: sha256:d1efcef8476bc57e7e15c4cc6d84a2e144b7e46e1e63949b265da3ab96008324
+  checksum: sha256:9edf6c3b45edcc770dfacf93cf7ce5803aa186ba2855acacd3c621e97f95ea91
   document_id: DSK-2012
   canonical_id: dsk.domain.domain-discovery
-  metadata_status: draft
+  metadata_status: review
 - source: skills/dsk/02-domain-skills/DSK-2013-domain-boundaries.md
   target: docs/desys/reference/skills/dsk/02-domain-skills/DSK-2013-domain-boundaries.md
   collection: skills
@@ -2557,11 +2557,11 @@ entries:
   distribution: pending
   indexable: true
   review_owner: DunderCode Engineering
-  review_fingerprint: sha256:0bf765ec3ab6d23df7838165edc1984f9ca11887c585f7433d23d53e085d0d43
-  checksum: sha256:4b3cf2b18ed3ab77165e7bdac8894739a94ec40795599f3bb25596dafe49adac
+  review_fingerprint: sha256:726286b8f38b7af19431113c8ec95a26a42c62fa22812aeb05e33e13818f2a9a
+  checksum: sha256:c419d8c982699b58632e93341e82ed1c641efd374be5b8cf7c57bf8ec9d13b81
   document_id: DSK-2013
   canonical_id: dsk.domain.domain-boundaries
-  metadata_status: draft
+  metadata_status: review
 - source: skills/dsk/02-domain-skills/DSK-2014-business-capabilities.md
   target: docs/desys/reference/skills/dsk/02-domain-skills/DSK-2014-business-capabilities.md
   collection: skills
@@ -2569,11 +2569,11 @@ entries:
   distribution: pending
   indexable: true
   review_owner: DunderCode Engineering
-  review_fingerprint: sha256:c235c7abce5665195fd96f95f637615ece28ba6ff19fc06ed2623663ca3c2f51
-  checksum: sha256:ff0d1e25340b73b922a5546d71346816b55aa71703b5b1ec1bf23a3ec8487e73
+  review_fingerprint: sha256:747b9dd837c6e1f1262138c77ef2974354e3c20870822e7898589efb033736ac
+  checksum: sha256:62bc647ee3a21f0f7d8f492698aa60ba7c566c11b1c4d0a0f619a75cbe67a0f7
   document_id: DSK-2014
   canonical_id: dsk.domain.business-capabilities
-  metadata_status: draft
+  metadata_status: review
 - source: skills/dsk/02-domain-skills/DSK-2015-business-processes.md
   target: docs/desys/reference/skills/dsk/02-domain-skills/DSK-2015-business-processes.md
   collection: skills

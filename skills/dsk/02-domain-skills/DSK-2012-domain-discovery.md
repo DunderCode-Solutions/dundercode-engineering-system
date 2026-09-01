@@ -4,14 +4,27 @@ document_id: DSK-2012
 canonical_id: dsk.domain.domain-discovery
 title: Domain Discovery
 node_type: skill
-document_class: operational
+document_class: reference
 version: 1.0.0
-status: draft
+status: review
 language: en
 owner: DunderCode Engineering
+relationships:
+- type: depends_on
+  target: dsk.domain.domain-analysis
+- type: derives_from
+  target: adr.corpus.layout-and-authority
 ---
 
 # DSK-2012 | Domain Discovery
+
+## Governance Notice
+
+This document preserves the original skill specification as reference material. It is not an Active Skill, executable instruction, compliance control or authorization to act. Terms such as "activate", "execute", "collect", "validate", "publish", "required" and "should" describe the source workflow model only; they do not grant authority or require an AI agent or person to perform an action.
+
+Use this reference deny-by-default. It grants no authority to use tools, access networks, request or use credentials, read or write storage, change production, collect information, publish content, approve decisions, deploy changes or perform remediation. A user request alone does not establish permission. Authorized humans remain accountable for scope, access, decisions, approval and any resulting artifact.
+
+Only authorized inputs may be used. Consumer policies, law, contracts, data classifications, access controls and retention requirements remain authoritative. Minimize confidential and personal information, distinguish facts from assumptions and stop for explicit human authorization when purpose, scope, data access, audience or ownership is unclear. No completeness, correctness, compliance, consensus, publication or outcome claim is created by this reference.
 
 # 1. Purpose
 

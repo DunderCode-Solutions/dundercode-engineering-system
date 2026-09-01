@@ -59,6 +59,12 @@ def main() -> None:
         result = run(str(executable), "--version", cwd=root)
         if result.stdout.strip() != f"desys-project-init {expected_version}":
             raise RuntimeError(f"Unexpected initializer version output: {result.stdout!r}")
+        review_candidate = environment / (
+            "Scripts/desys-corpus-review-candidate.exe" if os.name == "nt" else "bin/desys-corpus-review-candidate"
+        )
+        help_result = run(str(review_candidate), "--help", cwd=root)
+        if "--review-record" not in help_result.stdout or "--output" not in help_result.stdout:
+            raise RuntimeError(f"Unexpected review candidate help output: {help_result.stdout!r}")
 
 
 if __name__ == "__main__":

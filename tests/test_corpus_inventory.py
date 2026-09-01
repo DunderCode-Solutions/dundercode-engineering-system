@@ -18,6 +18,9 @@ from tools.build_corpus_inventory import (
     validate_portable_target,
 )
 from tools.desys_indexer.config import IndexerConfig, load_config
+from tools.desys_metadata import parse_front_matter
+
+PHASE_ONE_REVIEW = Path("corpus/reviews/pr6-phase-1-domain-reference-review-2026-08-30.yaml")
 
 
 def _config(root: Path) -> IndexerConfig:
@@ -73,6 +76,55 @@ def test_tracked_inventory_is_complete_and_current() -> None:
     assert render_inventory(build_inventory(config, inventory, assets)) == Path("corpus/inventory.yaml").read_text(
         encoding="utf-8"
     )
+
+
+def test_pr6_phase_one_review_matches_pending_inventory_entries() -> None:
+    record = yaml.safe_load(PHASE_ONE_REVIEW.read_text(encoding="utf-8"))
+    inventory = yaml.safe_load(Path("corpus/inventory.yaml").read_text(encoding="utf-8"))
+    entries = {entry["source"]: entry for entry in inventory["entries"]}
+    artifacts = record["source_review"]["artifacts"]
+
+    assert record["source_review"]["status"] == "PENDING"
+    assert set(record["source_review"]["dimensions"]) == {
+        "security",
+        "privacy",
+        "licensing",
+        "editorial",
+        "links",
+        "identities",
+    }
+    assert {decision["status"] for decision in record["source_review"]["dimensions"].values()} == {"PENDING"}
+    assert all(
+        decision["approver"] is decision["decided_at"] is decision["evidence"] is None
+        for decision in record["source_review"]["dimensions"].values()
+    )
+    assert record["package_review"] == {
+        "generation_status": "NOT GENERATED",
+        "status": "PENDING",
+        "candidate": None,
+        "packaged_bytes": {"status": "PENDING", "approver": None, "decided_at": None, "evidence": None},
+    }
+    assert record["selected_ids"] == [artifact["document_id"] for artifact in artifacts]
+    assert record["boundaries"]["selected_source_documents"] == [artifact["source"] for artifact in artifacts]
+    assert "Only a later distribution-only change may" in record["approval_instruction"]
+    assert "Source approval alone cannot authorize" in record["approval_instruction"]
+    assert [issue["issue_id"] for issue in record["open_issues"]] == ["deterministic-package-candidate"]
+    assert record["open_issues"][0]["disposition"] == "OPEN"
+
+    for artifact in artifacts:
+        entry = entries[artifact["source"]]
+        metadata, _ = parse_front_matter(Path(artifact["source"]).read_text(encoding="utf-8"))
+        assert artifact == {
+            "document_id": entry["document_id"],
+            "canonical_id": entry["canonical_id"],
+            "source": entry["source"],
+            "checksum": entry["checksum"],
+            "review_fingerprint": entry["review_fingerprint"],
+            "metadata_status": entry["metadata_status"],
+        }
+        assert metadata["document_class"] == "reference"
+        assert metadata["status"] == "review"
+        assert entry["distribution"] == "pending"
 
 
 def test_inventory_schema_identity_matches_runtime_contract() -> None:
